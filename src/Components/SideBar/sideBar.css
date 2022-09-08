@@ -1,0 +1,91 @@
+.pro-sidebar {
+  color: #adadad;
+  height: 100%;
+  text-align: left;
+  transition: width, left, right, 0.3s;
+  position: relative;
+  z-index: 1009;
+  min-height: 80vh;
+}
+.pro-sidebar-header,
+.pro-sidebar-footer {
+  border: none !important;
+}
+.header .closemenu {
+  color: #000;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  background: white;
+  padding: 0 0 0 6px;
+  margin: 7px 0;
+  float: right;
+  line-height: 28px;
+}
+
+.header .pro-sidebar.collapsed {
+  width: 70px;
+  min-width: 70px;
+}
+.header .pro-sidebar.collapsed .pro-sidebar-inner .pro-sidebar-layout .active {
+    border-radius: 50% !important;
+    height: 46px;
+    width: 43px;
+    padding: 0px 0px 0px 3px;
+}
+
+.header .pro-sidebar-inner {
+  background: white !important;
+  box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15);
+  border-radius: 15px;
+  padding: 10px;
+  border: 1px solid #c5c7cd;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout {
+  overflow-y: hidden;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout .logotext p {
+  font-size: 20px;
+  padding: 0 20px;
+  color: #000;
+  font-weight: bold;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul {
+  padding: 0 5px;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
+  margin: 0;
+  font-weight: bold;
+  padding: 7px 0 !important;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {
+  background: transparent !important;
+  color: white;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper .pro-icon {
+  font-size: 20px;
+  color: #c5bbbb;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper .pro-item-content {
+  color: #000;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout .active {
+  background: var(--theme-color);
+  border-radius: 15px;
+}
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-icon-wrapper .pro-icon,
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-item-content a,
+.header .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-item-content {
+   color: var(--theme-color) !important;
+}
+.header .logo {
+  padding: 20px;
+}
+
+@media only screen and (max-width: 720px) {
+  html {
+    overflow: hidden;
+  }
+}

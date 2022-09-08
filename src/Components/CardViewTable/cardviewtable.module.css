@@ -1,0 +1,24 @@
+.tablecardViewMain {
+  padding-left: 60px;
+}
+.tablecardView {
+  margin-top: 60px;
+}
+.tablecardViewCustomCol {
+  text-align: center;
+  position: relative;
+}
+.tablecardViewCustomCol img {
+  position: absolute;
+  top: -25px;
+  right: 50%;
+  border-radius: 50%;
+  width: 30%;
+}
+.tablecardView tr td {
+  width: 25%;
+  font-family: var(--Poppins);
+  color: #333333;
+  padding: 15px;
+  font-size: 14px;
+}

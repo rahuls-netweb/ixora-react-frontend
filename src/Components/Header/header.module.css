@@ -1,0 +1,74 @@
+.rowNavbar {
+  background: #ffffff;
+  border: 1px solid #c5c7cd;
+  border-radius: 15px;
+  padding: 5px 0;
+  margin-bottom: 12px;
+}
+
+.rowNavbar > div {
+  margin: auto;
+}
+.rowNavbar input {
+  padding: 5px 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(50, 50, 93, 0.25);
+}
+.rowNavbar input::placeholder {
+  color: var(--theme-color);
+}
+.searchNavBarMain {
+  display: flex;
+  justify-content: space-between;
+  border-right: 2px solid #efeff5;
+  padding: 0 2vw 0 4vw !important;
+}
+.searchNavBar {
+  position: relative;
+  width: 86%;
+}
+.searchNavBar input{
+  width: 100%;
+}
+.searchNavBar span {
+  position: absolute;
+  right: 1vw;
+  font-size: 28px;
+  bottom: 0px;
+  color: var(--theme-color);
+}
+.adminSection {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 25px !important;
+  align-items: center;
+}
+.adminSection label {
+  color: #808191;
+  font-weight: bold;
+  font-size: 16px;
+  padding-right: 16px;
+  font-family: var(--Mulish);
+  white-space: nowrap;
+}
+.notificationBell {
+  position: relative;
+  width: 10%;
+}
+.notificationBell .logo {
+  color: #c5c7cd;
+  font-size: 27px;
+}
+.notificationBell::before {
+  content: " ";
+  position: absolute;
+  background: var(--theme-color);
+  font-size: 100px;
+  line-height: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  left: 15px;
+  border: 2px solid white;
+  top: -5px;
+}

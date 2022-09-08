@@ -1,0 +1,113 @@
+/* CareerEnquiry Index.js  Page */
+
+.customColumn {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 0;
+}
+.divDivision {
+  width: 19%;
+  margin: 12px 0;
+}
+.listCareerEnquiries {
+  border: 1px solid rgb(197, 199, 205);
+  border-radius: 15px;
+  padding: 10px 25px;
+}
+
+.careerEnquiries {
+  display: flex;
+  justify-content: space-between;
+  overflow: visible !important;
+  margin-bottom: 12px;
+}
+.careerEnquirieSub {
+  display: flex;
+  align-items: flex-end;
+}
+.careerEnquirieSub h4 {
+  font-family: var(--Poppins);
+  font-size: 20px;
+  line-height: 36px;
+}
+.formCareerEnquiries {
+  justify-content: space-between;
+  display: flex;
+  width: 30%;
+}
+.formCareerEnquirieSub1 {
+  width: 65%;
+}
+.formCareerEnquirieSub2 {
+  width: 32%;
+  display: flex;
+  align-items: flex-end;
+}
+.formShowButton,
+.formShowButton:hover,
+.formShowButton:active,
+.formShowButton:focus {
+  width: 100%;
+  background: var(--theme-color) !important;
+}
+
+.popForm {
+  padding: 15px 15px 10px 15px;
+}
+.popFormGroup {
+  display: flex;
+  margin-top: 12px;
+}
+
+.popFormRadioButton input[type="radio"]:checked {
+  background-color: var(--theme-color) !important;
+  /* background: #1C4E80 !important; */
+}
+.iconView {
+  font-size: 25px;
+  color: var(--theme-color);
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* CareerEnquiry CarView  Page */
+.cardview {
+  border: 1px solid #c5c7cd;
+  border-radius: 10px;
+  padding: 10px 30px;
+}
+.tabsContent {
+  border-bottom: none !important;
+  width: 100%;
+  margin-bottom: 25px !important;
+  padding-left: 45px !important;
+}
+.tabsContent li {
+  padding: 0px 3px;
+  width: 25%;
+}
+.tabsContent li button {
+  border: 1px solid var(--theme-color) !important;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  font-family: var(--Poppins);
+  color: #333333;
+}
+.backToCareer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.backToCareerIcon {
+  font-size: 22px;
+  margin-right: 5px;
+  color: var(--theme-color);
+}
+.backToCareer span {
+  font-family: var(--Poppins);
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}

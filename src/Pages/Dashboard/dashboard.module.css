@@ -1,0 +1,36 @@
+.colSetting {
+  padding-right: 0 !important;
+}
+.commonContainer {
+  border: 1px solid #c5c7cd;
+  border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 15px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.commonContainer h5 {
+  font-family: var(--Poppins);
+  font-size: 20px;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+
+.commonContainer h6 {
+  font-family: var(--Poppins);
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  color:#808080;
+  font-weight: 600;
+}
+.iconDiv {
+  background: rgb(223, 224, 235);
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  height: 50px;
+  align-items: center;
+  border-radius: 50%;
+}
