@@ -35,7 +35,7 @@ const SideBar = () => {
   const location = useLocation();
   const CurrentRoute = location.pathname;
 
-  console.log(CurrentRoute, 'CurrentRoute')
+  console.log(CurrentRoute, "CurrentRoute");
 
   const sideLinks = [
     {
@@ -77,15 +77,50 @@ const SideBar = () => {
         {
           id: 6.1,
           icon: <MdSettings />,
-          route: '/settings/apperance',
-          Title: "Apperance"
-        }
-
-      ]
+          route: "/settings/qualification",
+          Title: "Qualification",
+        },
+        {
+          id: 6.2,
+          icon: <MdSettings />,
+          route: "/settings/category",
+          Title: "Category of the candidate",
+        },
+        {
+          id: 6.3,
+          icon: <MdSettings />,
+          route: "/settings/educational",
+          Title: "Educational Institute or College/ University",
+        },
+        {
+          id: 6.4,
+          icon: <MdSettings />,
+          route: "/settings/branchmaster",
+          Title: "Branch Master",
+        },
+        {
+          id: 6.5,
+          icon: <MdSettings />,
+          route: "/settings/employeemaster",
+          Title: "Employee master",
+        },
+        {
+          id: 6.6,
+          icon: <MdSettings />,
+          route: "/settings/userights",
+          Title: "User rights",
+        },
+      ],
     },
   ];
-
-  const activeRoute = sideLinks.find(link => CurrentRoute.startsWith(link.route)) ? CurrentRoute : "/Dashboard";
+  const handleDropdownlist = () => {
+    console.log("clecked");
+  };
+  const activeRoute = sideLinks.find((link) =>
+    CurrentRoute.startsWith(link.route)
+  )
+    ? CurrentRoute
+    : "/Dashboard";
 
   //create a custom function that will change menucollapse state from false to true and true to false
   const menuIconClick = () => {
@@ -108,20 +143,26 @@ const SideBar = () => {
               )}
             </div>
           </SidebarHeader>
-          <SidebarContent>
-            <Menu iconShape="square">
+          <SidebarContent className="dropdownMenu">
+            <Menu
+              iconShape="square"
+              onClick={() => {
+                return handleDropdownlist();
+              }}
+            >
               {sideLinks.map((val) => {
-                if(val.subRoutes === undefined){
+                if (val.subRoutes === undefined) {
                   return (
                     <MenuItem
                       key={val.id}
                       active={activeRoute.startsWith(val.route) ? true : false}
-                      icon={val.icon}>
+                      icon={val.icon}
+                    >
                       <NavLink to={val.route}>{val.Title}</NavLink>
                     </MenuItem>
-                  )
-                }else{
-                  return(
+                  );
+                } else {
+                  return (
                     <>
                       {/* <MenuItem
                         key={val.id}
@@ -134,18 +175,24 @@ const SideBar = () => {
                           return (
                             <MenuItem
                               key={subRoute.id}
-                              active={activeRoute.startsWith(subRoute.route) ? true : false}
-                              icon={subRoute.icon}>
-                              <NavLink to={subRoute.route}>{subRoute.Title}</NavLink>
+                              active={
+                                activeRoute.startsWith(subRoute.route)
+                                  ? true
+                                  : false
+                              }
+                              icon={subRoute.icon}
+                            >
+                              <NavLink to={subRoute.route}>
+                                {subRoute.Title}
+                              </NavLink>
                             </MenuItem>
-                          )
+                          );
                         })}
                       </SubMenu>
                     </>
                   );
                 }
               })}
-
             </Menu>
           </SidebarContent>
           <SidebarFooter>
@@ -160,8 +207,6 @@ const SideBar = () => {
 };
 
 export default SideBar;
-
-
 
 // import React, { useState } from "react";
 // import { NavLink, useLocation } from "react-router-dom";
@@ -199,7 +244,7 @@ export default SideBar;
 
 //   const location = useLocation();
 //   const CurrentRoute = location.pathname;
-  
+
 //   const sideLinks = [
 //     {
 //       id: 1,
