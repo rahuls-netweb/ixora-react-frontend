@@ -10,9 +10,17 @@ import { loginAction } from "../../../store/actions/authAction";
 function Signin() {
   const [credField, setCredField] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  function goToDashboard() {}
+  function goToDashboard() {
+    navigate("/dashboard", {
+      replace: true,
+    });
+  }
+  function Forgetpassword() {
+    navigate("/reset-password", {
+      replace: true,
+    });
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -59,11 +67,19 @@ function Signin() {
                 <Col md={12} className="text-center">
                   {/* <button className="btn w-100">Sign In</button> */}
 
-                  <Button type="submit" className={styles.signInLink}>
+                  <Button
+                    type="submit"
+                    onClick={goToDashboard}
+                    className={styles.signInLink}
+                  >
                     Sign In
                   </Button>
                   {/* <NavLink  to="/Dashboard" >Sign In</NavLink>  */}
-                  <a href="hhtp:google.com" alt="Forggetin">
+                  <a
+                    href="hhtp:google.com"
+                    alt="Forggetin"
+                    onClick={Forgetpassword}
+                  >
                     Forget your Password ?
                   </a>
                 </Col>
