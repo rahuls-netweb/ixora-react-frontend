@@ -1,10 +1,9 @@
+import styles from "./SignIn.module.css";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
-import styles from "./SignIn.module.css";
 import { loginAction } from "../../../store/actions/authAction";
 
 function Signin() {
@@ -12,16 +11,16 @@ function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function goToDashboard() {}
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    dispatch(loginAction());
-
+  function goToDashboard() {
     navigate("/dashboard", {
       replace: true,
     });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log("Submit");
+    dispatch(loginAction());
   }
   return (
     <Container fluid className={styles.containerX}>

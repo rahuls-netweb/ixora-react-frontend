@@ -1,0 +1,11 @@
+.tablecardViewMain {
+    padding-left: 60px;
+}
+
+.tablecardView tr td {
+    width: 25%;
+    font-family: var(--Poppins);
+    color: #333333;
+    padding: 15px;
+    font-size: 14px;
+}
