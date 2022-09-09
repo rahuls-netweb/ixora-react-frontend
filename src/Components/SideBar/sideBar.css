@@ -105,3 +105,9 @@
     overflow: hidden;
   }
 }
+
+.settings{
+  background: var(--theme-color);
+    border-radius: 15px;
+    color : var(--white-color)
+}

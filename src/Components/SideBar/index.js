@@ -13,7 +13,7 @@ import {
 } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 
-import "./sideBar.css"; //import sidebar css from react-pro-sidebar module and our custom css
+import styles from "./sideBar.css"; //import sidebar css from react-pro-sidebar module and our custom css
 
 //import icons from react icons
 import {
@@ -151,7 +151,7 @@ const SideBar = () => {
               }}
             >
               {sideLinks.map((val) => {
-                if (val.subRoutes === undefined) {
+                if (!val.subRoutes) {
                   return (
                     <MenuItem
                       key={val.id}
@@ -170,17 +170,26 @@ const SideBar = () => {
                         icon={val.icon}>
                         <NavLink to={val.route}>{val.Title}</NavLink>
                       </MenuItem> */}
-                      <SubMenu title={val.Title} icon={val.icon}>
-                        {val.subRoutes.map((subRoute) => {
+
+                      <SubMenu
+                        title={<NavLink to={val.route}>{val.Title}</NavLink>}
+                        icon={val.icon}
+                        onOpenChange={() => {}}
+                        defaultOpen={true}
+                        onClick={() => {
+                          return console.log(activeRoute);
+                        }}
+                      >
+                        {val.subRoutes.map((subRoute, index) => {
                           return (
                             <MenuItem
                               key={subRoute.id}
+                              icon={subRoute.icon}
                               active={
                                 activeRoute.startsWith(subRoute.route)
                                   ? true
                                   : false
                               }
-                              icon={subRoute.icon}
                             >
                               <NavLink to={subRoute.route}>
                                 {subRoute.Title}
