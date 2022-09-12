@@ -123,7 +123,7 @@ export default function TTIDEnquiry() {
 
       <Container fluid>
         <Row>
-          <Col md={12}>
+          <Col md={12} style={{ paddingRight: 0 }}>
             <div className={styles.listCareerEnquiries}>
               <div className={styles.careerEnquiries}>
                 <div className={styles.careerEnquirieSub}>
