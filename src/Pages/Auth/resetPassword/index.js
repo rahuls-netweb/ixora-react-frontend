@@ -1,26 +1,21 @@
-import styles from "./SignIn.module.css";
+import styles from "./ResetPassword.module.css";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { loginAction } from "../../../store/actions/authAction";
 
-function Signin() {
+function ResetPasword() {
   const [credField, setCredField] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  function goToDashboard() {
-    navigate("/dashboard", {
+  function gotoSignIn() {
+    navigate("/", {
       replace: true,
     });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("Submit");
-    dispatch(loginAction());
   }
   return (
     <Container fluid className={styles.containerX}>
@@ -33,7 +28,13 @@ function Signin() {
             <Container className="p-0">
               <Row className="py-3 justify-content-center">
                 <Col md={12}>
-                  <h2>Sign in</h2>
+                  <h2>Reset Password</h2>
+                </Col>
+                <Col md={12} className={styles.formText}>
+                  <div>
+                    Enter the mail associated with your account and we’ll send
+                    an email with instruction to reset your password
+                  </div>
                 </Col>
                 <Col md={12}>
                   <input
@@ -42,29 +43,17 @@ function Signin() {
                     placeholder="Email Address"
                   />
                 </Col>
-                <Col md={12} className="position-relative">
-                  <input
-                    type={credField ? "text" : "password"}
-                    className="form-control"
-                    placeholder="Password"
-                  />
-                  <span
-                    className={styles.floatingEye}
-                    onClick={() => setCredField(!credField)}
-                  >
-                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
-                  </span>
-                </Col>
+
                 <Col md={12} className="text-center">
                   {/* <button className="btn w-100">Sign In</button> */}
 
-                  <Button type="submit" className={styles.signInLink}>
-                    Sign In
+                  <Button
+                    type="submit"
+                    onClick={gotoSignIn}
+                    className={styles.signInLink}
+                  >
+                    Send Mail
                   </Button>
-                  {/* <NavLink  to="/Dashboard" >Sign In</NavLink>  */}
-                  <a href="hhtp:google.com" alt="Forggetin">
-                    Forget your Password ?
-                  </a>
                 </Col>
               </Row>
             </Container>
@@ -74,4 +63,4 @@ function Signin() {
     </Container>
   );
 }
-export default Signin;
+export default ResetPasword;

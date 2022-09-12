@@ -1,35 +1,21 @@
+import styles from "./CreateNewPassword.module.css";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Form, Container, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-import styles from "./SignIn.module.css";
-import { loginAction } from "../../../store/actions/authAction";
-
-function Signin() {
+function CreateNewPassword() {
   const [credField, setCredField] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
   function goToDashboard() {
-    navigate("/dashboard", {
-      replace: true,
-    });
-  }
-  function Forgetpassword() {
-    navigate("/reset-password", {
+    navigate("/", {
       replace: true,
     });
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    dispatch(loginAction());
-
-    navigate("/dashboard", {
-      replace: true,
-    });
   }
   return (
     <Container fluid className={styles.containerX}>
@@ -42,16 +28,18 @@ function Signin() {
             <Container className="p-0">
               <Row className="py-3 justify-content-center">
                 <Col md={12}>
-                  <h2>Sign in</h2>
+                  <h2>Create new password</h2>
                 </Col>
                 <Col md={12}>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Email Address"
-                  />
+                  <div className={styles.textStyle}>
+                    Your new password must be different from previous used
+                    passwords.
+                  </div>
                 </Col>
-                <Col md={12} className="position-relative">
+                <Col
+                  md={12}
+                  className={`position-relative ${styles.formDistance}`}
+                >
                   <input
                     type={credField ? "text" : "password"}
                     className="form-control"
@@ -63,6 +51,28 @@ function Signin() {
                   >
                     {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
                   </span>
+                  <span className={styles.textStyle}>
+                    Must be at least 8 characters.
+                  </span>
+                </Col>
+                <Col
+                  md={12}
+                  className={`position-relative ${styles.formDistance}`}
+                >
+                  <input
+                    type={credField ? "text" : "password"}
+                    className="form-control"
+                    placeholder="Confirm Password"
+                  />
+                  <span
+                    className={styles.floatingEye}
+                    onClick={() => setCredField(!credField)}
+                  >
+                    {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </span>
+                  <span className={styles.textStyle}>
+                    Both passsword must match.
+                  </span>
                 </Col>
                 <Col md={12} className="text-center">
                   {/* <button className="btn w-100">Sign In</button> */}
@@ -72,16 +82,8 @@ function Signin() {
                     onClick={goToDashboard}
                     className={styles.signInLink}
                   >
-                    Sign In
+                    Reset Password
                   </Button>
-                  {/* <NavLink  to="/Dashboard" >Sign In</NavLink>  */}
-                  <a
-                    href="hhtp:google.com"
-                    alt="Forggetin"
-                    onClick={Forgetpassword}
-                  >
-                    Forget your Password ?
-                  </a>
                 </Col>
               </Row>
             </Container>
@@ -91,4 +93,4 @@ function Signin() {
     </Container>
   );
 }
-export default Signin;
+export default CreateNewPassword;

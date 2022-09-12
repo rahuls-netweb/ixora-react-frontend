@@ -1,5 +1,5 @@
 .pro-sidebar {
-  color: #adadad;
+  color: var(--light-grey-color);
   height: 100%;
   text-align: left;
   transition: width, left, right, 0.3s;
@@ -20,7 +20,7 @@
   cursor: pointer;
   width: 35px;
   height: 35px;
-  background: white;
+  background: var(--white-color);
   padding: 0 0 0 6px;
   margin: 7px 0;
   float: right;
@@ -41,7 +41,7 @@
 }
 
 .header .pro-sidebar-inner {
-  background: white !important;
+  background: var(--white-color) !important;
   box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
   padding: 10px;
@@ -66,12 +66,13 @@
 .header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
   margin: 0;
   font-weight: bold;
-  padding: 7px 0 !important;
+  padding: 7px 0;
 }
 
 .header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {
   background: transparent !important;
-  color: white;
+  color: var(--white-color);
+  ;
 }
 
 .header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper .pro-icon {
@@ -85,7 +86,6 @@
 }
 
 .header .pro-sidebar-inner .pro-sidebar-layout .active {
-
   border-radius: 15px;
   white-space: pre-wrap;
 }
@@ -100,8 +100,11 @@
   padding: 20px;
 }
 
-
-
+@media only screen and (max-width: 720px) {
+  html {
+    overflow: hidden;
+  }
+}
 
 .dropdownMenu .pro-menu ul .pro-sub-menu .pro-inner-list-item {
   background: transparent;
@@ -113,23 +116,28 @@
   color: var(--white-color)
 }
 
-
-@media only screen and (max-width: 720px) {
-  html {
-    overflow: hidden;
-  }
-
-  <<<<<<< HEAD=======
-}
-
-.settings {
+.pro-sub-menu .pro-inner-item:has(.pro-item-content .active) {
   background: var(--theme-color);
   border-radius: 15px;
-  color: var(--white-color) >>>>>>> d8de7e24c6c85f82b92dc67dbb6367518cd4ea46
+  color: var(--white-color);
 }
 
-.settings {
-  background: var(--theme-color);
-  border-radius: 15px;
-  color: var(--white-color)
+.pro-sub-menu .pro-inner-item .pro-item-content .active:hover {
+
+  color: var(--white-color) !important;
 }
+
+.pro-sub-menu .react-slidedown {
+  padding-left: 15px !important;
+  margin-top: -10px !important;
+}
+
+.pro-sub-menu .react-slidedown ul li .pro-inner-item {
+  padding: 13px 10px 13px 10px !important;
+}
+
+.pro-sidebar .pro-menu .pro-sub-menu :hover {
+  color: #d8d8d8 !important;
+}
+
+/* .pro-sub-menu.open  */
