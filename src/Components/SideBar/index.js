@@ -74,36 +74,42 @@ const SideBar = () => {
       subRoutes: [
         {
           id: 6.1,
-          icon: <MdSettings className="green" />,
+          icon: <MdSettings />,
+          route: "/settings/headOffice",
+          Title: "Head Office",
+        },
+        {
+          id: 6.2,
+          icon: <MdSettings />,
           route: "/settings/qualification",
           Title: "Qualification",
         },
         {
-          id: 6.2,
+          id: 6.3,
           icon: <MdSettings />,
           route: "/settings/category",
           Title: "Category of the candidate",
         },
         {
-          id: 6.3,
+          id: 6.4,
           icon: <MdSettings />,
           route: "/settings/educational",
           Title: "Educational Institute or College/ University",
         },
         {
-          id: 6.4,
+          id: 6.5,
           icon: <MdSettings />,
           route: "/settings/branchmaster",
           Title: "Branch Master",
         },
         {
-          id: 6.5,
+          id: 6.6,
           icon: <MdSettings />,
           route: "/settings/employeemaster",
           Title: "Employee master",
         },
         {
-          id: 6.6,
+          id: 6.7,
           icon: <MdSettings />,
           route: "/settings/userights",
           Title: "User rights",
