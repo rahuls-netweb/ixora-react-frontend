@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
-import { Form, Container, Row, Col, Button } from "react-bootstrap";
+import { Form, Container, Row, Col, Button, Spinner } from "react-bootstrap";
+
 import { useNavigate } from "react-router-dom";
 
 import styles from "./SignIn.module.css";
@@ -9,6 +10,7 @@ import { loginAction } from "../../../store/actions/authAction";
 
 function Signin() {
   const [credField, setCredField] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -24,7 +26,12 @@ function Signin() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(loginAction(email, password));
+    setIsSubmitting(true);
+    dispatch(
+      loginAction(email, password, null, () => {
+        setIsSubmitting(false);
+      })
+    );
   }
   return (
     <Container fluid className={styles.containerX}>
@@ -46,6 +53,7 @@ function Signin() {
                     placeholder="Email Address"
                     value={email}
                     onChange={({ target: { value } }) => setEmail(value)}
+                    autoComplete="off"
                   />
                 </Col>
                 <Col md={12} className="position-relative">
@@ -54,6 +62,7 @@ function Signin() {
                     className="form-control"
                     placeholder="Password"
                     value={password}
+                    autoComplete="off"
                     onChange={({ target: { value } }) => setPassword(value)}
                   />
                   <span
@@ -64,9 +73,21 @@ function Signin() {
                   </span>
                 </Col>
                 <Col md={12} className="text-center">
-                  <Button type="submit" className={styles.signInLink}>
-                    Sign In
+                  <Button
+                    type="submit"
+                    className={styles.signInLink}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <Spinner
+                        animation="border"
+                        className={styles.signInLoader}
+                      />
+                    ) : (
+                      "Sign In"
+                    )}
                   </Button>
+
                   <a
                     href="hhtp:google.com"
                     alt="Forggetin"
