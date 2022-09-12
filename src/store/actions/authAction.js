@@ -1,12 +1,11 @@
 import axios from "../../utils/api";
+import { toast } from "react-toastify";
 
 export const ADMIN_LOGIN = "ADMIN_LOGIN";
 
 // Posts action
-export const loginAction = (email, password) => async (dispatch) => {
-  try {
-    console.log("action called");
-
+export const loginAction =
+  (email, password, success, error) => async (dispatch) => {
     axios
       .post("/login", {
         email,
@@ -22,12 +21,14 @@ export const loginAction = (email, password) => async (dispatch) => {
             user,
           },
         });
+        success && success();
+      })
+      .catch(function (err) {
+        toast.error(err.response.data.message);
+        error && error();
       });
-  } catch (err) {}
-};
+  };
 export const logoutAction = () => (dispatch) => {
-  alert("logout action called");
-
   localStorage.removeItem("auth");
   dispatch({
     type: ADMIN_LOGIN,
