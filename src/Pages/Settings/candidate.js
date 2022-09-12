@@ -4,11 +4,11 @@ import { Container, Row, Col, Tab, Tabs, Table, Button } from "react-bootstrap";
 import styles from "./setting.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Qualification() {
+export default function Candidate() {
   const [data, setData] = useState([]);
   const [text, setText] = useState();
   const navigate = useNavigate();
-  const [key, setKey] = useState("Qualification");
+  const [key, setKey] = useState("Candidate");
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -38,7 +38,7 @@ export default function Qualification() {
           <Col md={12}>
             <div className={styles.cardview}>
               <Tabs
-                defaultActiveKey="Qualification"
+                defaultActiveKey="Candidate"
                 id="fill-tab-example"
                 className={"tabs-Content " + styles.tabsContent}
                 fill

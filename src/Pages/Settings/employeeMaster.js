@@ -4,7 +4,7 @@ import { Container, Row, Col, Tab, Tabs, Table, Button } from "react-bootstrap";
 import styles from "./setting.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Qualification() {
+export default function EmployeeMaster() {
   const [data, setData] = useState([]);
   const [text, setText] = useState();
   const navigate = useNavigate();
@@ -123,7 +123,7 @@ export default function Qualification() {
                 <Tab eventKey="BranchMaster" title="Branch Master">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-                <Tab eventKey="Employee master" title="Employee master">
+                <Tab eventKey="EmployeeMaster" title="EmployeeMaster">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
               </Tabs>

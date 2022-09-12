@@ -18,6 +18,7 @@ export default function HeadOffice() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [location, setLocation] = useState();
+  const [key, setKey] = useState("HeadOffice");
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -35,8 +36,10 @@ export default function HeadOffice() {
                 id="fill-tab-example"
                 className={"tabs-Content " + styles.tabsContent}
                 fill
-                onClick={() => {
-                  console.log("check which is clicked");
+                activeKey={key}
+                onSelect={(key) => {
+                  setKey(key);
+                  navigate("/settings/" + key);
                 }}
               >
                 <Tab eventKey="HeadOffice" title="Head Office">
