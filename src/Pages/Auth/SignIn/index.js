@@ -9,13 +9,13 @@ import { loginAction } from "../../../store/actions/authAction";
 
 function Signin() {
   const [credField, setCredField] = useState(false);
+
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  function goToDashboard() {
-    navigate("/dashboard", {
-      replace: true,
-    });
-  }
+
   function Forgetpassword() {
     navigate("/reset-password", {
       replace: true,
@@ -24,12 +24,7 @@ function Signin() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    dispatch(loginAction());
-
-    navigate("/dashboard", {
-      replace: true,
-    });
+    dispatch(loginAction(email, password));
   }
   return (
     <Container fluid className={styles.containerX}>
@@ -49,6 +44,8 @@ function Signin() {
                     type="text"
                     className="form-control"
                     placeholder="Email Address"
+                    value={email}
+                    onChange={({ target: { value } }) => setEmail(value)}
                   />
                 </Col>
                 <Col md={12} className="position-relative">
@@ -56,6 +53,8 @@ function Signin() {
                     type={credField ? "text" : "password"}
                     className="form-control"
                     placeholder="Password"
+                    value={password}
+                    onChange={({ target: { value } }) => setPassword(value)}
                   />
                   <span
                     className={styles.floatingEye}
@@ -65,16 +64,9 @@ function Signin() {
                   </span>
                 </Col>
                 <Col md={12} className="text-center">
-                  {/* <button className="btn w-100">Sign In</button> */}
-
-                  <Button
-                    type="submit"
-                    onClick={goToDashboard}
-                    className={styles.signInLink}
-                  >
+                  <Button type="submit" className={styles.signInLink}>
                     Sign In
                   </Button>
-                  {/* <NavLink  to="/Dashboard" >Sign In</NavLink>  */}
                   <a
                     href="hhtp:google.com"
                     alt="Forggetin"

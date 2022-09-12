@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../../store/actions/authAction";
 //import react pro sidebar components
 import {
   ProSidebar,
@@ -25,7 +28,7 @@ import {
   MdPhone,
 } from "react-icons/md";
 const SideBar = () => {
-  //create initial menuCollapse state using useState hook
+  const dispatch = useDispatch();
   const [menuCollapse, setMenuCollapse] = useState(false);
   const location = useLocation();
   const CurrentRoute = location.pathname;
@@ -71,7 +74,7 @@ const SideBar = () => {
       subRoutes: [
         {
           id: 6.1,
-          icon: <MdSettings />,
+          icon: <MdSettings className="green" />,
           route: "/settings/qualification",
           Title: "Qualification",
         },
@@ -108,9 +111,7 @@ const SideBar = () => {
       ],
     },
   ];
-  const handleDropdownlist = () => {
-    console.log("clecked");
-  };
+
   const activeRoute = sideLinks.find((link) =>
     CurrentRoute.startsWith(link.route)
   )
@@ -120,6 +121,9 @@ const SideBar = () => {
   const menuIconClick = () => {
     //condition checking to change state from true to false and vice versa
     menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
+  };
+  const logOut = () => {
+    dispatch(logoutAction());
   };
   return (
     <>
@@ -137,12 +141,7 @@ const SideBar = () => {
             </div>
           </SidebarHeader>
           <SidebarContent className="dropdownMenu">
-            <Menu
-              iconShape="square"
-              onClick={() => {
-                return handleDropdownlist();
-              }}
-            >
+            <Menu iconShape="square">
               {sideLinks.map((val) => {
                 if (!val.subRoutes) {
                   return (
@@ -158,6 +157,7 @@ const SideBar = () => {
                   return (
                     <>
                       <SubMenu
+                        className="submenuContent"
                         icon={val.icon}
                         title={<NavLink to={val.route}>{val.Title}</NavLink>}
                         // icon={val.icon}
@@ -192,7 +192,9 @@ const SideBar = () => {
           </SidebarContent>
           <SidebarFooter>
             <Menu iconShape="square">
-              <MenuItem icon={<MdLogout />}>Logout</MenuItem>
+              <MenuItem icon={<MdLogout />} onClick={logOut}>
+                Logout
+              </MenuItem>
             </Menu>
           </SidebarFooter>
         </ProSidebar>
