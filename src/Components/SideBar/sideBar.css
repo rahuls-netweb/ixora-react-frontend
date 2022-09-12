@@ -93,7 +93,7 @@
 .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-icon-wrapper .pro-icon,
 .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-item-content a,
 .pro-sidebar-inner .pro-sidebar-layout ul .pro-menu-item:not(.active) .pro-inner-item:hover .pro-item-content {
-  color: var(--theme-color) !important;
+  color: var(--theme-color);
 }
 
 .header .logo {
@@ -116,26 +116,30 @@
   color: var(--white-color)
 }
 
-.pro-sub-menu .pro-inner-item:has(.pro-item-content .active) {
+.submenuContent .pro-inner-item:has(.pro-item-content .active) {
   background: var(--theme-color);
   border-radius: 15px;
   color: var(--white-color);
 }
 
-.pro-sub-menu .pro-inner-item .pro-item-content .active:hover {
+/* .submenuContent .pro-inner-item .pro-item-content .active:hover {
 
   color: var(--white-color) !important;
-}
+} */
 
-.pro-sub-menu .react-slidedown {
+.submenuContent .react-slidedown {
   padding-left: 15px !important;
   margin-top: -10px !important;
 }
 
-.pro-sub-menu .react-slidedown ul li .pro-inner-item {
+.submenuContent .react-slidedown ul li .pro-inner-item {
   padding: 13px 10px 13px 10px !important;
 }
 
-.pro-sidebar .pro-menu .pro-sub-menu:hover {
+/* .pro-sidebar .pro-menu .pro-sub-menu:hover {
   color: #d8d8d8 !important;
-}
+} */
+/* .submenuContent .pro-inner-item:hover .pro-icon-wrapper .pro-icon,
+.submenuContent .pro-inner-item:hover .pro-item-content a {
+  color: var(--white-color) !important;
+} */
