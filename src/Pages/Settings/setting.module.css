@@ -45,3 +45,29 @@
     font-size: 14px;
     letter-spacing: 0.2px;
 }
+
+.customColumn {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0 !important;
+}
+
+.divDivision {
+    padding: 12px 0;
+    width: 24%;
+}
+
+.formCareerEnquirieSub2 {
+    padding: 12px 0;
+    width: 50%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.formShowButton,
+.formShowButton:hover,
+.formShowButton:active,
+.formShowButton:focus {
+    width: 100%;
+    background: var(--theme-color) !important;
+}

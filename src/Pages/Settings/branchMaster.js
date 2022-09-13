@@ -1,36 +1,30 @@
 import React, { useState } from "react";
 import Layout from "../../Components/Layout";
-import { Container, Row, Col, Tab, Tabs, Table, Button } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Tab,
+  Tabs,
+  Form,
+  Button,
+  InputGroup,
+} from "react-bootstrap";
 import styles from "./setting.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function BranchMaster() {
-  const [data, setData] = useState([]);
-  const [text, setText] = useState();
+export default function HeadOffice() {
   const navigate = useNavigate();
-  const [key, setKey] = useState("BranchMaster");
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [location, setLocation] = useState();
+  const [key, setKey] = useState("branch-master");
   const handleSubmit = (e) => {
     e.preventDefault();
   };
-  const addData = () => {
-    if (text !== "") {
-      const newData = [
-        ...data,
-        {
-          title: text,
-        },
-      ];
-      setData(newData);
-      setText("");
-    }
+  const checkLogin = () => {
+    console.log("Name : ", name, "email : ", email, "Loaction : ", location);
   };
-  const editTask = () => {};
-  const deleteTask = (index) => {
-    const newdata = [...data];
-    newdata.splice(index, 1);
-    setData(newdata);
-  };
-
   return (
     <Layout>
       <Container fluid>
@@ -38,7 +32,7 @@ export default function BranchMaster() {
           <Col md={12}>
             <div className={styles.cardview}>
               <Tabs
-                defaultActiveKey="BranchMaster"
+                defaultActiveKey="branch-master"
                 id="fill-tab-example"
                 className={"tabs-Content " + styles.tabsContent}
                 fill
@@ -48,29 +42,82 @@ export default function BranchMaster() {
                   navigate("/settings/" + key);
                 }}
               >
-                <Tab eventKey="HeadOffice" title="Head Office">
+                <Tab eventKey="headoffice" title="Head Office">
                   <div className={styles.tablecardViewMain}>
-                    <h1>harman</h1>
+                    <Form onSubmit={handleSubmit} method="post">
+                      <Form.Group className="mb-3" controlId="formBasicName">
+                        <Form.Label>Your Name</Form.Label>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter Name"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                        />
+                      </Form.Group>
+
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                          type="email"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
+                        />
+                      </Form.Group>
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Location</Form.Label>
+                        <InputGroup className="mb-3">
+                          <select
+                            onChange={(e) => {
+                              setLocation(e.target.value);
+                            }}
+                          >
+                            <option
+                              value="SelectCountry"
+                              selected="true"
+                              disabled="disabled"
+                            >
+                              Select Country
+                            </option>
+                            <option value="CANADA">CANADA</option>
+                            <option value="INDIA">INDIA</option>
+                            <option value="USA">USA</option>
+                            <option value="AUSTRALIA">AUSTRALIA</option>
+                          </select>
+                        </InputGroup>
+                      </Form.Group>
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        onClick={(e) => {
+                          checkLogin();
+                        }}
+                      >
+                        Submit
+                      </Button>
+                    </Form>
                   </div>
                 </Tab>
-                <Tab eventKey="Country" title="Country">
+                <Tab eventKey="country" title="Country">
+                  <div className={styles.tablecardViewMain}>Harman</div>
+                </Tab>
+                <Tab eventKey="qualification" title="Qualification">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-                <Tab eventKey="Qualification" title="Qualification">
-                  <div className={styles.tablecardViewMain}>
-                    <h3>Qualification</h3>
-                  </div>
-                </Tab>
-                <Tab eventKey="Candidate" title="Candidate">
+                <Tab eventKey="candidate" title="Candidate">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-                <Tab eventKey="College/University" title="College/University">
+                <Tab eventKey="college-university" title="College/University">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-                <Tab eventKey="BranchMaster" title="Branch Master">
+                <Tab eventKey="branch-master" title="Branch Master">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-                <Tab eventKey="Employee master" title="Employee master">
+                <Tab eventKey="employee-master" title="Employee master">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
               </Tabs>

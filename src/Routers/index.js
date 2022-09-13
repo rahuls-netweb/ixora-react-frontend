@@ -4,19 +4,26 @@ import PublicRoute from "./PublicRouter";
 import PrivateRoute from "./PrivateRoute";
 
 import Signin from "../Pages/Auth/SignIn";
+import CreateNewPassword from "../Pages/Auth/CreateNewPassword";
+import ResetPassword from "../Pages/Auth/resetPassword";
+
 import Dashboard from "../Pages/Dashboard";
 import CareerEnquiry from "../Pages/CareerEnquiry/index";
+import CardView from "../Pages/CareerEnquiry/CardView";
 import TTIDEnquiry from "../Pages/TTIDEnquiry";
 import VisitorEnquiry from "../Pages/VisitorEnquiry";
 import TelephonicEnquiry from "../Pages/TelephonicEnquiry";
 
-import CardView from "../Pages/CareerEnquiry/CardView";
-import Qualification from "../Pages/Settings/Qualification";
-import UserRights from "../Pages/Settings/userRights";
-import NotfoundPage from "../Pages/PageNotFound";
-import CreateNewPassword from "../Pages/Auth/CreateNewPassword";
-import ResetPassword from "../Pages/Auth/resetPassword";
 import HeadOffice from "../Pages/Settings/HeadOffice";
+import Country from "../Pages/Settings/Country";
+import BranchMaster from "../Pages/Settings/BranchMaster";
+import Candidate from "../Pages/Settings/Candidate";
+import CollegeUniversity from "../Pages/Settings/College-University";
+import EmployeeMaster from "../Pages/Settings/EmployeeMaster";
+import Qualification from "../Pages/Settings/Qualification";
+
+import NotfoundPage from "../Pages/PageNotFound";
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
@@ -56,13 +63,19 @@ export default function AppRoutes() {
               element={<Navigate to="/settings/headoffice" />}
             />
             <Route path="/settings/headoffice" element={<HeadOffice />} />
-            <Route path="/settings/Country" element={<HeadOffice />} />
+            <Route path="/settings/country" element={<Country />} />
             <Route path="/settings/qualification" element={<Qualification />} />
-            <Route path="/settings/candidate" element={<UserRights />} />
-            <Route path="/settings/College" element={<HeadOffice />} />
-            <Route path="/settings/branch-master" element={<Qualification />} />
-            <Route path="/settings/employee-master" element={<UserRights />} />
-            <Route path="/settings/userights" element={<UserRights />} />
+            <Route path="/settings/candidate" element={<Candidate />} />
+            <Route
+              path="/settings/college-university"
+              element={<CollegeUniversity />}
+            />
+            <Route path="/settings/branch-master" element={<BranchMaster />} />
+            <Route
+              path="/settings/employee-master"
+              element={<EmployeeMaster />}
+            />
+            {/* <Route path="/settings/user-rights" element={<UserRights />} /> */}
           </Route>
         </Route>
         <Route path="*" element={<NotfoundPage />} />

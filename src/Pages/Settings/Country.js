@@ -13,12 +13,12 @@ import {
 import styles from "./setting.module.css";
 import { useNavigate } from "react-router-dom";
 
-export default function Qualification() {
+export default function Country() {
   const navigate = useNavigate();
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [location, setLocation] = useState();
-  const [key, setKey] = useState("qualification");
+  const [key, setKey] = useState("country");
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -32,7 +32,7 @@ export default function Qualification() {
           <Col md={12}>
             <div className={styles.cardview}>
               <Tabs
-                defaultActiveKey="qualification"
+                defaultActiveKey="country"
                 id="fill-tab-example"
                 className={"tabs-Content " + styles.tabsContent}
                 fill

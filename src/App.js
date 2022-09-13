@@ -8,10 +8,7 @@ function App() {
   return (
     <Provider store={store}>
       <AppRoutes />
-      <ToastContainer
-        // autoClose={2000}
-        position="bottom-right"
-      />
+      <ToastContainer autoClose={2000} position="bottom-center" />
     </Provider>
   );
 }
