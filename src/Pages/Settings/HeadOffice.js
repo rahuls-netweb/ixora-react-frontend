@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../Components/Layout";
 import DataTable from "../../Components/DataTable";
+import { MdDelete } from "react-icons/md";
+import { BiPencil } from "react-icons/bi";
 import {
   Container,
   Row,
@@ -10,65 +12,111 @@ import {
   Tabs,
   Form,
   Button,
-  InputGroup,
+  Spinner,
 } from "react-bootstrap";
 import styles from "./setting.module.css";
 import { useNavigate } from "react-router-dom";
 import {
   headOfficeCreate,
   headOfficeGetAll,
+  headOfficeUpdate,
+  headOfficeDelete,
 } from "../../store/actions/headOfficeAction";
+import { getPaginatedRecordNumber } from "../../utils/helpers";
 
-const columns = [
-  {
-    name: "ID",
-    selector: (row) => row.id,
-  },
-  {
-    name: "Head Office Name",
-    selector: (row) => row.name,
-  },
-  {
-    name: "Email",
-    selector: (row) => row.email,
-  },
-  {
-    name: "Phone",
-    selector: (row) => row.phone,
-  },
-  {
-    name: "Address",
-    selector: (row) => row.address,
-  },
-  {
-    cell: () => (
-      <div>
-        <button>edit</button>
-        <button>edit</button>
-      </div>
-    ),
-    ignoreRowClick: true,
-    allowOverflow: true,
-    button: true,
-  },
-];
+const initialFormState = {
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  status: "1",
+};
+
+const PAGE_MODES = {
+  edit: "edit",
+  add: "add",
+};
 
 export default function HeadOffice() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    status: "1",
-  });
+  const [mode, setMode] = useState(PAGE_MODES.add);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(initialFormState);
+  const resetFields = () => setData(initialFormState);
 
   const { headOfficeList } = useSelector((state) => state.headOffice);
-  console.log(headOfficeList, "headajsdjasdbkajsdjkadbs");
+
+  const columns = [
+    {
+      name: "ID",
+      selector: (row, index) => {
+        return getPaginatedRecordNumber({ page: 1, per_page: 8, index });
+      },
+    },
+    {
+      name: "Head Office Name",
+      selector: (row) => row.name,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
+    },
+    {
+      name: "Phone",
+      selector: (row) => row.phone,
+    },
+    {
+      name: "Address",
+      selector: (row) => row.address,
+    },
+    {
+      cell: (singleRowData, index) => (
+        <div>
+          <BiPencil
+            className={styles.actionIcon}
+            onClick={() => {
+              console.log(singleRowData, "singleRowData");
+              console.log(index, "index");
+              setMode(PAGE_MODES.edit);
+              setData({
+                id: singleRowData.id,
+                name: singleRowData.name,
+                email: singleRowData.email,
+                phone: singleRowData.phone,
+                address: singleRowData.address,
+              });
+            }}
+          />
+          <MdDelete
+            className={styles.actionIcon}
+            onClick={() => {
+              console.log(singleRowData, "singleRowData");
+              dispatch(
+                headOfficeDelete({ id: singleRowData.id }, () =>
+                  dispatch(headOfficeGetAll())
+                )
+              );
+            }}
+          />
+        </div>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
 
   useEffect(() => {
-    dispatch(headOfficeGetAll());
+    setLoading(true);
+    dispatch(
+      headOfficeGetAll(
+        null,
+        () => setLoading(false),
+        () => setLoading(false)
+      )
+    );
   }, []);
 
   function handleData(e) {
@@ -79,7 +127,32 @@ export default function HeadOffice() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(headOfficeCreate(data));
+    setIsSubmitting(true);
+    if (mode === PAGE_MODES.add) {
+      dispatch(
+        headOfficeCreate(
+          data,
+          () => {
+            setIsSubmitting(false);
+            resetFields();
+            dispatch(headOfficeGetAll());
+          },
+          () => setIsSubmitting(false)
+        )
+      );
+    } else if (mode === PAGE_MODES.edit) {
+      dispatch(
+        headOfficeUpdate(
+          data,
+          () => {
+            setIsSubmitting(false);
+            resetFields();
+            dispatch(headOfficeGetAll());
+          },
+          () => setIsSubmitting(false)
+        )
+      );
+    }
   }
 
   const [key, setKey] = useState("headoffice");
@@ -158,7 +231,16 @@ export default function HeadOffice() {
                                 type="submit"
                                 className={styles.formShowButton}
                               >
-                                Create
+                                {isSubmitting ? (
+                                  <Spinner
+                                    animation="border"
+                                    className={styles.signInLoader}
+                                  />
+                                ) : mode === PAGE_MODES.add ? (
+                                  "Create"
+                                ) : (
+                                  "Update"
+                                )}
                               </Button>
                             </Form.Group>
                           </Col>
@@ -166,9 +248,13 @@ export default function HeadOffice() {
                       </Container>
                     </Form>
                   </div>
-                  <div style={{ paddingLeft: 15 }}>
-                    <DataTable columns={columns} rows={headOfficeList} />
-                  </div>
+                  {loading ? (
+                    <p>Loading.....</p>
+                  ) : (
+                    <div style={{ paddingLeft: 15 }}>
+                      <DataTable columns={columns} rows={headOfficeList} />
+                    </div>
+                  )}
                 </Tab>
                 <Tab eventKey="country" title="Country">
                   <div className={styles.tablecardViewMain}>Harman</div>
