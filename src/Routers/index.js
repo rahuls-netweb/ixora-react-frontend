@@ -5,7 +5,7 @@ import PrivateRoute from "./PrivateRoute";
 
 import Signin from "../Pages/Auth/SignIn";
 import CreateNewPassword from "../Pages/Auth/CreateNewPassword";
-import ResetPassword from "../Pages/Auth/resetPassword";
+import ResetPassword from "../Pages/Auth/ResetPassword";
 
 import Dashboard from "../Pages/Dashboard";
 import CareerEnquiry from "../Pages/CareerEnquiry/index";
