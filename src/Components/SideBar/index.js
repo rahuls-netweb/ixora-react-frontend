@@ -32,7 +32,6 @@ const SideBar = () => {
   const [menuCollapse, setMenuCollapse] = useState(false);
   const location = useLocation();
   const CurrentRoute = location.pathname;
-  console.log(CurrentRoute, "CurrentRoute");
   const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
 
   const sideLinks = [
@@ -75,7 +74,7 @@ const SideBar = () => {
         {
           id: 6.1,
           icon: <MdSettings />,
-          route: "/settings/headOffice",
+          route: "/settings/headoffice",
           Title: "Head Office",
         },
         {
