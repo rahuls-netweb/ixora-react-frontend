@@ -37,7 +37,7 @@ export default function AppRoutes() {
 
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
-
+          <Route path="/CCID-assigned" element={<CCIDassigned />} />
           <Route path="/career-enquiry">
             <Route path="/career-enquiry" element={<CareerEnquiry />} />
             <Route path="/career-enquiry/:id" element={<CardView />} />
