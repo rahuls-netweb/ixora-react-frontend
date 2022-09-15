@@ -13,7 +13,7 @@ import CardView from "../Pages/CareerEnquiry/CardView";
 import TTIDEnquiry from "../Pages/TTIDEnquiry";
 import VisitorEnquiry from "../Pages/VisitorEnquiry";
 import TelephonicEnquiry from "../Pages/TelephonicEnquiry";
-import CCIDassigned from '../Pages/CCIDAssigned';
+import CCIDassigned from "../Pages/CCIDAssigned";
 
 
 import NotfoundPage from "../Pages/PageNotFound";
