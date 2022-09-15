@@ -23,6 +23,7 @@ import EmployeeMaster from "../Pages/Settings/EmployeeMaster";
 import Qualification from "../Pages/Settings/Qualification";
 
 import NotfoundPage from "../Pages/PageNotFound";
+import RootSettings from "../Pages/Settings/RootSettings";
 
 export default function AppRoutes() {
   return (
@@ -62,19 +63,19 @@ export default function AppRoutes() {
               path="/settings"
               element={<Navigate to="/settings/headoffice" />}
             />
-            <Route path="/settings/headoffice" element={<HeadOffice />} />
-            <Route path="/settings/country" element={<Country />} />
-            <Route path="/settings/qualification" element={<Qualification />} />
-            <Route path="/settings/candidate" element={<Candidate />} />
+            <Route path="/settings/:id" element={<RootSettings />} />
+            {/* <Route path="/settings/country" element={<RootSettings />} />
+            <Route path="/settings/qualification" element={<RootSettings />} />
+            <Route path="/settings/candidate" element={<RootSettings />} />
             <Route
               path="/settings/college-university"
-              element={<CollegeUniversity />}
+              element={<RootSettings />}
             />
-            <Route path="/settings/branch-master" element={<BranchMaster />} />
+            <Route path="/settings/branch-master" element={<RootSettings />} />
             <Route
               path="/settings/employee-master"
-              element={<EmployeeMaster />}
-            />
+              element={<RootSettings />}
+            /> */}
             {/* <Route path="/settings/user-rights" element={<UserRights />} /> */}
           </Route>
         </Route>

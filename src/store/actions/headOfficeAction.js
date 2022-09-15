@@ -6,11 +6,9 @@ export const HEADOFFICE_GETALL = "HEADOFFICE_GETALL";
 // Posts action
 export const headOfficeCreate =
   (headOfficeData, onSuccess, onFailure) => async (dispatch) => {
-    // console.log(headOfficeData);
     axios
       .post("/headoffices", headOfficeData)
       .then(function ({ data }) {
-        console.log(data);
         onSuccess && onSuccess();
         toast.success("Head Office created successfully");
       })
@@ -49,7 +47,7 @@ export const headOfficeUpdate =
       .then(function ({ data }) {
         onSuccess && onSuccess();
 
-        toast.success("Head Office deleted successfully");
+        toast.success("Head Office Updated successfully");
       })
       .catch(function (err) {
         toast.error(err.response.data.message);
@@ -59,16 +57,15 @@ export const headOfficeUpdate =
 
 export const headOfficeDelete =
   ({ id }, onSuccess, onFailure) =>
-  async (dispatch) => {
-    axios
-      .delete(`/headoffices/${id}`)
-      .then(function ({ data }) {
-        console.log(data, "data after delete");
-        toast.success("Head Office deleted successfully");
-        onSuccess && onSuccess();
-      })
-      .catch(function (err) {
-        toast.error(err.response.data.message);
-        onFailure && onFailure();
-      });
-  };
+    async (dispatch) => {
+      axios
+        .delete(`/headoffices/${id}`)
+        .then(function ({ data }) {
+          toast.success("Head Office deleted successfully");
+          onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+          toast.error(err.response.data.message);
+          onFailure && onFailure();
+        });
+    };

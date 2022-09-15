@@ -1,38 +1,19 @@
-import React, { useState } from "react";
-import Layout from "../../Components/Layout";
-import {
-  Container,
-  Row,
-  Col,
-  Tab,
-  Tabs,
-  Form,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
-import styles from "./setting.module.css";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Container, Row, Col } from 'react-bootstrap';
+import styles from './rootsettings.module.css';
 
 export default function Candidate() {
-  const navigate = useNavigate();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [location, setLocation] = useState();
-  const [key, setKey] = useState("candidate");
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-  const checkLogin = () => {
-    console.log("Name : ", name, "email : ", email, "Loaction : ", location);
-  };
   return (
-    <Layout>
-      <Container fluid>
-        <Row>
-          <Col md={12}>
-            <div className={styles.cardview}>
-              <Tabs
-                defaultActiveKey="candidate"
+    <Container fluid>
+      <Row>
+        <Col md={12}>
+          <div className={styles.cardview}>
+            I am country
+            {/* <RootSettings>
+              <InputFields fields={Input_Fields} /> 
+            </RootSettings> */}
+            {/* <Tabs
+                defaultActiveKey="headoffice"
                 id="fill-tab-example"
                 className={"tabs-Content " + styles.tabsContent}
                 fill
@@ -44,66 +25,129 @@ export default function Candidate() {
               >
                 <Tab eventKey="headoffice" title="Head Office">
                   <div className={styles.tablecardViewMain}>
-                    <Form onSubmit={handleSubmit} method="post">
-                      <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Label>Your Name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          placeholder="Enter Name"
-                          value={name}
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                        />
-                      </Form.Group>
+                    <Form onSubmit={handleSubmit}>
+                      <Container fluid>
+                        <Row>
+                          <Col md={10} className={styles.customColumn}>
+                            <Form.Group className={styles.divDivision}>
+                              <Form.Label>Head Office Name</Form.Label>
+                              <Form.Control
+                                type="text"
+                                name="name"
+                                placeholder="Head Office Name"
+                                value={data.name}
+                                onChange={handleData}
+                              />
+                            </Form.Group>
 
-                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                          type="email"
-                          placeholder="Email"
-                          value={email}
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        />
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Location</Form.Label>
-                        <InputGroup className="mb-3">
-                          <select
-                            onChange={(e) => {
-                              setLocation(e.target.value);
-                            }}
-                          >
-                            <option
-                              value="SelectCountry"
-                              selected="true"
-                              disabled="disabled"
+                            <Form.Group className={styles.divDivision}>
+                              <Form.Label>Email</Form.Label>
+                              <Form.Control
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                value={data.email}
+                                onChange={handleData}
+                              />
+                            </Form.Group>
+                            <Form.Group className={styles.divDivision}>
+                              <Form.Label>Phone Number</Form.Label>
+                              <Form.Control
+                                type="text"
+                                name="phone"
+                                placeholder="Phone Number"
+                                value={data.phone}
+                                onChange={handleData}
+                              />
+                            </Form.Group>
+
+                            <Form.Group className={styles.divDivision}>
+                              <Form.Label>Address</Form.Label>
+                              <Form.Control
+                                type="text"
+                                name="address"
+                                placeholder="Address"
+                                value={data.address}
+                                onChange={handleData}
+                              />
+                            </Form.Group>
+                          </Col>
+                          <Col md={2} className="d-flex justify-content-end">
+                            <Form.Group
+                              className={styles.formCareerEnquirieSub2}
                             >
-                              Select Country
-                            </option>
-                            <option value="CANADA">CANADA</option>
-                            <option value="INDIA">INDIA</option>
-                            <option value="USA">USA</option>
-                            <option value="AUSTRALIA">AUSTRALIA</option>
-                          </select>
-                        </InputGroup>
-                      </Form.Group>
-                      <Button
-                        variant="primary"
-                        type="submit"
-                        onClick={(e) => {
-                          checkLogin();
-                        }}
-                      >
-                        Submit
-                      </Button>
+                              <Button
+                                type="submit"
+                                className={styles.formShowButton}
+                              >
+                                {isSubmitting ? (
+                                  <Spinner
+                                    animation="border"
+                                    className={styles.signInLoader}
+                                  />
+                                ) : mode === PAGE_MODES.add ? (
+                                  "Create"
+                                ) : (
+                                  "Update"
+                                )}
+                              </Button>
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                      </Container>
                     </Form>
                   </div>
+                  {loading ? (
+                    <p>Loading.....</p>
+                  ) : (
+                    <div style={{ paddingLeft: 15 }}>
+                      <DataTable columns={columns} rows={headOfficeList} />
+                    </div>
+                  )}
                 </Tab>
                 <Tab eventKey="country" title="Country">
-                  <div className={styles.tablecardViewMain}>Harman</div>
+                  <div className={styles.tablecardViewMain}>
+                    <Form onSubmit={handleSubmit}>
+                      <Container fluid>
+                        <Row>
+                          <Col md={10} className={styles.customColumn}>
+                            <Form.Group className={styles.divDivision}>
+                              <Form.Label>Country</Form.Label>
+                              <Form.Control
+                                type="text"
+                                name="name"
+                                placeholder="Country"
+                                value={data.name}
+                                onChange={handleData}
+                              />
+                            </Form.Group>
+
+                          </Col>
+                          <Col md={2} className="d-flex justify-content-end">
+                            <Form.Group
+                              className={styles.formCareerEnquirieSub2}
+                            >
+                              <Button
+                                type="submit"
+                                className={styles.formShowButton}
+                              >
+                                {isSubmitting ? (
+                                  <Spinner
+                                    animation="border"
+                                    className={styles.signInLoader}
+                                  />
+                                ) : mode === PAGE_MODES.add ? (
+                                  "Create"
+                                ) : (
+                                  "Update"
+                                )}
+                              </Button>
+                            </Form.Group>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Form>
+                  </div>
                 </Tab>
                 <Tab eventKey="qualification" title="Qualification">
                   <div className={styles.tablecardViewMain}></div>
@@ -120,11 +164,11 @@ export default function Candidate() {
                 <Tab eventKey="employee-master" title="Employee master">
                   <div className={styles.tablecardViewMain}></div>
                 </Tab>
-              </Tabs>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </Layout>
+              </Tabs> */}
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }
+

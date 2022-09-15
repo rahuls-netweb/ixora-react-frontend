@@ -53,7 +53,6 @@ const obj = [
 export default function Dashboard() {
   const navigate = useNavigate();
   const handleClick = (value) => {
-    console.log(value, "value");
     if (value === "125") {
       navigate("/career-enquiry");
     } else if (value === "126") {
