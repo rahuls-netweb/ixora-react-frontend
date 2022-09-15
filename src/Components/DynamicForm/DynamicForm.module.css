@@ -1,0 +1,9 @@
+.customColumn {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 0 !important;
+  }
+  .divDivision {
+    width: 33%;
+    margin: 12px 0;
+  }
