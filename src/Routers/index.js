@@ -13,14 +13,8 @@ import CardView from "../Pages/CareerEnquiry/CardView";
 import TTIDEnquiry from "../Pages/TTIDEnquiry";
 import VisitorEnquiry from "../Pages/VisitorEnquiry";
 import TelephonicEnquiry from "../Pages/TelephonicEnquiry";
+import CCIDassigned from "../Pages/CCIDAssigned";
 
-import HeadOffice from "../Pages/Settings/HeadOffice";
-import Country from "../Pages/Settings/Country";
-import BranchMaster from "../Pages/Settings/BranchMaster";
-import Candidate from "../Pages/Settings/Candidate";
-import CollegeUniversity from "../Pages/Settings/College-University";
-import EmployeeMaster from "../Pages/Settings/EmployeeMaster";
-import Qualification from "../Pages/Settings/Qualification";
 
 import NotfoundPage from "../Pages/PageNotFound";
 import RootSettings from "../Pages/Settings/RootSettings";
