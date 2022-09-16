@@ -1,16 +1,16 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
 
-export const COLLEGE_GETALL = "COLLEGE_GETALL";
+export const CATEGORY_GETALL = "CATEGORY_GETALL";
 
 // Posts action
-export const collegeCreate =
-    (collegeData, onSuccess, onFailure) => async (dispatch) => {
+export const categoryCreate =
+    (categoryData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .post("/collages", collegeData)
+            .post("/categories", categoryData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
-                toast.success("College created successfully");
+                toast.success("Category created successfully");
             })
             .catch(function (err) {
                 let errorMessage =
@@ -23,17 +23,16 @@ export const collegeCreate =
             });
     };
 
-export const collegeGetAll =
+export const categoryGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/collages", {})
+            .get("/categories", {})
             .then(function ({ data }) {
                 dispatch({
-                    type: COLLEGE_GETALL,
+                    type: CATEGORY_GETALL,
                     payload: data.data,
                 });
                 onSuccess && onSuccess();
-                console.log(data, 'data')
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -41,14 +40,14 @@ export const collegeGetAll =
             });
     };
 
-export const collegeUpdate =
-    (collegeUpdateData, onSuccess, onFailure) => async (dispatch) => {
+export const categoryUpdate =
+    (categoryUpdateData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .put(`/collages/${collegeUpdateData.id}`, collegeUpdateData)
+            .put(`/categories/${categoryUpdateData.id}`, categoryUpdateData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
 
-                toast.success("College Updated successfully");
+                toast.success("Category Updated successfully");
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -56,13 +55,13 @@ export const collegeUpdate =
             });
     };
 
-export const collegeDelete =
+export const categoryDelete =
     ({ id }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/collages/${id}`)
+                .delete(`/categories/${id}`)
                 .then(function ({ data }) {
-                    toast.success("College deleted successfully");
+                    toast.success("Category deleted successfully");
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

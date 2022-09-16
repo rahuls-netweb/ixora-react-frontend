@@ -1,16 +1,16 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
 
-export const COLLEGE_GETALL = "COLLEGE_GETALL";
+export const ROLES_GETALL = "ROLES_GETALL";
 
 // Posts action
-export const collegeCreate =
-    (collegeData, onSuccess, onFailure) => async (dispatch) => {
+export const rolesCreate =
+    (rolesData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .post("/collages", collegeData)
+            .post("/roles", rolesData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
-                toast.success("College created successfully");
+                toast.success("Roles created successfully");
             })
             .catch(function (err) {
                 let errorMessage =
@@ -23,17 +23,16 @@ export const collegeCreate =
             });
     };
 
-export const collegeGetAll =
+export const rolesGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/collages", {})
+            .get("/roles", {})
             .then(function ({ data }) {
                 dispatch({
-                    type: COLLEGE_GETALL,
+                    type: ROLES_GETALL,
                     payload: data.data,
                 });
                 onSuccess && onSuccess();
-                console.log(data, 'data')
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -41,14 +40,14 @@ export const collegeGetAll =
             });
     };
 
-export const collegeUpdate =
-    (collegeUpdateData, onSuccess, onFailure) => async (dispatch) => {
+export const rolesUpdate =
+    (rolesUpdateData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .put(`/collages/${collegeUpdateData.id}`, collegeUpdateData)
+            .put(`/roles/${rolesUpdateData.id}`, rolesUpdateData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
 
-                toast.success("College Updated successfully");
+                toast.success("Roles Updated successfully");
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -56,13 +55,13 @@ export const collegeUpdate =
             });
     };
 
-export const collegeDelete =
+export const rolesDelete =
     ({ id }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/collages/${id}`)
+                .delete(`/roles/${id}`)
                 .then(function ({ data }) {
-                    toast.success("College deleted successfully");
+                    toast.success("Roles deleted successfully");
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

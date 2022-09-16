@@ -11,27 +11,33 @@ import BranchMaster from "./BranchMaster";
 import Country from "./Country";
 import EmployeeMaster from "./EmployeeMaster";
 import CollegeUniversity from "./College-University";
+import Permissions from "./Permissions";
+import Roles from "./Roles";
 
 import styles from './rootsettings.module.css';
 
 const HEADOFFICE_TABS = [
     { key: "headoffice", title: "Head Office" },
-    { key: "country", title: "Country" },
-    { key: "qualification", title: "Qualification" },
-    { key: "candidate", title: "Candidate" },
-    { key: "college-university", title: "College/University" },
     { key: "branch-master", title: "Branch Master" },
+    { key: "permissions", title: "Permissions" },
+    { key: "roles", title: "Roles" },
     { key: "employee-master", title: "Employee master" },
+    { key: "country", title: "Country" },
+    { key: "college-university", title: "College/University" },
+    { key: "qualification", title: "Qualification" },
+    { key: "candidate", title: "Category" },
 ];
 
 const DYNAMIC_COMPONENTS = {
     "headoffice": HeadOffice,
+    'branch-master': BranchMaster,
+    "permissions": Permissions,
+    "roles": Roles,
+    'employee-master': EmployeeMaster,
     "country": Country,
+    'college-university': CollegeUniversity,
     "qualification": Qualification,
     "candidate": Candidate,
-    'college-university': CollegeUniversity,
-    'branch-master': BranchMaster,
-    'employee-master': EmployeeMaster,
 }
 
 const RootSettings = () => {

@@ -1,16 +1,16 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
 
-export const COLLEGE_GETALL = "COLLEGE_GETALL";
+export const EMPLOYEEMASTER_GETALL = "EMPLOYEEMASTER_GETALL";
 
 // Posts action
-export const collegeCreate =
-    (collegeData, onSuccess, onFailure) => async (dispatch) => {
+export const employeeMasterCreate =
+    (employeeMasterData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .post("/collages", collegeData)
+            .post("/users", employeeMasterData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
-                toast.success("College created successfully");
+                toast.success("Employee Master created successfully");
             })
             .catch(function (err) {
                 let errorMessage =
@@ -23,17 +23,16 @@ export const collegeCreate =
             });
     };
 
-export const collegeGetAll =
+export const employeeMasterGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/collages", {})
+            .get("/users", {})
             .then(function ({ data }) {
                 dispatch({
-                    type: COLLEGE_GETALL,
+                    type: EMPLOYEEMASTER_GETALL,
                     payload: data.data,
                 });
                 onSuccess && onSuccess();
-                console.log(data, 'data')
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -41,14 +40,14 @@ export const collegeGetAll =
             });
     };
 
-export const collegeUpdate =
-    (collegeUpdateData, onSuccess, onFailure) => async (dispatch) => {
+export const employeeMasterUpdate =
+    (employeeMasterUpdateData, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .put(`/collages/${collegeUpdateData.id}`, collegeUpdateData)
+            .put(`/users/${employeeMasterUpdateData.id}`, employeeMasterUpdateData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
 
-                toast.success("College Updated successfully");
+                toast.success("Employee Master Updated successfully");
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);
@@ -56,13 +55,13 @@ export const collegeUpdate =
             });
     };
 
-export const collegeDelete =
+export const employeeMasterDelete =
     ({ id }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/collages/${id}`)
+                .delete(`/users/${id}`)
                 .then(function ({ data }) {
-                    toast.success("College deleted successfully");
+                    toast.success("Employee Master deleted successfully");
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

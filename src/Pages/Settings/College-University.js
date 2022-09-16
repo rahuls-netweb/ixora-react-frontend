@@ -54,7 +54,7 @@ export default function HeadOffice() {
       selector: (row) => row.collage_name,
     },
     {
-      name: "Country Code",
+      name: "Country Id",
       selector: (row) => row.country_id,
     },
     {
@@ -159,7 +159,7 @@ export default function HeadOffice() {
                 <Form.Control
                   type="number"
                   name="country_id"
-                  placeholder="country Code"
+                  placeholder="country id"
                   value={data.country_id}
                   onChange={handleData}
                 />
