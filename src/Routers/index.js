@@ -58,19 +58,7 @@ export default function AppRoutes() {
               element={<Navigate to="/settings/headoffice" />}
             />
             <Route path="/settings/:id" element={<RootSettings />} />
-            {/* <Route path="/settings/country" element={<RootSettings />} />
-            <Route path="/settings/qualification" element={<RootSettings />} />
-            <Route path="/settings/candidate" element={<RootSettings />} />
-            <Route
-              path="/settings/college-university"
-              element={<RootSettings />}
-            />
-            <Route path="/settings/branch-master" element={<RootSettings />} />
-            <Route
-              path="/settings/employee-master"
-              element={<RootSettings />}
-            /> */}
-            {/* <Route path="/settings/user-rights" element={<UserRights />} /> */}
+
           </Route>
         </Route>
         <Route path="*" element={<NotfoundPage />} />

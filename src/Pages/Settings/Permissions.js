@@ -40,6 +40,7 @@ export default function Permissions() {
     const resetFields = () => setData(initialFormState);
 
     const { permissionsList } = useSelector((state) => state.permissions);
+    console.log(permissionsList);
 
     const columns = [
         {

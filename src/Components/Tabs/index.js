@@ -16,11 +16,13 @@ const CustomTabs = ({ tabs = [], activeKey = '', onTabSelect, children }) => {
                 // navigate("/settings/" + key);
             }}
         >
-            {tabs.map((tab) => (
-                <Tab key={tab.key} eventKey={tab.key} title={tab.title}>
-                    {children}
-                </Tab>
-            ))}
+            {tabs.map((tab) => {
+                return (
+                    <Tab key={tab.key} eventKey={tab.key} title={tab.title}>
+                        {children}
+                    </Tab>
+                )
+            })}
         </Tabs>
     );
 };

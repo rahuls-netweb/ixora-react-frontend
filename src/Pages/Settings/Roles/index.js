@@ -51,9 +51,9 @@ export default function Roles() {
         rolesList: state.roles.rolesList,
     }));
 
-    const [selectedRole, setSelectedRole] = useState("");
-    const handleShow = (roleName) => {
-        setSelectedRole(roleName);
+    const [selectedRole, setSelectedRole] = useState(null);
+    const handleShow = (role) => {
+        setSelectedRole(role);
         setShow(true);
     };
     const perColumns = [
@@ -82,7 +82,7 @@ export default function Roles() {
         {
             name: "Permissions",
             selector: (row) =>
-                <div onClick={() => handleShow(row.name)}>
+                <div onClick={() => handleShow(row)}>
                     <span className={styles.formShowButton1}>View All </span>
                     <MdRemoveRedEye className={styles.actionIcon} ></MdRemoveRedEye>
                 </div>
@@ -93,7 +93,7 @@ export default function Roles() {
                     <BiPlus
                         title={`Add permission to ${singleRowData.name}`}
                         className={styles.actionIcon}
-                        onClick={() => handleShow(singleRowData.name)}
+                        onClick={() => handleShow(singleRowData)}
                     // onClick={() => {
                     //     dispatch(
                     //         rolesDelete({ id: singleRowData.id }, () =>
@@ -280,8 +280,8 @@ export default function Roles() {
             }
 
 
-            {show && <PopUP show={show} hide={handleClose} size="md">
-                <AddPermissionToRoleModel roleName={selectedRole} />
+            {show && <PopUP show={show} hide={handleClose} size="lg">
+                <AddPermissionToRoleModel role={selectedRole} />
             </PopUP>}
         </>
     )

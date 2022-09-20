@@ -69,3 +69,20 @@ export const permissionsDelete =
                     onFailure && onFailure();
                 });
         };
+
+export const addPermissionsToRole =
+    ({ roleId, permissionIds = [] }, onSuccess, onFailure) =>
+        async (dispatch) => {
+            const params = new URLSearchParams();
+            permissionIds.forEach((id, index) => params.append(`permission_ids[${index + 1}]`, id));
+            axios
+                .put(`/roles/${roleId}/permissions`, params)
+                .then(function ({ data }) {
+                    toast.success("Permission added to role successfully");
+                    onSuccess && onSuccess();
+                })
+                .catch(function (err) {
+                    toast.error(err.response.data.message);
+                    onFailure && onFailure();
+                });
+        };
