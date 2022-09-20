@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Row, Col } from 'react-bootstrap';
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Layout from "../../Components/Layout";
 import CustomTabs from "../../Components/Tabs";
 
@@ -19,8 +19,8 @@ import styles from './rootsettings.module.css';
 const HEADOFFICE_TABS = [
     { key: "headoffice", title: "Head Office" },
     { key: "branch-master", title: "Branch Master" },
-    { key: "permissions", title: "Permissions" },
     { key: "roles", title: "Roles" },
+    { key: "permissions", title: "Permissions" },
     { key: "employee-master", title: "Employee master" },
     { key: "country", title: "Country" },
     { key: "college-university", title: "College/University" },
@@ -31,8 +31,8 @@ const HEADOFFICE_TABS = [
 const DYNAMIC_COMPONENTS = {
     "headoffice": HeadOffice,
     'branch-master': BranchMaster,
-    "permissions": Permissions,
     "roles": Roles,
+    "permissions": Permissions,
     'employee-master': EmployeeMaster,
     "country": Country,
     'college-university': CollegeUniversity,
@@ -42,7 +42,6 @@ const DYNAMIC_COMPONENTS = {
 
 const RootSettings = () => {
     let { id: selectedTab } = useParams();
-    const location = useLocation();
     const navigate = useNavigate();
 
     const possibleTabs = HEADOFFICE_TABS.map(tab => tab.key.toLowerCase());

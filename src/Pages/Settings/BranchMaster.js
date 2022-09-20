@@ -81,22 +81,22 @@ export default function BranchMaster() {
       name: "Headoffice Id",
       selector: (row) => row.headoffice_id,
     },
-    {
-      name: "Branch code",
-      selector: (row) => row.branch_code,
-    },
-    {
-      name: "Opening Time",
-      selector: (row) => row.opening_time,
-    },
-    {
-      name: "Closing Time",
-      selector: (row) => row.closing_time,
-    },
-    {
-      name: "Lunch Time",
-      selector: (row) => row.lunch_time,
-    },
+    // {
+    //   name: "Branch code",
+    //   selector: (row) => row.branch_code,
+    // },
+    // {
+    //   name: "Opening Time",
+    //   selector: (row) => row.opening_time,
+    // },
+    // {
+    //   name: "Closing Time",
+    //   selector: (row) => row.closing_time,
+    // },
+    // {
+    //   name: "Lunch Time",
+    //   selector: (row) => row.lunch_time,
+    // },
     {
       cell: (singleRowData, index) => (
         <div>
@@ -318,11 +318,17 @@ export default function BranchMaster() {
       </Form>
       {
         loading ? (
-          <p>Loading.....</p>
+          <div className="text-center">
+            <Spinner animation="border"
+              className={styles.signInLoader}
+            />
+          </div>
+
         ) : (
           <div style={{ paddingLeft: 15 }}>
             <DataTable columns={columns} rows={branchMasterList} />
           </div>
+
         )
       }
     </>

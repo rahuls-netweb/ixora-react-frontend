@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DataTable from "../../Components/DataTable";
-import Select from 'react-select';
-// import { colourOptions } from '../data';
-import { MdDelete } from "react-icons/md";
-import { BiPencil } from "react-icons/bi";
+import PopUP from "../../../Components/PopUp";
+import AddPermissionToRoleModel from "./AddPermissionToRoleModel";
+import DataTable from "../../../Components/DataTable";
+
+import { MdDelete, MdRemoveRedEye } from "react-icons/md";
+import { BiPencil, BiPlus } from "react-icons/bi";
 import {
     Container,
     Row,
@@ -14,15 +15,15 @@ import {
     Button,
     Spinner,
 } from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import styles from '../rootsettings.module.css';
 import {
     rolesCreate,
     rolesGetAll,
     rolesUpdate,
     rolesDelete,
-} from "../../store/actions/rolesAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
-import { permissionsGetAll } from "../../store/actions/permissionsAction";
+} from "../../../store/actions/rolesAction";
+import { getPaginatedRecordNumber } from "../../../utils/helpers";
+import { permissionsGetAll } from "../../../store/actions/permissionsAction";
 
 const initialFormState = {
     name: "",
@@ -35,6 +36,9 @@ const PAGE_MODES = {
     add: "add",
 };
 export default function Roles() {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+
     const dispatch = useDispatch();
     const [mode, setMode] = useState(PAGE_MODES.add);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,14 +47,22 @@ export default function Roles() {
     const resetFields = () => setData(initialFormState);
 
     const { rolesList, permissionsList } = useSelector((state) => ({
-        rolesList: state.roles.rolesList,
         permissionsList: state.permissions.permissionsList,
+        rolesList: state.roles.rolesList,
     }));
 
-    const options = permissionsList.map(permission => ({
-        value: permission.id,
-        label: permission.name
-    }))
+    const [selectedRole, setSelectedRole] = useState("");
+    const handleShow = (roleName) => {
+        setSelectedRole(roleName);
+        setShow(true);
+    };
+    const perColumns = [
+        {
+            name: "Permission",
+            selector: (row) => row.name,
+        },
+    ];
+
 
     const columns = [
         {
@@ -69,17 +81,29 @@ export default function Roles() {
         },
         {
             name: "Permissions",
-            selector: (row) => {
-                const permissionString = row.permissions.reduce((acc, curr) => {
-                    return acc += curr.name + ', '
-                }, '');
-                return permissionString.substring(0, permissionString.length - 2);
-            },
+            selector: (row) =>
+                <div onClick={() => handleShow(row.name)}>
+                    <span className={styles.formShowButton1}>View All </span>
+                    <MdRemoveRedEye className={styles.actionIcon} ></MdRemoveRedEye>
+                </div>
         },
         {
             cell: (singleRowData, index) => (
                 <div>
+                    <BiPlus
+                        title={`Add permission to ${singleRowData.name}`}
+                        className={styles.actionIcon}
+                        onClick={() => handleShow(singleRowData.name)}
+                    // onClick={() => {
+                    //     dispatch(
+                    //         rolesDelete({ id: singleRowData.id }, () =>
+                    //             dispatch(rolesGetAll())
+                    //         )
+                    //     );
+                    // }}
+                    />
                     <BiPencil
+                        title="Edit Role"
                         className={styles.actionIcon}
                         onClick={() => {
                             setMode(PAGE_MODES.edit);
@@ -92,6 +116,7 @@ export default function Roles() {
                         }}
                     />
                     <MdDelete
+                        title="Delete Role"
                         className={styles.actionIcon}
                         onClick={() => {
                             dispatch(
@@ -188,7 +213,8 @@ export default function Roles() {
                                 />
                             </Form.Group>
                             <Form.Group className={styles.divDivision1}>
-                                <Form.Label>Permission Name</Form.Label>
+                                {/* <Button className={styles.formShowButton1} onClick={handleShow}>
+                                    + Add Permissions</Button> */}
                                 {/* <Form.Select name="permission_ids" value={data.permission_ids} onChange={handleData}>
                                     <option value="" disabled>--Select--</option>
                                     {permissionsList.map(permission => {
@@ -197,7 +223,7 @@ export default function Roles() {
                                 </Form.Select> */}
 
 
-                                <Select
+                                {/* <Select
                                     isMulti
                                     name="colors"
                                     options={options}
@@ -210,7 +236,7 @@ export default function Roles() {
                                         }))
                                     }}
                                     value={data.permission_ids}
-                                />
+                                /> */}
 
                             </Form.Group>
 
@@ -241,13 +267,22 @@ export default function Roles() {
             </Form>
             {
                 loading ? (
-                    <p>Loading.....</p>
+                    <div className="text-center">
+                        <Spinner animation="border"
+                            className={styles.signInLoader}
+                        />
+                    </div>
                 ) : (
                     <div style={{ paddingLeft: 15 }}>
                         <DataTable columns={columns} rows={rolesList} />
                     </div>
                 )
             }
+
+
+            {show && <PopUP show={show} hide={handleClose} size="md">
+                <AddPermissionToRoleModel roleName={selectedRole} />
+            </PopUP>}
         </>
     )
 }

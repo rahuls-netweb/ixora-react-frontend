@@ -32,7 +32,7 @@ const SideBar = () => {
   const [menuCollapse, setMenuCollapse] = useState(false);
   const location = useLocation();
   const CurrentRoute = location.pathname;
-  const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
+  // const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
 
   const sideLinks = [
     {
@@ -90,16 +90,16 @@ const SideBar = () => {
           Title: "Branch Master",
         },
         {
-          id: 7.3,
-          icon: <MdSettings />,
-          route: "/settings/permissions",
-          Title: "Permissions",
-        },
-        {
           id: 7.4,
           icon: <MdSettings />,
           route: "/settings/roles",
           Title: "Roles",
+        },
+        {
+          id: 7.3,
+          icon: <MdSettings />,
+          route: "/settings/permissions",
+          Title: "Permissions",
         },
         {
           id: 7.5,
@@ -191,9 +191,9 @@ const SideBar = () => {
                         title={<NavLink to={val.route}>{val.Title}</NavLink>}
                         // icon={val.icon}
                         defaultOpen={true}
-                        onClick={() => {
-                          setActiveSubmenuParent(val.route);
-                        }}
+                      // onClick={() => {
+                      //   setActiveSubmenuParent(val.route);
+                      // }}
                       >
                         {val.subRoutes.map((subRoute, index) => {
                           return (

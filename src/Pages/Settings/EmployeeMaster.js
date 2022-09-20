@@ -235,7 +235,11 @@ export default function HeadOffice() {
       </Form>
       {
         loading ? (
-          <p>Loading.....</p>
+          <div className="text-center">
+            <Spinner animation="border"
+              className={styles.signInLoader}
+            />
+          </div>
         ) : (
           <div style={{ paddingLeft: 15 }}>
             <DataTable columns={columns} rows={headOfficeList} />

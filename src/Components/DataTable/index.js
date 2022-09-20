@@ -46,6 +46,7 @@ export default function TableGrid({ columns, rows, perPage = 8 }) {
       pagination={!!perPage}
       paginationPerPage={perPage}
       paginationRowsPerPageOptions={[perPage, perPage * 2, perPage * 3]}
+
     />
   );
 }

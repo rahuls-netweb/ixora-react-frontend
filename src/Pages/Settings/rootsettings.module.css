@@ -58,11 +58,11 @@
 }
 
 .divDivision1 {
-    padding: 12px 0;
-    width: 36%;
+    width: 23%;
+    display: flex;
+    align-items: end;
+    margin-bottom: 15px;
 }
-
-
 
 .formCareerEnquirieSub2 {
     padding: 12px 0;
@@ -79,6 +79,18 @@
     background: var(--theme-color) !important;
 }
 
+.formShowButton1,
+.formShowButton1:hover,
+.formShowButton1:active,
+.formShowButton1:focus {
+    color: var(--theme-color) !important;
+    background: transparent !important;
+    border: none !important;
+    padding-left: 0 !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
 .actionIcon {
     font-size: 25px;
     margin-right: 5px;
@@ -90,4 +102,54 @@
     font-size: 15px;
     width: 20px !important;
     height: 20px !important;
+}
+
+.permissionDivision {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.permissionDivision input {
+    width: 73%;
+}
+
+.permissionDivision button {
+    width: 25%;
+    background: var(--theme-color);
+    ;
+}
+
+.customUL {
+    width: 100%;
+    list-style: none;
+    padding: 0 2px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.customUL li {
+    padding: 2px 0;
+}
+
+.customUL input {
+    margin-right: 5px;
+}
+
+.customUL::-webkit-scrollbar {
+    width: 5px;
+}
+
+.customUL::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+.customUL::-webkit-scrollbar-thumb {
+    background: var(--theme-color);
+    border-radius: 10px;
+}
+
+.themeColor {
+    background: var(--theme-color) !important;
 }
