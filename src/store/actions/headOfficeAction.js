@@ -35,7 +35,7 @@ export const headOfficeGetAll =
         onSuccess && onSuccess();
       })
       .catch(function (err) {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data?.message || err?.message);
         onFailure && onFailure();
       });
   };
@@ -50,22 +50,22 @@ export const headOfficeUpdate =
         toast.success("Head Office Updated successfully");
       })
       .catch(function (err) {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data?.message || err?.message);
         onFailure && onFailure();
       });
   };
 
 export const headOfficeDelete =
   ({ id }, onSuccess, onFailure) =>
-    async (dispatch) => {
-      axios
-        .delete(`/headoffices/${id}`)
-        .then(function ({ data }) {
-          toast.success("Head Office deleted successfully");
-          onSuccess && onSuccess();
-        })
-        .catch(function (err) {
-          toast.error(err.response.data.message);
-          onFailure && onFailure();
-        });
-    };
+  async (dispatch) => {
+    axios
+      .delete(`/headoffices/${id}`)
+      .then(function ({ data }) {
+        toast.success("Head Office deleted successfully");
+        onSuccess && onSuccess();
+      })
+      .catch(function (err) {
+        toast.error(err.response?.data?.message || err?.message);
+        onFailure && onFailure();
+      });
+  };

@@ -24,7 +24,7 @@ export const loginAction =
         success && success();
       })
       .catch(function (err) {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data?.message || err?.message);
         error && error();
       });
   };
