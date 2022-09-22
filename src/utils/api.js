@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getLocalStorage } from "./localStorage";
 
 export const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -12,6 +13,13 @@ const axiosInstance = axios.create({
   headers: {
     Authorization: `Bearer ${auth?.token}`,
   },
+});
+
+axiosInstance.interceptors.request.use(function (config) {
+  const auth = getLocalStorage("auth");
+  config.headers.Authorization =
+    auth && auth.token ? `Bearer ${auth.token}` : "";
+  return config;
 });
 
 export default axiosInstance;
