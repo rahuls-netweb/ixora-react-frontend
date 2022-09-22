@@ -77,14 +77,14 @@ export default function BranchMaster() {
       name: "Address",
       selector: (row) => row.address,
     },
-    {
-      name: "Headoffice Id",
-      selector: (row) => row.headoffice_id,
-    },
     // {
-    //   name: "Branch code",
-    //   selector: (row) => row.branch_code,
+    //   name: "Headoffice Id",
+    //   selector: (row) => row.headoffice_id,
     // },
+    {
+      name: "Branch code",
+      selector: (row) => row.branch_code,
+    },
     // {
     //   name: "Opening Time",
     //   selector: (row) => row.opening_time,

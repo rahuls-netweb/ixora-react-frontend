@@ -148,7 +148,7 @@ export default function HeadOffice() {
                 <Form.Control
                   type="text"
                   name="collage_name"
-                  placeholder="Head Office Name"
+                  placeholder="College Name"
                   value={data.collage_name}
                   onChange={handleData}
                 />
@@ -159,7 +159,7 @@ export default function HeadOffice() {
                 <Form.Control
                   type="number"
                   name="country_id"
-                  placeholder="country id"
+                  placeholder="country Code"
                   value={data.country_id}
                   onChange={handleData}
                 />
