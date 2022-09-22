@@ -139,7 +139,7 @@ export default function Permissions() {
                     <Row>
                         <Col md={10} className={styles.customColumn}>
                             <Form.Group className={styles.divDivision}>
-                                <Form.Label>Permission Name</Form.Label>
+                                <Form.Label>Permission Name  <span className="reqruiredFields">*</span></Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="name"

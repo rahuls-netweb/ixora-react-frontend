@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdStar } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import {
   Container,
@@ -157,7 +157,7 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office Name</Form.Label>
+                <Form.Label>Head Office Name  <span className="reqruiredFields">*</span> </Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
@@ -165,6 +165,7 @@ export default function HeadOffice() {
                   value={data.name}
                   onChange={handleData}
                 />
+
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>

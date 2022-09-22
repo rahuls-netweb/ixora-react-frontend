@@ -138,7 +138,7 @@ export default function Qualification() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Qualification</Form.Label>
+                <Form.Label>Qualification  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="name"

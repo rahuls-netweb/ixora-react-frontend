@@ -37,3 +37,7 @@ code {
 .themeColor {
   background: var(--theme-color) !important;
 }
+
+.reqruiredFields {
+  color: red;
+}
