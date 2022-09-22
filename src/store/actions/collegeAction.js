@@ -3,14 +3,15 @@ import { toast } from "react-toastify";
 
 export const COLLEGE_GETALL = "COLLEGE_GETALL";
 
-// Posts action
 export const collegeCreate =
     (collegeData, onSuccess, onFailure) => async (dispatch) => {
+        console.log(collegeData, "collegeData");
         axios
             .post("/collages", collegeData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
-                toast.success("College created successfully");
+                toast.success("college created successfully");
+                console.log(data, "data");
             })
             .catch(function (err) {
                 let errorMessage =
@@ -23,6 +24,7 @@ export const collegeCreate =
             });
     };
 
+
 export const collegeGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
@@ -33,7 +35,7 @@ export const collegeGetAll =
                     payload: data.data,
                 });
                 onSuccess && onSuccess();
-                console.log(data, 'data')
+
             })
             .catch(function (err) {
                 toast.error(err.response.data.message);

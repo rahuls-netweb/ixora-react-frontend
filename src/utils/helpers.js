@@ -5,3 +5,16 @@ export function getPaginatedRecordNumber({
 }) {
   return per_page * page - per_page + index + 1;
 }
+
+
+export const resetFormOptions = {
+  shouldDirty: true,
+  shouldTouch: true,
+  shouldValidate: true
+}
+
+export function resetReactHookFormValues(values = {}, setValue = () => { }) {
+  Object.entries(values).forEach(([key, value]) => {
+    setValue(key, value, resetFormOptions)
+  })
+}

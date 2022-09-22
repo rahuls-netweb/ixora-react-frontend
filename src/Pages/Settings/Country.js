@@ -19,7 +19,11 @@ import {
   countryUpdate,
   countryDelete,
 } from "../../store/actions/countryAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -33,16 +37,30 @@ const PAGE_MODES = {
   add: "add",
 };
 
+const validationSchema = yup.object({
+  name: yup.string().required("Required"),
+  code: yup.number().required("Required"),
+});
 
 export default function Country() {
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
 
   const { countryList } = useSelector((state) => state.country);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const columns = [
     {
@@ -70,17 +88,18 @@ export default function Country() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
+              resetReactHookFormValues({
                 id: singleRowData.id,
                 name: singleRowData.name,
                 code: singleRowData.code,
-                flag_image: singleRowData.flag_image,
-              });
+              }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 countryDelete({ id: singleRowData.id }, () =>
                   dispatch(countryGetAll())
@@ -90,8 +109,6 @@ export default function Country() {
           />
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
   ];
@@ -107,26 +124,9 @@ export default function Country() {
     );
   }, []);
 
-  function handleData(e, type = null) {
-    if (type === null) {
-      const name = e.target.name;
-      const value = e.target.value;
-      setData({ ...data, [name]: value });
-    } else if (type === 'image') {
-      const [file] = e.target.files;
-      setData(prev => {
-        return {
-          ...prev,
-          flag_image: file
-        }
-      })
-    }
-
-  }
 
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function onFormSubmit(data) {
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -134,7 +134,8 @@ export default function Country() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(countryGetAll());
           },
           () => setIsSubmitting(false)
@@ -146,7 +147,8 @@ export default function Country() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(countryGetAll());
           },
           () => setIsSubmitting(false)
@@ -157,7 +159,7 @@ export default function Country() {
   }
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
@@ -165,10 +167,8 @@ export default function Country() {
                 <Form.Label>Country Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="name"
                   placeholder="Country Name"
-                  value={data.name}
-                  onChange={handleData}
+                  {...register('name')}
                 />
               </Form.Group>
 
@@ -176,22 +176,10 @@ export default function Country() {
                 <Form.Label>Country Code  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="number"
-                  name="code"
                   placeholder="Country Code"
-                  value={data.code}
-                  onChange={handleData}
+                  {...register('code')}
                 />
               </Form.Group>
-              {/* <Form.Group className={styles.divDivision}>
-                <Form.Label>Country Flag</Form.Label>
-                <Form.Control
-                  type="file"
-                  name="flag"
-                  accept="image/*"
-                  placeholder="Country Flag"
-                  onChange={(e) => handleData(e, "image")}
-                />
-              </Form.Group> */}
 
             </Col>
             <Col md={2} className="d-flex justify-content-end">
@@ -201,6 +189,7 @@ export default function Country() {
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner

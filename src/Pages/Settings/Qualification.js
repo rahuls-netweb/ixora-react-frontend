@@ -19,7 +19,11 @@ import {
   qualificationUpdate,
   qualificationDelete,
 } from "../../store/actions/qualificationAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: ""
@@ -30,14 +34,29 @@ const PAGE_MODES = {
   add: "add",
 };
 
+const validationSchema = yup.object({
+  name: yup.string().required("Required"),
+});
+
 export default function Qualification() {
+  const resolver = useYupValidationResolver(validationSchema);
 
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
+
+
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const { qualificationList } = useSelector((state) => state.qualification);
 
@@ -59,15 +78,14 @@ export default function Qualification() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
-                id: singleRowData.id,
-                name: singleRowData.name
-              });
+              resetReactHookFormValues({ "name": singleRowData.name, id: singleRowData.id }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 qualificationDelete({ id: singleRowData.id }, () =>
                   dispatch(qualificationGetAll())
@@ -94,14 +112,9 @@ export default function Qualification() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+
+  function onFormSubmit(data) {
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -109,7 +122,7 @@ export default function Qualification() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            reset();
             dispatch(qualificationGetAll());
           },
           () => setIsSubmitting(false)
@@ -121,7 +134,7 @@ export default function Qualification() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            reset();
             dispatch(qualificationGetAll());
           },
           () => setIsSubmitting(false)
@@ -133,7 +146,7 @@ export default function Qualification() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
@@ -141,10 +154,8 @@ export default function Qualification() {
                 <Form.Label>Qualification  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="name"
                   placeholder="Qualification"
-                  value={data.name}
-                  onChange={handleData}
+                  {...register('name')}
                 />
               </Form.Group>
 
@@ -155,6 +166,7 @@ export default function Qualification() {
               >
                 <Button
                   type="submit"
+                  disabled={!isDirty || !isValid}
                   className={styles.formShowButton}
                 >
                   {isSubmitting ? (

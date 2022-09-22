@@ -18,8 +18,10 @@ import {
   categoryUpdate,
   categoryDelete,
 } from "../../store/actions/categoryAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
-
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -30,16 +32,27 @@ const PAGE_MODES = {
   add: "add",
 };
 
-export default function Candidate() {
+const validationSchema = yup.object({
+  category_name: yup.string().required("Required"),
+});
 
+export default function Candidate() {
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
-
   const { categoryList } = useSelector((state) => state.category);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const columns = [
     {
@@ -59,15 +72,14 @@ export default function Candidate() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
-                id: singleRowData.id,
-                category_name: singleRowData.category_name,
-              });
+              resetReactHookFormValues({ "category_name": singleRowData.category_name, id: singleRowData.id }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 categoryDelete({ id: singleRowData.id }, () =>
                   dispatch(categoryGetAll())
@@ -77,8 +89,7 @@ export default function Candidate() {
           />
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
+
       button: true,
     },
   ];
@@ -94,14 +105,8 @@ export default function Candidate() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  async function onFormSubmit(data) {
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -109,7 +114,8 @@ export default function Candidate() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(categoryGetAll());
           },
           () => setIsSubmitting(false)
@@ -121,19 +127,19 @@ export default function Candidate() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            reset();
+            setMode(PAGE_MODES.add)
             dispatch(categoryGetAll());
           },
           () => setIsSubmitting(false)
         )
       );
     }
-    setMode(PAGE_MODES.add)
   }
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)} >
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
@@ -141,10 +147,8 @@ export default function Candidate() {
                 <Form.Label>Category Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="category_name"
                   placeholder="Category Name"
-                  value={data.category_name}
-                  onChange={handleData}
+                  {...register("category_name")}
                 />
               </Form.Group>
             </Col>
@@ -155,6 +159,7 @@ export default function Candidate() {
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner
@@ -167,6 +172,7 @@ export default function Candidate() {
                     "Update"
                   )}
                 </Button>
+
               </Form.Group>
             </Col>
           </Row>

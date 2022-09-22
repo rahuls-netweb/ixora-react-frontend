@@ -157,7 +157,7 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office Name  <span className="reqruiredFields">*</span> </Form.Label>
+                <Form.Label>Head Office Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="name"

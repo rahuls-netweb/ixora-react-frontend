@@ -27,9 +27,7 @@ export default function CCIDassigned() {
     },
   ]);
 
-  const handleTesting2 = () => {
-    console.log(data3);
-  };
+
   const [data3, setData3] = useState([
     {
       name: "",

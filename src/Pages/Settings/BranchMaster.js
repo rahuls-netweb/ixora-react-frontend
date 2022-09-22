@@ -45,7 +45,7 @@ export default function BranchMaster() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(initialFormState);
-  console.log(data, 'data data')
+
   const resetFields = () => setData(initialFormState);
 
   const { branchMasterList, headOfficeList } = useSelector((state) => ({

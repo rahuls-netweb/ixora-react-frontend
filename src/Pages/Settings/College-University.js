@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
@@ -19,7 +18,12 @@ import {
   collegeUpdate,
   collegeDelete,
 } from "../../store/actions/collegeAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+
 
 const initialFormState = {
   collage_name: "",
@@ -31,16 +35,31 @@ const PAGE_MODES = {
   add: "add",
 };
 
+const validationSchema = yup.object({
+  collage_name: yup.string().required("Required"),
+  country_id: yup.string().required("Required"),
+});
+
 export default function HeadOffice() {
 
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
 
   const { collegeList } = useSelector((state) => state.college);
+  const { countryList } = useSelector((state) => state.country);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const columns = [
     {
@@ -54,26 +73,29 @@ export default function HeadOffice() {
       selector: (row) => row.collage_name,
     },
     {
-      name: "Country Id",
-      selector: (row) => row.country_id,
+      name: "Country Name",
+      selector: (row) => row.country_name,
     },
     {
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
             className={styles.actionIcon}
+
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
-                id: singleRowData.id,
-                collage_name: singleRowData.collage_name,
-                country_id: singleRowData.country_id,
-              });
+              resetReactHookFormValues({
+                "collage_name": singleRowData.collage_name,
+                "country_id": singleRowData.country_id,
+                id: singleRowData.id
+              }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 collegeDelete({ id: singleRowData.id }, () =>
                   dispatch(collegeGetAll())
@@ -83,8 +105,7 @@ export default function HeadOffice() {
           />
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
+
       button: true,
     },
   ];
@@ -100,14 +121,10 @@ export default function HeadOffice() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+
+  function onFormSubmit(data) {
+
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -115,7 +132,8 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(collegeGetAll());
           },
           () => setIsSubmitting(false)
@@ -127,7 +145,8 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            reset();
+            setMode(PAGE_MODES.add)
             dispatch(collegeGetAll());
           },
           () => setIsSubmitting(false)
@@ -139,7 +158,7 @@ export default function HeadOffice() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
@@ -147,22 +166,20 @@ export default function HeadOffice() {
                 <Form.Label>College Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="collage_name"
                   placeholder="College Name"
-                  value={data.collage_name}
-                  onChange={handleData}
+                  {...register("collage_name")}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label> Country Code  <span className="reqruiredFields">*</span></Form.Label>
-                <Form.Control
-                  type="number"
-                  name="country_id"
-                  placeholder="country Code"
-                  value={data.country_id}
-                  onChange={handleData}
-                />
+                <Form.Label> Country Name  <span className="reqruiredFields">*</span></Form.Label>
+
+                <Form.Select  {...register("country_id")}>
+                  <option value="" disabled>--Select--</option>
+                  {countryList.map(country => {
+                    return <option value={country.id}>{country.name}</option>
+                  })}
+                </Form.Select>
               </Form.Group>
             </Col>
             <Col md={2} className="d-flex justify-content-end">
@@ -172,6 +189,7 @@ export default function HeadOffice() {
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner

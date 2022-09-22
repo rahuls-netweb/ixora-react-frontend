@@ -4,7 +4,7 @@ import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import styles from "./DynamicForm.module.css";
 
 function DynamicForm(props) {
-  console.log(props);
+
   const handleInputChange = (index, event) => {
     props.handleInputChange(index, event);
   };
