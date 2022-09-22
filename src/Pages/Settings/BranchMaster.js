@@ -193,7 +193,7 @@ export default function BranchMaster() {
             <Col md={12} className={styles.customColumn}>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Branch Name</Form.Label>
+                <Form.Label>Branch Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
@@ -204,7 +204,7 @@ export default function BranchMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -237,7 +237,7 @@ export default function BranchMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Headoffice Name</Form.Label>
+                <Form.Label>Headoffice Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Select name="headoffice_id" value={data.headoffice_id} onChange={handleData}>
                   <option value="" disabled>--Select--</option>
                   {headOfficeList.map(headoffice => {
@@ -248,7 +248,7 @@ export default function BranchMaster() {
             </Col>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Branch Code</Form.Label>
+                <Form.Label>Branch Code  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="branch_code"
@@ -259,7 +259,7 @@ export default function BranchMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Opening Time</Form.Label>
+                <Form.Label>Opening Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
                   name="opening_time"
@@ -270,7 +270,7 @@ export default function BranchMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Closing Time</Form.Label>
+                <Form.Label>Closing Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
                   name="closing_time"
@@ -281,7 +281,7 @@ export default function BranchMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Lunch Time</Form.Label>
+                <Form.Label>Lunch Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
                   name="lunch_time"

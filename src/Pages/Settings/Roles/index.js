@@ -199,7 +199,7 @@ export default function Roles() {
                     <Row>
                         <Col md={10} className={styles.customColumn}>
                             <Form.Group className={styles.divDivision}>
-                                <Form.Label>Role Name</Form.Label>
+                                <Form.Label>Role Name  <span className="reqruiredFields">*</span></Form.Label>
                                 <Form.Control
                                     type="text"
                                     name="name"

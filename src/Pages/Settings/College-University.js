@@ -144,7 +144,7 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>College Name</Form.Label>
+                <Form.Label>College Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="collage_name"
@@ -155,7 +155,7 @@ export default function HeadOffice() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label> Country Code</Form.Label>
+                <Form.Label> Country Code  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="number"
                   name="country_id"

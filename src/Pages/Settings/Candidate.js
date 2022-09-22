@@ -138,7 +138,7 @@ export default function Candidate() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Category Name</Form.Label>
+                <Form.Label>Category Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="category_name"

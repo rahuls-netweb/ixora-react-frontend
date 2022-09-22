@@ -162,7 +162,7 @@ export default function Country() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Country Name</Form.Label>
+                <Form.Label>Country Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
@@ -173,7 +173,7 @@ export default function Country() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Country Code</Form.Label>
+                <Form.Label>Country Code  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="number"
                   name="code"
