@@ -59,10 +59,10 @@ export default function Country() {
       name: "Country Code",
       selector: (row) => row.code,
     },
-    {
-      name: "Country Flag",
-      selector: (row) => row.flag_image,
-    },
+    // {
+    //   name: "Country Flag",
+    //   selector: (row) => row.flag_image,
+    // },
     {
       cell: (singleRowData, index) => (
         <div>
@@ -182,7 +182,7 @@ export default function Country() {
                   onChange={handleData}
                 />
               </Form.Group>
-              <Form.Group className={styles.divDivision}>
+              {/* <Form.Group className={styles.divDivision}>
                 <Form.Label>Country Flag</Form.Label>
                 <Form.Control
                   type="file"
@@ -191,7 +191,7 @@ export default function Country() {
                   placeholder="Country Flag"
                   onChange={(e) => handleData(e, "image")}
                 />
-              </Form.Group>
+              </Form.Group> */}
 
             </Col>
             <Col md={2} className="d-flex justify-content-end">

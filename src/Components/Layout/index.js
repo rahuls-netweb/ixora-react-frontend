@@ -1,7 +1,7 @@
 import Header from "../Header";
 import SideBar from "../SideBar";
 import { Container, Row, Col } from "react-bootstrap";
-export default function Layout(props) {
+export default function Layout({ children }) {
   return (
     <Container fluid className="containerNavbar">
       <Row>
@@ -13,7 +13,7 @@ export default function Layout(props) {
         <SideBar />
         <Container fluid style={{ paddingRight: 0 }}>
           <Row>
-            <Col md={12}>{props.children}</Col>
+            <Col md={12}>{children}</Col>
           </Row>
         </Container>
       </div>

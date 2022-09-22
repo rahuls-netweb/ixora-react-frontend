@@ -250,7 +250,7 @@ export default function BranchMaster() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Branch Code</Form.Label>
                 <Form.Control
-                  type="number"
+                  type="text"
                   name="branch_code"
                   placeholder="Branch Code"
                   value={data.branch_code}

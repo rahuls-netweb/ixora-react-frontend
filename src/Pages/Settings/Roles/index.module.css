@@ -25,25 +25,31 @@
 .divPermissions div:nth-child(odd) {
     padding: 10px;
     background: #f2f2f2;
+    cursor: pointer;
+    min-height: 62px;
+}
+
+.divPermissions .newDiv {
+    cursor: auto !important;
 }
 
 .divPermissions div:nth-child(even) {
     padding: 10px;
     background: var(--light-white);
     cursor: pointer;
+    min-height: 62px;
 }
 
 .divPermissions div h5 {
     font-size: 14px;
     margin-bottom: 5px !important;
-    cursor: pointer;
+    padding-left: 7px;
 }
 
 .divPermissions div h6 span {
     background: transparent !important;
     font-size: 12px;
     color: var(--theme-color);
-    cursor: pointer;
 }
 
 .ulModules {
@@ -53,4 +59,13 @@
 
 .ulModules li input {
     margin-right: 10px;
+}
+
+.active {
+    background: var(--theme-color) !important;
+    color: white !important;
+}
+
+.active h6 span {
+    color: white !important;
 }

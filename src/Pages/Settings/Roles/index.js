@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PopUP from "../../../Components/PopUp";
 import AddPermissionToRoleModel from "./AddPermissionToRoleModel";
+import ViewPermissionToRoleModel from "./ViewPermissionToRoleModel";
 import DataTable from "../../../Components/DataTable";
 
 import { MdDelete, MdRemoveRedEye } from "react-icons/md";
@@ -39,6 +40,9 @@ export default function Roles() {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
+    const [show1, setShow1] = useState(false);
+    const handleClose1 = () => setShow1(false);
+
     const dispatch = useDispatch();
     const [mode, setMode] = useState(PAGE_MODES.add);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,6 +59,10 @@ export default function Roles() {
     const handleShow = (role) => {
         setSelectedRole(role);
         setShow(true);
+    };
+    const handleShow1 = (role) => {
+        setSelectedRole(role);
+        setShow1(true);
     };
     const perColumns = [
         {
@@ -82,9 +90,9 @@ export default function Roles() {
         {
             name: "Permissions",
             selector: (row) =>
-                <div onClick={() => handleShow(row)}>
+                <div onClick={() => handleShow1(row)}>
                     <span className={styles.formShowButton1}>View All </span>
-                    <MdRemoveRedEye className={styles.actionIcon} ></MdRemoveRedEye>
+                    {/* <MdRemoveRedEye className={styles.actionIcon} ></MdRemoveRedEye> */}
                 </div>
         },
         {
@@ -212,33 +220,6 @@ export default function Roles() {
                                     disabled={true}
                                 />
                             </Form.Group>
-                            <Form.Group className={styles.divDivision1}>
-                                {/* <Button className={styles.formShowButton1} onClick={handleShow}>
-                                    + Add Permissions</Button> */}
-                                {/* <Form.Select name="permission_ids" value={data.permission_ids} onChange={handleData}>
-                                    <option value="" disabled>--Select--</option>
-                                    {permissionsList.map(permission => {
-                                        return <option value={permission.id}>{permission.name}</option>
-                                    })}
-                                </Form.Select> */}
-
-
-                                {/* <Select
-                                    isMulti
-                                    name="colors"
-                                    options={options}
-                                    className="basic-multi-select"
-                                    classNamePrefix="select"
-                                    onChange={newValues => {
-                                        setData(prev => ({
-                                            ...prev,
-                                            permission_ids: newValues,
-                                        }))
-                                    }}
-                                    value={data.permission_ids}
-                                /> */}
-
-                            </Form.Group>
 
                         </Col>
                         <Col md={2} className="d-flex justify-content-end">
@@ -280,8 +261,11 @@ export default function Roles() {
             }
 
 
-            {show && <PopUP show={show} hide={handleClose} size="lg">
+            {show && <PopUP show={show} hide={handleClose} size="xl">
                 <AddPermissionToRoleModel role={selectedRole} />
+            </PopUP>}
+            {show1 && <PopUP show={show1} hide={handleClose1} size="lg">
+                <ViewPermissionToRoleModel role={selectedRole} />
             </PopUP>}
         </>
     )

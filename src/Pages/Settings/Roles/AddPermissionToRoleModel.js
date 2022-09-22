@@ -12,16 +12,39 @@ import styles from "../rootsettings.module.css";
 import stylesIndex from "./index.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addPermissionsToRole } from "../../../store/actions/permissionsAction";
+import { useEffect } from "react";
+import { permissionsGetAll } from "../../../store/actions/permissionsAction";
+import { rolesGetAll } from '../../../store/actions/rolesAction'
 
 export default function AddPermissionToRoleModel({ role }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedModule, setSelectedModule] = useState("");
     const [selectedPermissions, setSelectedPermissions] = useState({});
-    const { permissionsList } = useSelector((state) => state.permissions);
+    const { rolesList, permissionsList } = useSelector((state) => ({
+        permissionsList: state.permissions.permissionsList,
+        rolesList: state.roles.rolesList,
+    }));
+
+
+
     const dispatch = useDispatch();
 
+    const existingPermissionsSelectedRole = rolesList.find(singleRole => singleRole.name === role.name);
+
+    useEffect(() => {
+        if (existingPermissionsSelectedRole && selectedModule) {
+            const selectedIds = {};
+            existingPermissionsSelectedRole.module_permission[selectedModule.toLowerCase()]?.forEach(per => {
+                selectedIds[per.id] = true;
+            });
+            setSelectedPermissions(selectedIds);
+        }
+    }, [existingPermissionsSelectedRole, selectedModule]);
+
     const permissions = permissionsList.reduce((acc, current) => {
-        const [module, permission] = current.name.split("_");
+        const permission = current.action_name;
+        const module = current.module_name.toUpperCase();
+        // const [module, permission] = current.name.split("_");
         acc[module] = {
             ...acc[module],
             [permission]: current,
@@ -32,12 +55,39 @@ export default function AddPermissionToRoleModel({ role }) {
     function handleSubmit(e) {
         e.preventDefault();
         setIsSubmitting(true);
+
+        // find existing permissions added
+        const allPermissionIds = rolesList.filter(singleRole => singleRole.name === role.name).map(singleRole => {
+            // singleRole.module_permission.map(el => el.id)
+            return singleRole;
+        }).map((singlePermission) => {
+            return singlePermission.permissions.map(permission => {
+                return permission.id
+            })
+        }).flat();
+
+        Object.entries(selectedPermissions).forEach(([key, value]) => {
+            if (!value) {
+                // remove
+                const index = allPermissionIds.indexOf(+key);
+                allPermissionIds.splice(index, 1)
+            } else {
+                // add
+                const index = allPermissionIds.indexOf(+key);
+                if (index === -1) {
+                    allPermissionIds.push(+key);
+                }
+            }
+        });
+
         dispatch(addPermissionsToRole({
             roleId: role.id,
-            permissionIds: Object.keys(selectedPermissions)
+            permissionIds: allPermissionIds
         }, () => {
             // onsuccess
             setIsSubmitting(false);
+            dispatch(permissionsGetAll());
+            dispatch(rolesGetAll());
         }, () => {
             // onFailure
             setIsSubmitting(false);
@@ -49,14 +99,13 @@ export default function AddPermissionToRoleModel({ role }) {
         setSelectedPermissions({});
     };
 
-    console.log(selectedPermissions, "selected permissions!!!!");
-
-
-
     return (
         <Form onSubmit={handleSubmit}>
             <Container fluid>
                 <Row>
+                    {/* <Col md={12} className={styles.customColumn} style={{ boxShadow: '0 1.188rem 1.188rem rgb(0 0 0 /16%)' }}>
+                        <Form.Label>Add Permission in Roles</Form.Label>
+                    </Col> */}
                     <Col md={12} className={styles.customColumn}>
                         <Form.Group className={styles.divDivision}>
                             <Form.Label>Name of the Role</Form.Label>
@@ -87,14 +136,21 @@ export default function AddPermissionToRoleModel({ role }) {
                                                             ([moduleName, permissionName]) => (
                                                                 <div
                                                                     key={moduleName}
+                                                                    className={selectedModule === moduleName ? stylesIndex.active : ''}
                                                                     onClick={() => onSelectModule(moduleName)}
                                                                 >
                                                                     <h5>{moduleName}</h5>
                                                                     <h6>
-                                                                        <Badge>View</Badge>
-                                                                        <Badge>Edit</Badge>
-                                                                        <Badge>Create</Badge>
-                                                                        <Badge>Delete</Badge>
+                                                                        {/* {allPermissionsBySelectedRole.find(singlePermissionByRole => {
+                                                                            singlePermissionByRole.name === 
+                                                                        })} */}
+                                                                        {existingPermissionsSelectedRole.module_permission[moduleName.toLowerCase()]?.map(existingPermission => {
+
+                                                                            const [module, permission] = existingPermission.name.split("_");
+                                                                            return (
+                                                                                <Badge>{permission}</Badge>
+                                                                            )
+                                                                        })}
                                                                     </h6>
                                                                 </div>
                                                             )
@@ -105,31 +161,33 @@ export default function AddPermissionToRoleModel({ role }) {
                                         </Container>
                                     </td>
                                     <td>
-                                        {console.log(selectedModule, "selectedModule")}
                                         {selectedModule && (
                                             <ul className={stylesIndex.ulModules}>
                                                 {Object.entries(permissions[selectedModule]).map(
-                                                    ([permission, moduleDetail]) => (
-                                                        <li key={permission}>
-                                                            <input
-                                                                type="checkbox"
-                                                                onChange={(event) => {
-                                                                    const { checked } = event.target;
-                                                                    setSelectedPermissions((prevPermissions) => {
-                                                                        const copiedPermissions = { ...prevPermissions };
-                                                                        if (checked) {
-                                                                            copiedPermissions[moduleDetail.id] = true;
-                                                                        } else {
-                                                                            delete copiedPermissions[moduleDetail.id];
-                                                                            // copiedPermissions[moduleDetail.id] = false;
-                                                                        }
-                                                                        return copiedPermissions;
-                                                                    });
-                                                                }}
-                                                            />
-                                                            <span>{permission}</span>
-                                                        </li>
-                                                    )
+                                                    ([permission, moduleDetail]) => {
+                                                        return (
+                                                            <li key={permission}>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={selectedPermissions[moduleDetail.id]}
+                                                                    onChange={(event) => {
+                                                                        const { checked } = event.target;
+                                                                        setSelectedPermissions((prevPermissions) => {
+                                                                            const copiedPermissions = { ...prevPermissions };
+                                                                            if (checked) {
+                                                                                copiedPermissions[moduleDetail.id] = true;
+                                                                            } else {
+                                                                                copiedPermissions[moduleDetail.id] = false;
+                                                                                // delete copiedPermissions[moduleDetail.id];
+                                                                            }
+                                                                            return copiedPermissions;
+                                                                        });
+                                                                    }}
+                                                                />
+                                                                <span>{permission}</span>
+                                                            </li>
+                                                        )
+                                                    }
                                                 )}
                                             </ul>
                                         )}
@@ -149,6 +207,6 @@ export default function AddPermissionToRoleModel({ role }) {
                     </Col>
                 </Row>
             </Container>
-        </Form>
+        </Form >
     );
 }
