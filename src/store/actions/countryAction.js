@@ -19,12 +19,7 @@ export const countryCreate =
         toast.success("Country created successfully");
       })
       .catch(function (err) {
-        let errorMessage =
-          err?.response?.data?.message || "Something went wrong";
-        const [values] = Object.entries(err?.response?.data?.errors);
-        const [_, value] = values;
-        errorMessage = Array.isArray(value) ? value[0] : value;
-        toast.error(errorMessage);
+        showErrorMessageFromApi(err);
         onFailure && onFailure();
       });
   };
@@ -61,15 +56,15 @@ export const countryUpdate =
 
 export const countryDelete =
   ({ id }, onSuccess, onFailure) =>
-  async (dispatch) => {
-    axios
-      .delete(`/countries/${id}`)
-      .then(function ({ data }) {
-        toast.success("Country deleted successfully");
-        onSuccess && onSuccess();
-      })
-      .catch(function (err) {
-        toast.error(err.response.data.message);
-        onFailure && onFailure();
-      });
-  };
+    async (dispatch) => {
+      axios
+        .delete(`/countries/${id}`)
+        .then(function ({ data }) {
+          toast.success("Country deleted successfully");
+          onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+          toast.error(err.response.data.message);
+          onFailure && onFailure();
+        });
+    };

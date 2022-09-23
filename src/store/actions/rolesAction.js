@@ -1,5 +1,6 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
+import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const ROLES_GETALL = "ROLES_GETALL";
 
@@ -13,12 +14,7 @@ export const rolesCreate =
                 toast.success("Roles created successfully");
             })
             .catch(function (err) {
-                let errorMessage =
-                    err?.response?.data?.message || "Something went wrong";
-                const [values] = Object.entries(err?.response?.data?.errors);
-                const [_, value] = values;
-                errorMessage = Array.isArray(value) ? value[0] : value;
-                toast.error(errorMessage);
+                showErrorMessageFromApi(err);
                 onFailure && onFailure();
             });
     };
@@ -46,14 +42,14 @@ export const rolesUpdate =
             .put(`/roles/${rolesUpdateData.id}`, rolesUpdateData)
             .then(function ({ data }) {
                 onSuccess && onSuccess();
-
                 toast.success("Roles Updated successfully");
             })
             .catch(function (err) {
-                toast.error(err.response.data.message);
+                showErrorMessageFromApi(err);
                 onFailure && onFailure();
             });
     };
+
 
 export const rolesDelete =
     ({ id }, onSuccess, onFailure) =>

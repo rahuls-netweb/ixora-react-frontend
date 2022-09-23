@@ -14,12 +14,7 @@ export const categoryCreate =
         toast.success("Category created successfully");
       })
       .catch(function (err) {
-        let errorMessage =
-          err?.response?.data?.message || "Something went wrong";
-        const [values] = Object.entries(err?.response?.data?.errors);
-        const [_, value] = values;
-        errorMessage = Array.isArray(value) ? value[0] : value;
-        toast.error(errorMessage);
+        showErrorMessageFromApi(err);
         onFailure && onFailure();
       });
   };
@@ -57,15 +52,15 @@ export const categoryUpdate =
 
 export const categoryDelete =
   ({ id }, onSuccess, onFailure) =>
-  async (dispatch) => {
-    axios
-      .delete(`/categories/${id}`)
-      .then(function ({ data }) {
-        toast.success("Category deleted successfully");
-        onSuccess && onSuccess();
-      })
-      .catch(function (err) {
-        showErrorMessageFromApi(err);
-        onFailure && onFailure();
-      });
-  };
+    async (dispatch) => {
+      axios
+        .delete(`/categories/${id}`)
+        .then(function ({ data }) {
+          toast.success("Category deleted successfully");
+          onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+          showErrorMessageFromApi(err);
+          onFailure && onFailure();
+        });
+    };

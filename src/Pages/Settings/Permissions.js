@@ -19,7 +19,10 @@ import {
     permissionsUpdate,
     permissionsDelete,
 } from "../../store/actions/permissionsAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
     name: "",
@@ -30,17 +33,28 @@ const PAGE_MODES = {
     add: "add",
 };
 
-export default function Permissions() {
+const validationSchema = yup.object({
+    name: yup.string().required("Required"),
+});
 
+export default function Permissions() {
+    const resolver = useYupValidationResolver(validationSchema);
     const dispatch = useDispatch();
     const [mode, setMode] = useState(PAGE_MODES.add);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState(initialFormState);
-    const resetFields = () => setData(initialFormState);
 
     const { permissionsList } = useSelector((state) => state.permissions);
 
+    const {
+        handleSubmit,
+        register,
+        setValue,
+        formState: { isDirty, isValid },
+        reset,
+    } = useForm({
+        resolver, mode: "onChange", defaultValues: initialFormState
+    });
 
     const columns = [
         {
@@ -58,17 +72,20 @@ export default function Permissions() {
                 <div>
                     <BiPencil
                         className={styles.actionIcon}
+
                         onClick={() => {
                             setMode(PAGE_MODES.edit);
-                            setData({
+                            resetReactHookFormValues({
                                 id: singleRowData.id,
                                 name: singleRowData.name,
-                            });
+                            }, setValue);
                         }}
                     />
                     <MdDelete
                         className={styles.actionIcon}
                         onClick={() => {
+                            reset();
+                            setMode(PAGE_MODES.add);
                             dispatch(
                                 permissionsDelete({ id: singleRowData.id }, () =>
                                     dispatch(permissionsGetAll())
@@ -78,8 +95,7 @@ export default function Permissions() {
                     />
                 </div>
             ),
-            ignoreRowClick: true,
-            allowOverflow: true,
+
             button: true,
         },
     ];
@@ -95,14 +111,8 @@ export default function Permissions() {
         );
     }, []);
 
-    function handleData(e) {
-        const name = e.target.name;
-        const value = e.target.value;
-        setData({ ...data, [name]: value });
-    }
 
-    function handleSubmit(e) {
-        e.preventDefault();
+    function onFormSubmit(data) {
         setIsSubmitting(true);
         if (mode === PAGE_MODES.add) {
             dispatch(
@@ -110,7 +120,8 @@ export default function Permissions() {
                     data,
                     () => {
                         setIsSubmitting(false);
-                        resetFields();
+                        setMode(PAGE_MODES.add)
+                        reset();
                         dispatch(permissionsGetAll());
                     },
                     () => setIsSubmitting(false)
@@ -122,7 +133,8 @@ export default function Permissions() {
                     data,
                     () => {
                         setIsSubmitting(false);
-                        resetFields();
+                        setMode(PAGE_MODES.add)
+                        reset();
                         dispatch(permissionsGetAll());
                     },
                     () => setIsSubmitting(false)
@@ -134,7 +146,7 @@ export default function Permissions() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit(onFormSubmit)}>
                 <Container fluid>
                     <Row>
                         <Col md={10} className={styles.customColumn}>
@@ -142,10 +154,8 @@ export default function Permissions() {
                                 <Form.Label>Permission Name  <span className="reqruiredFields">*</span></Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="name"
                                     placeholder="Permission Name"
-                                    value={data.name}
-                                    onChange={handleData}
+                                    {...register("name")}
                                 />
                             </Form.Group>
 
@@ -157,6 +167,7 @@ export default function Permissions() {
                                 <Button
                                     type="submit"
                                     className={styles.formShowButton}
+                                    disabled={!isDirty || !isValid}
                                 >
                                     {isSubmitting ? (
                                         <Spinner

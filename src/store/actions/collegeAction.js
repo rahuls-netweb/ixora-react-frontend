@@ -1,5 +1,6 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
+import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const COLLEGE_GETALL = "COLLEGE_GETALL";
 
@@ -14,12 +15,7 @@ export const collegeCreate =
                 console.log(data, "data");
             })
             .catch(function (err) {
-                let errorMessage =
-                    err?.response?.data?.message || "Something went wrong";
-                const [values] = Object.entries(err?.response?.data?.errors);
-                const [_, value] = values;
-                errorMessage = Array.isArray(value) ? value[0] : value;
-                toast.error(errorMessage);
+                showErrorMessageFromApi(err);
                 onFailure && onFailure();
             });
     };

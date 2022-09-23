@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete, MdStar } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import {
   Container,
@@ -19,7 +19,11 @@ import {
   headOfficeUpdate,
   headOfficeDelete,
 } from "../../store/actions/headOfficeAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -33,17 +37,30 @@ const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
-
+const validationSchema = yup.object({
+  name: yup.string().required("Required"),
+});
 export default function HeadOffice() {
 
   const dispatch = useDispatch();
+  const resolver = useYupValidationResolver(validationSchema);
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
+
+
 
   const { headOfficeList } = useSelector((state) => state.headOffice);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const columns = [
     {
@@ -73,20 +90,23 @@ export default function HeadOffice() {
         <div>
           <BiPencil
             className={styles.actionIcon}
+
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
+              resetReactHookFormValues({
                 id: singleRowData.id,
                 name: singleRowData.name,
                 email: singleRowData.email,
                 phone: singleRowData.phone,
                 address: singleRowData.address,
-              });
+              }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 headOfficeDelete({ id: singleRowData.id }, () =>
                   dispatch(headOfficeGetAll())
@@ -96,8 +116,6 @@ export default function HeadOffice() {
           />
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
   ];
@@ -113,14 +131,9 @@ export default function HeadOffice() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function onFormSubmit(data) {
+
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -128,7 +141,8 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(headOfficeGetAll());
           },
           () => setIsSubmitting(false)
@@ -140,7 +154,8 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            reset();
+            setMode(PAGE_MODES.add)
             dispatch(headOfficeGetAll());
           },
           () => setIsSubmitting(false)
@@ -152,7 +167,7 @@ export default function HeadOffice() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
@@ -160,10 +175,8 @@ export default function HeadOffice() {
                 <Form.Label>Head Office Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="name"
                   placeholder="Head Office Name"
-                  value={data.name}
-                  onChange={handleData}
+                  {...register("name")}
                 />
 
               </Form.Group>
@@ -172,20 +185,16 @@ export default function HeadOffice() {
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
-                  name="email"
                   placeholder="Email"
-                  value={data.email}
-                  onChange={handleData}
+                  {...register("email")}
                 />
               </Form.Group>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
                   type="text"
-                  name="phone"
                   placeholder="Phone Number"
-                  value={data.phone}
-                  onChange={handleData}
+                  {...register("phone")}
                 />
               </Form.Group>
 
@@ -193,10 +202,8 @@ export default function HeadOffice() {
                 <Form.Label>Address</Form.Label>
                 <Form.Control
                   type="text"
-                  name="address"
                   placeholder="Address"
-                  value={data.address}
-                  onChange={handleData}
+                  {...register("address")}
                 />
               </Form.Group>
             </Col>
@@ -207,6 +214,7 @@ export default function HeadOffice() {
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner

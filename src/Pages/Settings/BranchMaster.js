@@ -19,7 +19,11 @@ import {
   branchMasterDelete,
 } from "../../store/actions/branchMasterAction";
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -38,15 +42,32 @@ const PAGE_MODES = {
   add: "add",
 };
 
-export default function BranchMaster() {
+const validationSchema = yup.object({
+  name: yup.string().required("Required"),
+  email: yup.string().email("Invalid Email").required("Required"),
+  headoffice_id: yup.number().required("Required"),
+  branch_code: yup.string().required("Required"),
+  opening_time: yup.string().required("Required"),
+  closing_time: yup.string().required("Required"),
+  lunch_time: yup.string().required("Required"),
+});
 
+export default function BranchMaster() {
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
 
-  const resetFields = () => setData(initialFormState);
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const { branchMasterList, headOfficeList } = useSelector((state) => ({
     branchMasterList: state.branchMaster.branchMasterList,
@@ -104,7 +125,7 @@ export default function BranchMaster() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
+              resetReactHookFormValues({
                 id: singleRowData.id,
                 name: singleRowData.name,
                 email: singleRowData.email,
@@ -115,12 +136,14 @@ export default function BranchMaster() {
                 opening_time: singleRowData.opening_time,
                 closing_time: singleRowData.closing_time,
                 lunch_time: singleRowData.lunch_time,
-              });
+              }, setValue);
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
                 branchMasterDelete({ id: singleRowData.id }, () =>
                   dispatch(branchMasterGetAll())
@@ -130,8 +153,6 @@ export default function BranchMaster() {
           />
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
   ];
@@ -148,14 +169,9 @@ export default function BranchMaster() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+
+  function onFormSubmit(data) {
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -163,7 +179,8 @@ export default function BranchMaster() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(branchMasterGetAll());
           },
           () => setIsSubmitting(false)
@@ -175,7 +192,8 @@ export default function BranchMaster() {
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
+            setMode(PAGE_MODES.add)
+            reset();
             dispatch(branchMasterGetAll());
           },
           () => setIsSubmitting(false)
@@ -187,7 +205,7 @@ export default function BranchMaster() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)} >
         <Container fluid>
           <Row>
             <Col md={12} className={styles.customColumn}>
@@ -198,8 +216,7 @@ export default function BranchMaster() {
                   type="text"
                   name="name"
                   placeholder="Branch Name"
-                  value={data.name}
-                  onChange={handleData}
+                  {...register("name")}
                 />
               </Form.Group>
 
@@ -207,10 +224,8 @@ export default function BranchMaster() {
                 <Form.Label>Email  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="email"
-                  name="email"
                   placeholder="Email"
-                  value={data.email}
-                  onChange={handleData}
+                  {...register("email")}
                 />
               </Form.Group>
 
@@ -218,10 +233,8 @@ export default function BranchMaster() {
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
                   type="tel"
-                  name="phone"
                   placeholder="Phone"
-                  value={data.phone}
-                  onChange={handleData}
+                  {...register("phone")}
                 />
               </Form.Group>
 
@@ -229,16 +242,14 @@ export default function BranchMaster() {
                 <Form.Label>Address</Form.Label>
                 <Form.Control
                   type="text"
-                  name="address"
                   placeholder="Address"
-                  value={data.address}
-                  onChange={handleData}
+                  {...register("address")}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Headoffice Name  <span className="reqruiredFields">*</span></Form.Label>
-                <Form.Select name="headoffice_id" value={data.headoffice_id} onChange={handleData}>
+                <Form.Select {...register("headoffice_id")}>
                   <option value="" disabled>--Select--</option>
                   {headOfficeList.map(headoffice => {
                     return <option value={headoffice.id}>{headoffice.name}</option>
@@ -251,10 +262,8 @@ export default function BranchMaster() {
                 <Form.Label>Branch Code  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
-                  name="branch_code"
                   placeholder="Branch Code"
-                  value={data.branch_code}
-                  onChange={handleData}
+                  {...register("branch_code")}
                 />
               </Form.Group>
 
@@ -262,10 +271,8 @@ export default function BranchMaster() {
                 <Form.Label>Opening Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
-                  name="opening_time"
                   placeholder="Opening Time"
-                  value={data.opening_time}
-                  onChange={handleData}
+                  {...register("opening_time")}
                 />
               </Form.Group>
 
@@ -273,10 +280,8 @@ export default function BranchMaster() {
                 <Form.Label>Closing Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
-                  name="closing_time"
                   placeholder="Closing Time"
-                  value={data.closing_time}
-                  onChange={handleData}
+                  {...register("closing_time")}
                 />
               </Form.Group>
 
@@ -284,10 +289,8 @@ export default function BranchMaster() {
                 <Form.Label>Lunch Time  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="time"
-                  name="lunch_time"
                   placeholder="Lunch Time"
-                  value={data.lunch_time}
-                  onChange={handleData}
+                  {...register("lunch_time")}
                 />
               </Form.Group>
             </Col>
@@ -299,6 +302,7 @@ export default function BranchMaster() {
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner

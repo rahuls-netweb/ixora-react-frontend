@@ -14,12 +14,7 @@ export const qualificationCreate =
         toast.success("Qualification created successfully");
       })
       .catch(function (err) {
-        let errorMessage =
-          err?.response?.data?.message || "Something went wrong";
-        const [values] = Object.entries(err?.response?.data?.errors);
-        const [_, value] = values;
-        errorMessage = Array.isArray(value) ? value[0] : value;
-        toast.error(errorMessage);
+        showErrorMessageFromApi(err);
         onFailure && onFailure();
       });
   };
@@ -61,15 +56,15 @@ export const qualificationUpdate =
 
 export const qualificationDelete =
   ({ id }, onSuccess, onFailure) =>
-  async (dispatch) => {
-    axios
-      .delete(`/qualifications/${id}`)
-      .then(function ({ data }) {
-        toast.success("Qualification deleted successfully");
-        onSuccess && onSuccess();
-      })
-      .catch(function (err) {
-        showErrorMessageFromApi(err);
-        onFailure && onFailure();
-      });
-  };
+    async (dispatch) => {
+      axios
+        .delete(`/qualifications/${id}`)
+        .then(function ({ data }) {
+          toast.success("Qualification deleted successfully");
+          onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+          showErrorMessageFromApi(err);
+          onFailure && onFailure();
+        });
+    };

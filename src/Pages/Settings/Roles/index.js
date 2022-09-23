@@ -6,7 +6,7 @@ import AddPermissionToRoleModel from "./AddPermissionToRoleModel";
 import ViewPermissionToRoleModel from "./ViewPermissionToRoleModel";
 import DataTable from "../../../Components/DataTable";
 
-import { MdDelete, MdRemoveRedEye } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
 import {
     Container,
@@ -23,20 +23,28 @@ import {
     rolesUpdate,
     rolesDelete,
 } from "../../../store/actions/rolesAction";
-import { getPaginatedRecordNumber } from "../../../utils/helpers";
 import { permissionsGetAll } from "../../../store/actions/permissionsAction";
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
 
 const initialFormState = {
     name: "",
     guard_name: null,
-    permission_ids: [],
 };
 
 const PAGE_MODES = {
     edit: "edit",
     add: "add",
 };
+
+const validationSchema = yup.object({
+    name: yup.string().required("Required"),
+});
+
 export default function Roles() {
+    const resolver = useYupValidationResolver(validationSchema);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
 
@@ -47,11 +55,19 @@ export default function Roles() {
     const [mode, setMode] = useState(PAGE_MODES.add);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [data, setData] = useState(initialFormState);
-    const resetFields = () => setData(initialFormState);
 
-    const { rolesList, permissionsList } = useSelector((state) => ({
-        permissionsList: state.permissions.permissionsList,
+    const {
+        handleSubmit,
+        register,
+        setValue,
+        formState: { isDirty, isValid },
+        reset,
+    } = useForm({
+        resolver, mode: "onChange", defaultValues: initialFormState
+    });
+
+    const { rolesList } = useSelector((state) => ({
+        // permissionsList: state.permissions.permissionsList,
         rolesList: state.roles.rolesList,
     }));
 
@@ -64,12 +80,6 @@ export default function Roles() {
         setSelectedRole(role);
         setShow1(true);
     };
-    const perColumns = [
-        {
-            name: "Permission",
-            selector: (row) => row.name,
-        },
-    ];
 
 
     const columns = [
@@ -92,7 +102,6 @@ export default function Roles() {
             selector: (row) =>
                 <div onClick={() => handleShow1(row)}>
                     <span className={styles.formShowButton1}>View All </span>
-                    {/* <MdRemoveRedEye className={styles.actionIcon} ></MdRemoveRedEye> */}
                 </div>
         },
         {
@@ -102,31 +111,24 @@ export default function Roles() {
                         title={`Add permission to ${singleRowData.name}`}
                         className={styles.actionIcon}
                         onClick={() => handleShow(singleRowData)}
-                    // onClick={() => {
-                    //     dispatch(
-                    //         rolesDelete({ id: singleRowData.id }, () =>
-                    //             dispatch(rolesGetAll())
-                    //         )
-                    //     );
-                    // }}
                     />
                     <BiPencil
                         title="Edit Role"
                         className={styles.actionIcon}
                         onClick={() => {
                             setMode(PAGE_MODES.edit);
-                            setData({
+                            resetReactHookFormValues({
                                 id: singleRowData.id,
                                 name: singleRowData.name,
-                                // guard_name: singleRowData.guard_name,
-                                permission_ids: singleRowData.permission_ids,
-                            });
+                            }, setValue);
                         }}
                     />
                     <MdDelete
                         title="Delete Role"
                         className={styles.actionIcon}
                         onClick={() => {
+                            reset();
+                            setMode(PAGE_MODES.add);
                             dispatch(
                                 rolesDelete({ id: singleRowData.id }, () =>
                                     dispatch(rolesGetAll())
@@ -136,8 +138,6 @@ export default function Roles() {
                     />
                 </div>
             ),
-            ignoreRowClick: true,
-            allowOverflow: true,
             button: true,
         },
     ];
@@ -154,23 +154,18 @@ export default function Roles() {
         );
     }, []);
 
-    function handleData(e) {
-        const name = e.target.name;
-        const value = e.target.value;
-        setData({ ...data, [name]: value });
-    }
 
-    function handleSubmit(e) {
-        e.preventDefault();
+
+    async function onFormSubmit(data) {
         setIsSubmitting(true);
-        const permission_ids = data.permission_ids.map(pId => pId.value);
         if (mode === PAGE_MODES.add) {
             dispatch(
                 rolesCreate(
-                    { ...data, permission_ids },
+                    data,
                     () => {
                         setIsSubmitting(false);
-                        resetFields();
+                        reset();
+                        setMode(PAGE_MODES.add)
                         dispatch(rolesGetAll());
                     },
                     () => setIsSubmitting(false)
@@ -179,22 +174,24 @@ export default function Roles() {
         } else if (mode === PAGE_MODES.edit) {
             dispatch(
                 rolesUpdate(
-                    { ...data, permission_ids },
+                    data,
                     () => {
                         setIsSubmitting(false);
-                        resetFields();
+                        reset();
+                        setMode(PAGE_MODES.add)
                         dispatch(rolesGetAll());
                     },
                     () => setIsSubmitting(false)
                 )
             );
         }
+        reset();
         setMode(PAGE_MODES.add)
     }
 
     return (
         <>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit(onFormSubmit)}>
                 <Container fluid>
                     <Row>
                         <Col md={10} className={styles.customColumn}>
@@ -202,10 +199,8 @@ export default function Roles() {
                                 <Form.Label>Role Name  <span className="reqruiredFields">*</span></Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="name"
                                     placeholder="Role Name"
-                                    value={data.name}
-                                    onChange={handleData}
+                                    {...register("name")}
                                 />
                             </Form.Group>
 
@@ -213,10 +208,7 @@ export default function Roles() {
                                 <Form.Label>Guard Name</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    // name="guard_name"
                                     placeholder="Web"
-                                    // value={data.guard_name}
-                                    // onChange={handleData}
                                     disabled={true}
                                 />
                             </Form.Group>
@@ -229,6 +221,7 @@ export default function Roles() {
                                 <Button
                                     type="submit"
                                     className={styles.formShowButton}
+                                    disabled={!isDirty || !isValid}
                                 >
                                     {isSubmitting ? (
                                         <Spinner

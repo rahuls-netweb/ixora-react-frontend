@@ -1,5 +1,6 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
+import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const HEADOFFICE_GETALL = "HEADOFFICE_GETALL";
 
@@ -13,12 +14,7 @@ export const headOfficeCreate =
         toast.success("Head Office created successfully");
       })
       .catch(function (err) {
-        let errorMessage =
-          err?.response?.data?.message || "Something went wrong";
-        const [values] = Object.entries(err?.response?.data?.errors);
-        const [_, value] = values;
-        errorMessage = Array.isArray(value) ? value[0] : value;
-        toast.error(errorMessage);
+        showErrorMessageFromApi(err);
         onFailure && onFailure();
       });
   };
@@ -57,15 +53,15 @@ export const headOfficeUpdate =
 
 export const headOfficeDelete =
   ({ id }, onSuccess, onFailure) =>
-  async (dispatch) => {
-    axios
-      .delete(`/headoffices/${id}`)
-      .then(function ({ data }) {
-        toast.success("Head Office deleted successfully");
-        onSuccess && onSuccess();
-      })
-      .catch(function (err) {
-        toast.error(err.response?.data?.message || err?.message);
-        onFailure && onFailure();
-      });
-  };
+    async (dispatch) => {
+      axios
+        .delete(`/headoffices/${id}`)
+        .then(function ({ data }) {
+          toast.success("Head Office deleted successfully");
+          onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+          toast.error(err.response?.data?.message || err?.message);
+          onFailure && onFailure();
+        });
+    };
