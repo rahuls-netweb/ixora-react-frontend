@@ -22,8 +22,10 @@ import {
 
 import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
 import * as yup from "yup";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 const initialFormState = {
   name: "",
@@ -39,16 +41,17 @@ const PAGE_MODES = {
 
 const validationSchema = yup.object({
   name: yup.string().required("Required"),
-  code: yup.number().required("Required"),
+  // code: yup.number().required("Required"),
 });
 
 export default function Country() {
+  const [code, setCode] = useState('91');
   const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
+
 
   const { countryList } = useSelector((state) => state.country);
 
@@ -132,6 +135,7 @@ export default function Country() {
 
 
   function onFormSubmit(data) {
+
     setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
@@ -188,11 +192,18 @@ export default function Country() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Country Code  <span className="reqruiredFields">*</span></Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Country Code"
-                  {...register('code')}
+
+                <PhoneInput
+                  country={'in'}
+                  placeholder="Enter phone number"
+                  onChange={value => setValue("code", value)}
+                  inputProps={{
+                    disabled: true,
+                  }}
                 />
+
+
+
               </Form.Group>
 
             </Col>

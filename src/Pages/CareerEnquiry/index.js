@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import styles from "./careerEnquiry.module.css";
@@ -6,6 +6,12 @@ import DataTable from "../../Components/DataTable";
 import PopUP from "../../Components/PopUp";
 import { MdRemoveRedEye } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
+import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
+import { countryGetAll } from "../../store/actions/countryAction";
+import { qualificationGetAll } from "../../store/actions/qualificationAction";
 
 const columns = [
   {
@@ -39,6 +45,7 @@ const columns = [
 ];
 
 export default function CareerEnquiry() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const data = [
     {
@@ -64,20 +71,20 @@ export default function CareerEnquiry() {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  var form = [];
-  for (var i = 0; i <= 10; i++) {
-    form.push(
-      <Form.Group className={styles.popFormGroup} controlId="formBasicCheckbox">
-        <Form.Check
-          className={styles.popFormRadioButton}
-          type="radio"
-          label="Ankit Madaan"
-        />
-        {/* <Form.Label>Email address</Form.Label> */}
-      </Form.Group>
-    );
-  }
 
+  const { branchMasterList, headOfficeList, countryList, qualificationList } = useSelector((state) => ({
+    branchMasterList: state.branchMaster.branchMasterList,
+    headOfficeList: state.headOffice.headOfficeList,
+    countryList: state.country.countryList,
+    qualificationList: state.qualification.qualificationList,
+  }));
+
+  useEffect(() => {
+    dispatch(headOfficeGetAll());
+    dispatch(branchMasterGetAll());
+    dispatch(countryGetAll());
+    dispatch(qualificationGetAll());
+  }, []);
   return (
     <Layout>
       <Form>
@@ -87,14 +94,21 @@ export default function CareerEnquiry() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Head Office</Form.Label>
                 <Form.Select>
-                  <option>List</option>
+                  <option value="" disabled>--Select--</option>
+                  {headOfficeList.map(headoffice => {
+                    return <option value={headoffice.id}>{headoffice.name}</option>
+                  })}
                 </Form.Select>
+
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Branch</Form.Label>
                 <Form.Select>
-                  <option>List</option>
+                  <option value="" disabled>--Select--</option>
+                  {branchMasterList.map(branch => {
+                    return <option value={branch.id}>{branch.name}</option>
+                  })}
                 </Form.Select>
               </Form.Group>
 
@@ -106,14 +120,20 @@ export default function CareerEnquiry() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Country</Form.Label>
                 <Form.Select>
-                  <option>Select</option>
+                  <option value="" disabled>--Select--</option>
+                  {countryList.map(country => {
+                    return <option value={country.id}>{country.name}</option>
+                  })}
                 </Form.Select>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Qualification</Form.Label>
                 <Form.Select>
-                  <option>Select</option>
+                  <option value="" disabled>--Select--</option>
+                  {qualificationList.map(qualification => {
+                    return <option value={qualification.id}>{qualification.name}</option>
+                  })}
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -134,7 +154,9 @@ export default function CareerEnquiry() {
                   <Form.Group className={styles.formCareerEnquirieSub1}>
                     <Form.Label>Head Office</Form.Label>
                     <Form.Select>
-                      <option>List</option>
+                      {headOfficeList.map(headoffice => {
+                        return <option value={headoffice.id}>{headoffice.name}</option>
+                      })}
                     </Form.Select>
                   </Form.Group>
                   <Form.Group className={styles.formCareerEnquirieSub2}>
@@ -161,7 +183,7 @@ export default function CareerEnquiry() {
       <PopUP show={show} hide={handleClose} size="md">
         <Form className={styles.popForm}>
           <Form.Control type="text" placeholder="Select" />
-          {form}
+          {/* <AddEmployeeMasterToEnquiry /> */}
         </Form>
       </PopUP>
     </Layout>

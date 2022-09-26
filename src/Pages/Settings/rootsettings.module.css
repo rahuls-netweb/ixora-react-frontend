@@ -57,6 +57,10 @@
     width: 23%;
 }
 
+.divDivision input {
+    width: 100% !important;
+}
+
 .divDivision1 {
     width: 23%;
     display: flex;
