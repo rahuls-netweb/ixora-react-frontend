@@ -1,18 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   headOfficeCreate,
   headOfficeGetAll,
@@ -20,10 +12,18 @@ import {
   headOfficeDelete,
 } from "../../store/actions/headOfficeAction";
 
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import {
+  EmailPattern,
+  NamePattern,
+  PhonePattern,
+} from "../../Components/validation";
 
 const initialFormState = {
   name: "",
@@ -41,14 +41,11 @@ const validationSchema = yup.object({
   name: yup.string().required("Required"),
 });
 export default function HeadOffice() {
-
   const dispatch = useDispatch();
   const resolver = useYupValidationResolver(validationSchema);
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-
-
 
   const { headOfficeList } = useSelector((state) => state.headOffice);
 
@@ -59,7 +56,9 @@ export default function HeadOffice() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const columns = [
@@ -92,28 +91,33 @@ export default function HeadOffice() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({
-                id: singleRowData.id,
-                name: singleRowData.name,
-                email: singleRowData.email,
-                phone: singleRowData.phone,
-                address: singleRowData.address,
-              }, setValue);
+              resetReactHookFormValues(
+                {
+                  id: singleRowData.id,
+                  name: singleRowData.name,
+                  email: singleRowData.email,
+                  phone: singleRowData.phone,
+                  address: singleRowData.address,
+                },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 headOfficeDelete({ id: singleRowData.id }, () =>
-                  dispatch(headOfficeGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    headOfficeGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -135,9 +139,8 @@ export default function HeadOffice() {
     );
   }, []);
 
-
   function onFormSubmit(data) {
-    setLoading(true)
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -145,16 +148,18 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(headOfficeGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              headOfficeGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
           }
         )
       );
@@ -165,18 +170,20 @@ export default function HeadOffice() {
           () => {
             setIsSubmitting(false);
             reset();
-            setMode(PAGE_MODES.add)
-            dispatch(headOfficeGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            setMode(PAGE_MODES.add);
+            dispatch(
+              headOfficeGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
       );
     }
-    setMode(PAGE_MODES.add)
+    setMode(PAGE_MODES.add);
   }
 
   return (
@@ -186,13 +193,14 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Head Office Name <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Head Office Name"
-                  {...register("name")}
+                  {...register("name", { pattern: /^[0-9]+$/ })}
                 />
-
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -200,7 +208,9 @@ export default function HeadOffice() {
                 <Form.Control
                   type="email"
                   placeholder="Email"
-                  {...register("email")}
+                  {...register("email", {
+                    pattern: EmailPattern(),
+                  })}
                 />
               </Form.Group>
               <Form.Group className={styles.divDivision}>
@@ -208,7 +218,11 @@ export default function HeadOffice() {
                 <Form.Control
                   type="text"
                   placeholder="Phone Number"
-                  {...register("phone")}
+                  {...register("phone", {
+                    maxLength: 15,
+                    pattern: PhonePattern(),
+                    minLength: 10,
+                  })}
                 />
               </Form.Group>
 
@@ -222,9 +236,7 @@ export default function HeadOffice() {
               </Form.Group>
             </Col>
             <Col md={2} className="d-flex justify-content-end">
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}
@@ -246,19 +258,15 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={headOfficeList} />
-          </div>
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={headOfficeList} />
+        </div>
+      )}
     </>
-  )
+  );
 }
