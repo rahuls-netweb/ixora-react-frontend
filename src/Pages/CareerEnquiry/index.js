@@ -7,7 +7,7 @@ import PopUP from "../../Components/PopUp";
 import { MdRemoveRedEye } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import AddEmployeeMasterToEnquiry from './AddEmployeeMasterToEnquiry'
+
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
 import { countryGetAll } from "../../store/actions/countryAction";
@@ -183,7 +183,7 @@ export default function CareerEnquiry() {
       <PopUP show={show} hide={handleClose} size="md">
         <Form className={styles.popForm}>
           <Form.Control type="text" placeholder="Select" />
-          <AddEmployeeMasterToEnquiry />
+          {/* <AddEmployeeMasterToEnquiry /> */}
         </Form>
       </PopUP>
     </Layout>
