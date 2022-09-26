@@ -128,10 +128,15 @@ export default function Roles() {
                         className={styles.actionIcon}
                         onClick={() => {
                             reset();
+                            setLoading(true)
                             setMode(PAGE_MODES.add);
                             dispatch(
                                 rolesDelete({ id: singleRowData.id }, () =>
-                                    dispatch(rolesGetAll())
+                                    dispatch(rolesGetAll(
+                                        null,
+                                        () => setLoading(false),
+                                        () => setLoading(false)
+                                    ))
                                 )
                             );
                         }}
@@ -157,6 +162,7 @@ export default function Roles() {
 
 
     async function onFormSubmit(data) {
+        setLoading(true)
         setIsSubmitting(true);
         if (mode === PAGE_MODES.add) {
             dispatch(
@@ -166,7 +172,11 @@ export default function Roles() {
                         setIsSubmitting(false);
                         reset();
                         setMode(PAGE_MODES.add)
-                        dispatch(rolesGetAll());
+                        dispatch(rolesGetAll(
+                            null,
+                            () => setLoading(false),
+                            () => setLoading(false)
+                        ));
                     },
                     () => setIsSubmitting(false)
                 )
@@ -179,7 +189,11 @@ export default function Roles() {
                         setIsSubmitting(false);
                         reset();
                         setMode(PAGE_MODES.add)
-                        dispatch(rolesGetAll());
+                        dispatch(rolesGetAll(
+                            null,
+                            () => setLoading(false),
+                            () => setLoading(false)
+                        ));
                     },
                     () => setIsSubmitting(false)
                 )

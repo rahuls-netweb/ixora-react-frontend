@@ -79,10 +79,15 @@ export default function Candidate() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 categoryDelete({ id: singleRowData.id }, () =>
-                  dispatch(categoryGetAll())
+                  dispatch(categoryGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -107,6 +112,7 @@ export default function Candidate() {
 
 
   async function onFormSubmit(data) {
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -116,7 +122,11 @@ export default function Candidate() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(categoryGetAll());
+            dispatch(categoryGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
@@ -129,7 +139,11 @@ export default function Candidate() {
             setIsSubmitting(false);
             reset();
             setMode(PAGE_MODES.add)
-            dispatch(categoryGetAll());
+            dispatch(categoryGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )

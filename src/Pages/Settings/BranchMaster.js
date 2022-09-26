@@ -143,10 +143,15 @@ export default function BranchMaster() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 branchMasterDelete({ id: singleRowData.id }, () =>
-                  dispatch(branchMasterGetAll())
+                  dispatch(branchMasterGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -172,6 +177,8 @@ export default function BranchMaster() {
 
 
   function onFormSubmit(data) {
+
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -181,7 +188,11 @@ export default function BranchMaster() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(branchMasterGetAll());
+            dispatch(branchMasterGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
@@ -194,7 +205,11 @@ export default function BranchMaster() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(branchMasterGetAll());
+            dispatch(branchMasterGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )

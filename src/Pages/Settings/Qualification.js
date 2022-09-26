@@ -85,10 +85,15 @@ export default function Qualification() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 qualificationDelete({ id: singleRowData.id }, () =>
-                  dispatch(qualificationGetAll())
+                  dispatch(qualificationGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -115,6 +120,7 @@ export default function Qualification() {
 
 
   function onFormSubmit(data) {
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -123,7 +129,11 @@ export default function Qualification() {
           () => {
             setIsSubmitting(false);
             reset();
-            dispatch(qualificationGetAll());
+            dispatch(qualificationGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
@@ -135,7 +145,11 @@ export default function Qualification() {
           () => {
             setIsSubmitting(false);
             reset();
-            dispatch(qualificationGetAll());
+            dispatch(qualificationGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )

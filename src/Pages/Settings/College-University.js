@@ -95,10 +95,15 @@ export default function HeadOffice() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 collegeDelete({ id: singleRowData.id }, () =>
-                  dispatch(collegeGetAll())
+                  dispatch(collegeGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -124,7 +129,7 @@ export default function HeadOffice() {
 
 
   function onFormSubmit(data) {
-
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -134,7 +139,11 @@ export default function HeadOffice() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(collegeGetAll());
+            dispatch(collegeGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
@@ -147,7 +156,11 @@ export default function HeadOffice() {
             setIsSubmitting(false);
             reset();
             setMode(PAGE_MODES.add)
-            dispatch(collegeGetAll());
+            dispatch(collegeGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )

@@ -85,10 +85,15 @@ export default function Permissions() {
                         className={styles.actionIcon}
                         onClick={() => {
                             reset();
+                            setLoading(true)
                             setMode(PAGE_MODES.add);
                             dispatch(
                                 permissionsDelete({ id: singleRowData.id }, () =>
-                                    dispatch(permissionsGetAll())
+                                    dispatch(permissionsGetAll(
+                                        null,
+                                        () => setLoading(false),
+                                        () => setLoading(false)
+                                    ))
                                 )
                             );
                         }}
@@ -113,6 +118,7 @@ export default function Permissions() {
 
 
     function onFormSubmit(data) {
+        setLoading(false)
         setIsSubmitting(true);
         if (mode === PAGE_MODES.add) {
             dispatch(
@@ -122,7 +128,10 @@ export default function Permissions() {
                         setIsSubmitting(false);
                         setMode(PAGE_MODES.add)
                         reset();
-                        dispatch(permissionsGetAll());
+                        dispatch(permissionsGetAll(
+                            null,
+                            () => setLoading(false),
+                            () => setLoading(false)));
                     },
                     () => setIsSubmitting(false)
                 )
@@ -135,7 +144,11 @@ export default function Permissions() {
                         setIsSubmitting(false);
                         setMode(PAGE_MODES.add)
                         reset();
-                        dispatch(permissionsGetAll());
+                        dispatch(permissionsGetAll(
+                            null,
+                            () => setLoading(false),
+                            () => setLoading(false)
+                        ));
                     },
                     () => setIsSubmitting(false)
                 )

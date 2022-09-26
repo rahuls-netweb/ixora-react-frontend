@@ -99,10 +99,15 @@ export default function Country() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 countryDelete({ id: singleRowData.id }, () =>
-                  dispatch(countryGetAll())
+                  dispatch(countryGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -127,6 +132,7 @@ export default function Country() {
 
 
   function onFormSubmit(data) {
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -136,7 +142,11 @@ export default function Country() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(countryGetAll());
+            dispatch(countryGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
@@ -149,7 +159,11 @@ export default function Country() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(countryGetAll());
+            dispatch(countryGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )

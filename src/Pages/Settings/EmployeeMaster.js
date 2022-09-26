@@ -1,14 +1,3 @@
-// import React from "react";
-// import Layout from "../../Components/Layout";
-
-
-
-// export default function EmployeeMaster() {
-//   return (
-//     <h1>Employee Master</h1>
-//   );
-// }
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
@@ -24,36 +13,63 @@ import {
 } from "react-bootstrap";
 import styles from './rootsettings.module.css';
 import {
-  headOfficeCreate,
-  headOfficeGetAll,
-  headOfficeUpdate,
-  headOfficeDelete,
-} from "../../store/actions/headOfficeAction";
-import { getPaginatedRecordNumber } from "../../utils/helpers";
+  employeeMasterCreate,
+  employeeMasterGetAll,
+  employeeMasterUpdate,
+  employeeMasterDelete,
+} from "../../store/actions/employeeMasterAction";
+
+import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
   email: "",
   phone: "",
-  address: "",
-  status: "1",
+  password: "",
+  password_confirmation: "",
+  report_time: null,
+  report_time_from: "",
+  report_time_to: "",
+  lunch_from: "",
+  lunch_to: "",
+  status: 1,
+  is_admin: 0,
 };
 
 const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
-
+const validationSchema = yup.object({
+  name: yup.string().required("Required"),
+  email: yup.string().email("Invalid Email").required("Required"),
+  password: yup.string().required("Required"),
+  password_confirmation: yup.string().required("Required"),
+});
 export default function HeadOffice() {
 
   const dispatch = useDispatch();
+  const resolver = useYupValidationResolver(validationSchema);
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialFormState);
-  const resetFields = () => setData(initialFormState);
+  // const [isAdmin, setIsAdmin] = useState(0);
 
-  const { headOfficeList } = useSelector((state) => state.headOffice);
+
+  const { employeeMasterList } = useSelector((state) => state.employeeMaster);
+
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    formState: { isDirty, isValid },
+    reset,
+  } = useForm({
+    resolver, mode: "onChange", defaultValues: initialFormState
+  });
 
   const columns = [
     {
@@ -75,39 +91,52 @@ export default function HeadOffice() {
       selector: (row) => row.phone,
     },
     {
-      name: "Address",
-      selector: (row) => row.address,
+      name: "Report Time",
+      selector: (row) => row.report_time_from,
     },
     {
       cell: (singleRowData, index) => (
         <div>
+
           <BiPencil
             className={styles.actionIcon}
+
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              setData({
+              resetReactHookFormValues({
                 id: singleRowData.id,
                 name: singleRowData.name,
                 email: singleRowData.email,
                 phone: singleRowData.phone,
-                address: singleRowData.address,
-              });
+                password: singleRowData.password,
+                password_confirmation: singleRowData.password_confirmation,
+                report_time_from: singleRowData.report_time_from,
+                report_time_to: singleRowData.report_time_to,
+                lunch_from: singleRowData.lunch_from,
+                lunch_to: singleRowData.lunch_to,
+              }, setValue);
             }}
           />
-          <MdDelete
+
+          {!singleRowData.is_admin ? <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              reset();
+              setMode(PAGE_MODES.add);
               dispatch(
-                headOfficeDelete({ id: singleRowData.id }, () =>
-                  dispatch(headOfficeGetAll())
+                employeeMasterDelete({ id: singleRowData.id }, () =>
+                  dispatch(employeeMasterGetAll())
                 )
               );
             }}
-          />
+          /> : null}
+
+
+
+
+
         </div>
       ),
-      ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
   ];
@@ -115,7 +144,7 @@ export default function HeadOffice() {
   useEffect(() => {
     setLoading(true);
     dispatch(
-      headOfficeGetAll(
+      employeeMasterGetAll(
         null,
         () => setLoading(false),
         () => setLoading(false)
@@ -123,35 +152,34 @@ export default function HeadOffice() {
     );
   }, []);
 
-  function handleData(e) {
-    const name = e.target.name;
-    const value = e.target.value;
-    setData({ ...data, [name]: value });
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function onFormSubmit(data) {
+    // setIsAdmin(data.is_admin);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
-        headOfficeCreate(
+        employeeMasterCreate(
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
-            dispatch(headOfficeGetAll());
+            setMode(PAGE_MODES.add)
+            reset();
+            dispatch(employeeMasterGetAll(
+              // null, () => tttttttt
+            ));
           },
           () => setIsSubmitting(false)
         )
       );
     } else if (mode === PAGE_MODES.edit) {
       dispatch(
-        headOfficeUpdate(
+        employeeMasterUpdate(
           data,
           () => {
             setIsSubmitting(false);
-            resetFields();
-            dispatch(headOfficeGetAll());
+            reset();
+            setMode(PAGE_MODES.add)
+            dispatch(employeeMasterGetAll());
           },
           () => setIsSubmitting(false)
         )
@@ -162,60 +190,105 @@ export default function HeadOffice() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
-            <Col md={10} className={styles.customColumn}>
+            <Col md={12} className={styles.customColumn}>
+
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office Name</Form.Label>
+                <Form.Label>User Name  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
-                  placeholder="Head Office Name"
-                  value={data.name}
-                  onChange={handleData}
+                  placeholder="User Name"
+                  {...register("name")}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email  <span className="reqruiredFields">*</span></Form.Label>
                 <Form.Control
                   type="email"
-                  name="email"
                   placeholder="Email"
-                  value={data.email}
-                  onChange={handleData}
-                />
-              </Form.Group>
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="phone"
-                  placeholder="Phone Number"
-                  value={data.phone}
-                  onChange={handleData}
+                  {...register("email")}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Address</Form.Label>
+                <Form.Label>Phone</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="address"
-                  placeholder="Address"
-                  value={data.address}
-                  onChange={handleData}
+                  type="tel"
+                  placeholder="Phone"
+                  {...register("phone")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Password  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  {...register("password")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Confirm Password  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm Password"
+                  {...register("password_confirmation")}
+                />
+              </Form.Group>
+
+            </Col>
+
+            <Col md={10} className={styles.customColumn}>
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Report Time From</Form.Label>
+                <Form.Control
+                  type="time"
+                  placeholder="Report Time From"
+                  {...register("report_time_from")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Report Time To</Form.Label>
+                <Form.Control
+                  type="time"
+                  placeholder="Report Time To"
+                  {...register("report_time_to")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Lunch From</Form.Label>
+                <Form.Control
+                  type="time"
+                  placeholder="Lunch From"
+                  {...register("lunch_from")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Lunch To </Form.Label>
+                <Form.Control
+                  type="time"
+                  placeholder="Lunch To"
+                  {...register("lunch_to")}
                 />
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group
                 className={styles.formCareerEnquirieSub2}
               >
                 <Button
                   type="submit"
                   className={styles.formShowButton}
+                  disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
                     <Spinner
@@ -242,7 +315,7 @@ export default function HeadOffice() {
           </div>
         ) : (
           <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={headOfficeList} />
+            <DataTable columns={columns} rows={employeeMasterList} />
           </div>
         )
       }

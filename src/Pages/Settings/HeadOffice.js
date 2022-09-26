@@ -90,7 +90,6 @@ export default function HeadOffice() {
         <div>
           <BiPencil
             className={styles.actionIcon}
-
             onClick={() => {
               setMode(PAGE_MODES.edit);
               resetReactHookFormValues({
@@ -106,10 +105,15 @@ export default function HeadOffice() {
             className={styles.actionIcon}
             onClick={() => {
               reset();
+              setLoading(true)
               setMode(PAGE_MODES.add);
               dispatch(
                 headOfficeDelete({ id: singleRowData.id }, () =>
-                  dispatch(headOfficeGetAll())
+                  dispatch(headOfficeGetAll(
+                    null,
+                    () => setLoading(false),
+                    () => setLoading(false)
+                  ))
                 )
               );
             }}
@@ -133,7 +137,7 @@ export default function HeadOffice() {
 
 
   function onFormSubmit(data) {
-
+    setLoading(true)
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -143,9 +147,15 @@ export default function HeadOffice() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add)
             reset();
-            dispatch(headOfficeGetAll());
+            dispatch(headOfficeGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false)
+          }
         )
       );
     } else if (mode === PAGE_MODES.edit) {
@@ -156,7 +166,11 @@ export default function HeadOffice() {
             setIsSubmitting(false);
             reset();
             setMode(PAGE_MODES.add)
-            dispatch(headOfficeGetAll());
+            dispatch(headOfficeGetAll(
+              null,
+              () => setLoading(false),
+              () => setLoading(false)
+            ));
           },
           () => setIsSubmitting(false)
         )
