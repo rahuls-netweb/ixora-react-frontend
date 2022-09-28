@@ -2,34 +2,41 @@
   background: #ffffff;
   border: 1px solid #c5c7cd;
   border-radius: 15px;
-  padding: 5px 0;
+  padding: 5px 15px;
   margin-bottom: 12px;
 }
 
-.rowNavbar > div {
+.rowNavbar>div {
   margin: auto;
 }
+
+
 .rowNavbar input {
   padding: 5px 15px;
   border-radius: 8px;
   border: 1px solid rgba(50, 50, 93, 0.25);
 }
+
 .rowNavbar input::placeholder {
   color: var(--theme-color);
 }
+
 .searchNavBarMain {
   display: flex;
   justify-content: space-between;
   border-right: 2px solid #efeff5;
   padding: 0 2vw 0 4vw !important;
 }
+
 .searchNavBar {
   position: relative;
   width: 86%;
 }
-.searchNavBar input{
+
+.searchNavBar input {
   width: 100%;
 }
+
 .searchNavBar span {
   position: absolute;
   right: 1vw;
@@ -37,12 +44,28 @@
   bottom: 0px;
   color: var(--theme-color);
 }
+
 .adminSection {
   display: flex;
   justify-content: flex-end;
-  padding: 0 25px !important;
+  padding: 0 0 0 25px !important;
   align-items: center;
 }
+
+.adminSubSection1 {
+  width: 54%;
+  padding-right: 30px;
+  border-right: 2px solid #efeff5;
+}
+
+.adminSubSection2 {
+  width: 46%;
+  padding-left: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .adminSection label {
   color: #808191;
   font-weight: bold;
@@ -51,14 +74,17 @@
   font-family: var(--Mulish);
   white-space: nowrap;
 }
+
 .notificationBell {
   position: relative;
   width: 10%;
 }
+
 .notificationBell .logo {
   color: #c5c7cd;
   font-size: 27px;
 }
+
 .notificationBell::before {
   content: " ";
   position: absolute;
