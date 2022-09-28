@@ -3,25 +3,22 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   categoryCreate,
   categoryGetAll,
   categoryUpdate,
   categoryDelete,
 } from "../../store/actions/categoryAction";
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
-import * as yup from "yup";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { NamePattern } from "../../Components/validation";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -32,12 +29,12 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  category_name: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   category_name: yup.string().required("Required"),
+// });
 
 export default function Candidate() {
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,7 +48,9 @@ export default function Candidate() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    // resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const columns = [
@@ -72,22 +71,30 @@ export default function Candidate() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({ "category_name": singleRowData.category_name, id: singleRowData.id }, setValue);
+              resetReactHookFormValues(
+                {
+                  category_name: singleRowData.category_name,
+                  id: singleRowData.id,
+                },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 categoryDelete({ id: singleRowData.id }, () =>
-                  dispatch(categoryGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    categoryGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -110,9 +117,8 @@ export default function Candidate() {
     );
   }, []);
 
-
   async function onFormSubmit(data) {
-    setLoading(true)
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -120,13 +126,15 @@ export default function Candidate() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(categoryGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              categoryGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -138,12 +146,14 @@ export default function Candidate() {
           () => {
             setIsSubmitting(false);
             reset();
-            setMode(PAGE_MODES.add)
-            dispatch(categoryGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            setMode(PAGE_MODES.add);
+            dispatch(
+              categoryGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -153,23 +163,26 @@ export default function Candidate() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onFormSubmit)} >
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Category Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Category Name <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Category Name"
-                  {...register("category_name")}
+                  {...register("category_name", {
+                    required: true,
+                    pattern: NamePattern(),
+                  })}
                 />
               </Form.Group>
             </Col>
             <Col md={2} className="d-flex justify-content-end">
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}
@@ -186,26 +199,20 @@ export default function Candidate() {
                     "Update"
                   )}
                 </Button>
-
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={categoryList} />
-          </div>
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={categoryList} />
+        </div>
+      )}
     </>
-  )
+  );
 }
-

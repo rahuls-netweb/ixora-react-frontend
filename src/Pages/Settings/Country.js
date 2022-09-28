@@ -1,18 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   countryCreate,
   countryGetAll,
@@ -20,12 +12,16 @@ import {
   countryDelete,
 } from "../../store/actions/countryAction";
 
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
-import * as yup from "yup";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
+// import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { NamePattern } from "../../Components/validation";
 
 const initialFormState = {
   name: "",
@@ -39,19 +35,18 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  name: yup.string().required("Required"),
-  // code: yup.number().required("Required"),
-});
+// const validationSchema = yup.object({
+//   name: yup.string().required("Required"),
+//   // code: yup.number().required("Required"),
+// });
 
 export default function Country() {
-  const [code, setCode] = useState('91');
-  const resolver = useYupValidationResolver(validationSchema);
+  const [code, setCode] = useState("91");
+  // const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-
 
   const { countryList } = useSelector((state) => state.country);
 
@@ -62,7 +57,9 @@ export default function Country() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    // resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const columns = [
@@ -91,26 +88,31 @@ export default function Country() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({
-                id: singleRowData.id,
-                name: singleRowData.name,
-                code: singleRowData.code,
-              }, setValue);
+              resetReactHookFormValues(
+                {
+                  id: singleRowData.id,
+                  name: singleRowData.name,
+                  code: singleRowData.code,
+                },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 countryDelete({ id: singleRowData.id }, () =>
-                  dispatch(countryGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    countryGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -132,11 +134,8 @@ export default function Country() {
     );
   }, []);
 
-
-
   function onFormSubmit(data) {
-
-    setLoading(true)
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -144,13 +143,15 @@ export default function Country() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(countryGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              countryGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -161,19 +162,21 @@ export default function Country() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(countryGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              countryGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
       );
     }
-    setMode(PAGE_MODES.add)
+    setMode(PAGE_MODES.add);
   }
   return (
     <>
@@ -182,35 +185,36 @@ export default function Country() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Country Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Country Name <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Country Name"
-                  {...register('name')}
+                  {...register("name", {
+                    required: true,
+                    pattern: NamePattern(),
+                  })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Country Code  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Country Code <span className="reqruiredFields">*</span>
+                </Form.Label>
 
                 <PhoneInput
-                  country={'in'}
+                  country={"in"}
                   placeholder="Enter phone number"
-                  onChange={value => setValue("code", value)}
+                  onChange={(value) => setValue("code", value)}
                   inputProps={{
                     disabled: true,
                   }}
                 />
-
-
-
               </Form.Group>
-
             </Col>
             <Col md={2} className="d-flex justify-content-end">
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}
@@ -232,19 +236,15 @@ export default function Country() {
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={countryList} />
-          </div>
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={countryList} />
+        </div>
+      )}
     </>
   );
 }

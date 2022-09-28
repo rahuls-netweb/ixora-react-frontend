@@ -16,9 +16,9 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 import {
   EmailPattern,
   NamePattern,
@@ -37,12 +37,12 @@ const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
-const validationSchema = yup.object({
-  name: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   name: yup.string().required("Required"),
+// });
 export default function HeadOffice() {
   const dispatch = useDispatch();
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ export default function HeadOffice() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver,
+    // resolver,
     mode: "onChange",
     defaultValues: initialFormState,
   });
@@ -199,7 +199,10 @@ export default function HeadOffice() {
                 <Form.Control
                   type="text"
                   placeholder="Head Office Name"
-                  {...register("name", { pattern: /^[0-9]+$/ })}
+                  {...register("name", {
+                    pattern: NamePattern(),
+                    required: true,
+                  })}
                 />
               </Form.Group>
 
@@ -210,17 +213,18 @@ export default function HeadOffice() {
                   placeholder="Email"
                   {...register("email", {
                     pattern: EmailPattern(),
+                    required: true,
                   })}
                 />
               </Form.Group>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone Number</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   placeholder="Phone Number"
                   {...register("phone", {
+                    required: true,
                     maxLength: 15,
-                    pattern: PhonePattern(),
                     minLength: 10,
                   })}
                 />
@@ -231,7 +235,7 @@ export default function HeadOffice() {
                 <Form.Control
                   type="text"
                   placeholder="Address"
-                  {...register("address")}
+                  {...register("address", { required: true })}
                 />
               </Form.Group>
             </Col>

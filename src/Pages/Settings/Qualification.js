@@ -1,32 +1,28 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   qualificationCreate,
   qualificationGetAll,
   qualificationUpdate,
   qualificationDelete,
 } from "../../store/actions/qualificationAction";
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
 
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { NamePattern } from "../../Components/validation";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
-  name: ""
+  name: "",
 };
 
 const PAGE_MODES = {
@@ -34,19 +30,17 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  name: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   name: yup.string().required("Required"),
+// });
 
 export default function Qualification() {
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
 
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-
-
 
   const {
     handleSubmit,
@@ -55,7 +49,9 @@ export default function Qualification() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    // resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const { qualificationList } = useSelector((state) => state.qualification);
@@ -78,22 +74,27 @@ export default function Qualification() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({ "name": singleRowData.name, id: singleRowData.id }, setValue);
+              resetReactHookFormValues(
+                { name: singleRowData.name, id: singleRowData.id },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 qualificationDelete({ id: singleRowData.id }, () =>
-                  dispatch(qualificationGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    qualificationGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -117,10 +118,8 @@ export default function Qualification() {
     );
   }, []);
 
-
-
   function onFormSubmit(data) {
-    setLoading(true)
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -129,11 +128,13 @@ export default function Qualification() {
           () => {
             setIsSubmitting(false);
             reset();
-            dispatch(qualificationGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              qualificationGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -145,11 +146,13 @@ export default function Qualification() {
           () => {
             setIsSubmitting(false);
             reset();
-            dispatch(qualificationGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              qualificationGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -165,19 +168,21 @@ export default function Qualification() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Qualification  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Qualification <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Qualification"
-                  {...register('name')}
+                  {...register("name", {
+                    required: true,
+                    pattern: NamePattern(),
+                  })}
                 />
               </Form.Group>
-
             </Col>
             <Col md={2} className="d-flex justify-content-end">
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   disabled={!isDirty || !isValid}
@@ -199,19 +204,15 @@ export default function Qualification() {
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={qualificationList} />
-          </div>
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={qualificationList} />
+        </div>
+      )}
     </>
-  )
+  );
 }

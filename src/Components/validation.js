@@ -8,6 +8,6 @@ export function NamePattern() {
   return name;
 }
 export function PhonePattern() {
-  const name = /^[0-9]+$/;
-  return name;
+  const phone = /^[0-9]+$/;
+  return phone;
 }

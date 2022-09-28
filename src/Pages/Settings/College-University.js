@@ -3,15 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   collegeCreate,
   collegeGetAll,
@@ -19,11 +12,14 @@ import {
   collegeDelete,
 } from "../../store/actions/collegeAction";
 
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
-import * as yup from "yup";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-
+import { NamePattern } from "../../Components/validation";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   collage_name: "",
@@ -35,14 +31,13 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  collage_name: yup.string().required("Required"),
-  country_id: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   collage_name: yup.string().required("Required"),
+//   country_id: yup.string().required("Required"),
+// });
 
 export default function HeadOffice() {
-
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,7 +53,9 @@ export default function HeadOffice() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    // resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const columns = [
@@ -81,29 +78,33 @@ export default function HeadOffice() {
         <div>
           <BiPencil
             className={styles.actionIcon}
-
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({
-                "collage_name": singleRowData.collage_name,
-                "country_id": singleRowData.country_id,
-                id: singleRowData.id
-              }, setValue);
+              resetReactHookFormValues(
+                {
+                  collage_name: singleRowData.collage_name,
+                  country_id: singleRowData.country_id,
+                  id: singleRowData.id,
+                },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 collegeDelete({ id: singleRowData.id }, () =>
-                  dispatch(collegeGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    collegeGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -126,10 +127,8 @@ export default function HeadOffice() {
     );
   }, []);
 
-
-
   function onFormSubmit(data) {
-    setLoading(true)
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -137,13 +136,15 @@ export default function HeadOffice() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(collegeGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              collegeGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -155,18 +156,20 @@ export default function HeadOffice() {
           () => {
             setIsSubmitting(false);
             reset();
-            setMode(PAGE_MODES.add)
-            dispatch(collegeGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            setMode(PAGE_MODES.add);
+            dispatch(
+              collegeGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
       );
     }
-    setMode(PAGE_MODES.add)
+    setMode(PAGE_MODES.add);
   }
 
   return (
@@ -176,29 +179,39 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>College Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  College Name <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="College Name"
-                  {...register("collage_name")}
+                  {...register("collage_name", {
+                    required: true,
+                    pattern: NamePattern(),
+                  })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label> Country Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  {" "}
+                  Country Name <span className="reqruiredFields">*</span>
+                </Form.Label>
 
-                <Form.Select  {...register("country_id")}>
-                  <option value="" disabled>--Select--</option>
-                  {countryList.map(country => {
-                    return <option value={country.id}>{country.name}</option>
+                <Form.Select {...register("country_id", { required: true })}>
+                  <option value="" disabled>
+                    --Select--
+                  </option>
+                  <option value="country1">Country1</option>
+                  <option value="country2">Country2</option>
+                  {countryList.map((country) => {
+                    return <option value={country.id}>{country.name}</option>;
                   })}
                 </Form.Select>
               </Form.Group>
             </Col>
             <Col md={2} className="d-flex justify-content-end">
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}
@@ -220,19 +233,15 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={collegeList} />
-          </div>
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={collegeList} />
+        </div>
+      )}
     </>
-  )
+  );
 }

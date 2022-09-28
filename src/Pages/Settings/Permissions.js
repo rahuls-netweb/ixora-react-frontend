@@ -23,9 +23,10 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { NamePattern } from "../../Components/validation";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -36,12 +37,12 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  name: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   name: yup.string().required("Required"),
+// });
 
 export default function Permissions() {
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,7 +60,7 @@ export default function Permissions() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver,
+    // resolver,
     mode: "onChange",
     defaultValues: initialFormState,
   });
@@ -187,7 +188,10 @@ export default function Permissions() {
                   <Form.Control
                     type="text"
                     placeholder="Permission Name"
-                    {...register("name")}
+                    {...register("name", {
+                      required: true,
+                      pattern: NamePattern(),
+                    })}
                   />
                   {/* toolTip Start */}
                   <Button

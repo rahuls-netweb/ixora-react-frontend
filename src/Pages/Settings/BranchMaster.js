@@ -3,15 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Spinner,
-} from "react-bootstrap";
-import styles from './rootsettings.module.css';
+import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import styles from "./rootsettings.module.css";
 import {
   branchMasterCreate,
   branchMasterGetAll,
@@ -20,10 +13,14 @@ import {
 } from "../../store/actions/branchMasterAction";
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 
-import { getPaginatedRecordNumber, resetReactHookFormValues } from "../../utils/helpers";
-import * as yup from "yup";
+import {
+  getPaginatedRecordNumber,
+  resetReactHookFormValues,
+} from "../../utils/helpers";
+// import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { EmailPattern, NamePattern } from "../../Components/validation";
+// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -42,18 +39,18 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
-  name: yup.string().required("Required"),
-  email: yup.string().email("Invalid Email").required("Required"),
-  headoffice_id: yup.number().required("Required"),
-  branch_code: yup.string().required("Required"),
-  opening_time: yup.string().required("Required"),
-  closing_time: yup.string().required("Required"),
-  lunch_time: yup.string().required("Required"),
-});
+// const validationSchema = yup.object({
+//   name: yup.string().required("Required"),
+//   email: yup.string().email("Invalid Email").required("Required"),
+//   headoffice_id: yup.number().required("Required"),
+//   branch_code: yup.string().required("Required"),
+//   opening_time: yup.string().required("Required"),
+//   closing_time: yup.string().required("Required"),
+//   lunch_time: yup.string().required("Required"),
+// });
 
 export default function BranchMaster() {
-  const resolver = useYupValidationResolver(validationSchema);
+  // const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,7 +63,9 @@ export default function BranchMaster() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    resolver, mode: "onChange", defaultValues: initialFormState
+    // resolver,
+    mode: "onChange",
+    defaultValues: initialFormState,
   });
 
   const { branchMasterList, headOfficeList } = useSelector((state) => ({
@@ -125,33 +124,38 @@ export default function BranchMaster() {
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
-              resetReactHookFormValues({
-                id: singleRowData.id,
-                name: singleRowData.name,
-                email: singleRowData.email,
-                phone: singleRowData.phone,
-                address: singleRowData.address,
-                headoffice_id: singleRowData.headoffice_id,
-                branch_code: singleRowData.branch_code,
-                opening_time: singleRowData.opening_time,
-                closing_time: singleRowData.closing_time,
-                lunch_time: singleRowData.lunch_time,
-              }, setValue);
+              resetReactHookFormValues(
+                {
+                  id: singleRowData.id,
+                  name: singleRowData.name,
+                  email: singleRowData.email,
+                  phone: singleRowData.phone,
+                  address: singleRowData.address,
+                  headoffice_id: singleRowData.headoffice_id,
+                  branch_code: singleRowData.branch_code,
+                  opening_time: singleRowData.opening_time,
+                  closing_time: singleRowData.closing_time,
+                  lunch_time: singleRowData.lunch_time,
+                },
+                setValue
+              );
             }}
           />
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
               reset();
-              setLoading(true)
+              setLoading(true);
               setMode(PAGE_MODES.add);
               dispatch(
                 branchMasterDelete({ id: singleRowData.id }, () =>
-                  dispatch(branchMasterGetAll(
-                    null,
-                    () => setLoading(false),
-                    () => setLoading(false)
-                  ))
+                  dispatch(
+                    branchMasterGetAll(
+                      null,
+                      () => setLoading(false),
+                      () => setLoading(false)
+                    )
+                  )
                 )
               );
             }}
@@ -174,11 +178,9 @@ export default function BranchMaster() {
     );
   }, []);
 
-
-
   function onFormSubmit(data) {
-
-    setLoading(true)
+    console.log(data);
+    setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -186,13 +188,15 @@ export default function BranchMaster() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(branchMasterGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              branchMasterGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
@@ -203,53 +207,68 @@ export default function BranchMaster() {
           data,
           () => {
             setIsSubmitting(false);
-            setMode(PAGE_MODES.add)
+            setMode(PAGE_MODES.add);
             reset();
-            dispatch(branchMasterGetAll(
-              null,
-              () => setLoading(false),
-              () => setLoading(false)
-            ));
+            dispatch(
+              branchMasterGetAll(
+                null,
+                () => setLoading(false),
+                () => setLoading(false)
+              )
+            );
           },
           () => setIsSubmitting(false)
         )
       );
     }
-    setMode(PAGE_MODES.add)
+    setMode(PAGE_MODES.add);
   }
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onFormSubmit)} >
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={12} className={styles.customColumn}>
-
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Branch Name  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Branch Name <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   name="name"
                   placeholder="Branch Name"
-                  {...register("name")}
+                  {...register("name", {
+                    required: true,
+                    pattern: NamePattern(),
+                  })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Email  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Email <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="email"
                   placeholder="Email"
-                  {...register("email")}
+                  {...register("email", {
+                    required: true,
+                    pattern: EmailPattern(),
+                  })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
-                  type="tel"
+                  type="number"
                   placeholder="Phone"
-                  {...register("phone")}
+                  {...register("phone", {
+                    required: true,
+                    minLength: 10,
+                    maxLength: 15,
+                  })}
                 />
               </Form.Group>
 
@@ -258,62 +277,81 @@ export default function BranchMaster() {
                 <Form.Control
                   type="text"
                   placeholder="Address"
-                  {...register("address")}
+                  {...register("address", { required: true })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Headoffice Name  <span className="reqruiredFields">*</span></Form.Label>
-                <Form.Select {...register("headoffice_id")}>
-                  <option value="" disabled>--Select--</option>
-                  {headOfficeList.map(headoffice => {
-                    return <option value={headoffice.id}>{headoffice.name}</option>
+                <Form.Label>
+                  Headoffice Name <span className="reqruiredFields">*</span>
+                </Form.Label>
+                <Form.Select {...register("headoffice_id", { required: true })}>
+                  <option value="" disabled>
+                    --Select--
+                  </option>
+                  <option value="admin1">Admin1</option>
+                  <option value="admin2">Admin2</option>
+                  <option value="admin3">Admin3</option>
+                  {headOfficeList.map((headoffice) => {
+                    return (
+                      <option value={headoffice.id}>{headoffice.name}</option>
+                    );
                   })}
                 </Form.Select>
               </Form.Group>
             </Col>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Branch Code  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Branch Code <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Branch Code"
-                  {...register("branch_code")}
+                  {...register("branch_code", { required: true })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Opening Time  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Opening Time <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Opening Time"
-                  {...register("opening_time")}
+                  {...register("opening_time", { required: true })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Closing Time  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Closing Time <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Closing Time"
-                  {...register("closing_time")}
+                  {...register("closing_time", { required: true })}
                 />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Lunch Time  <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Lunch Time <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Lunch Time"
-                  {...register("lunch_time")}
+                  {...register("lunch_time", { required: true })}
                 />
               </Form.Group>
             </Col>
 
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
-              <Form.Group
-                className={styles.formCareerEnquirieSub2}
-              >
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}
@@ -335,21 +373,15 @@ export default function BranchMaster() {
           </Row>
         </Container>
       </Form>
-      {
-        loading ? (
-          <div className="text-center">
-            <Spinner animation="border"
-              className={styles.signInLoader}
-            />
-          </div>
-
-        ) : (
-          <div style={{ paddingLeft: 15 }}>
-            <DataTable columns={columns} rows={branchMasterList} />
-          </div>
-
-        )
-      }
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" className={styles.signInLoader} />
+        </div>
+      ) : (
+        <div style={{ paddingLeft: 15 }}>
+          <DataTable columns={columns} rows={branchMasterList} />
+        </div>
+      )}
     </>
-  )
+  );
 }
