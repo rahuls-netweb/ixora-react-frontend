@@ -4,7 +4,7 @@ export function EmailPattern() {
   return email;
 }
 export function NamePattern() {
-  const name = /^[A-Za-z]+$/;
+  const name = /^[a-zA-Z]/;
   return name;
 }
 export function PhonePattern() {

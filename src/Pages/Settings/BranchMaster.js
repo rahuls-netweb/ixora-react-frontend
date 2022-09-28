@@ -318,6 +318,8 @@ export default function BranchMaster() {
                 </Form.Label>
                 <Form.Control
                   type="time"
+                  min="09:00"
+                  max="18:00"
                   placeholder="Opening Time"
                   {...register("opening_time", { required: true })}
                 />
@@ -329,6 +331,8 @@ export default function BranchMaster() {
                 </Form.Label>
                 <Form.Control
                   type="time"
+                  min="09:00"
+                  max="18:00"
                   placeholder="Closing Time"
                   {...register("closing_time", { required: true })}
                 />
@@ -340,6 +344,8 @@ export default function BranchMaster() {
                 </Form.Label>
                 <Form.Control
                   type="time"
+                  min="09:00"
+                  max="18:00"
                   placeholder="Lunch Time"
                   {...register("lunch_time", { required: true })}
                 />
