@@ -26,6 +26,7 @@ import {
 // import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
+import Help from "../../Components/Help";
 // import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
@@ -182,7 +183,8 @@ export default function Permissions() {
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
-                  Permission Name <span className="reqruiredFields">*</span>{" "}
+                  Permission Name <span className="reqruiredFields">*</span>
+                  <Help text="---Testing---" />
                 </Form.Label>
                 <div style={{ display: "flex" }}>
                   <Form.Control
@@ -193,43 +195,6 @@ export default function Permissions() {
                       pattern: NamePattern(),
                     })}
                   />
-                  {/* toolTip Start */}
-                  <Button
-                    variant="primary"
-                    ref={target}
-                    onClick={() => setShow(!show)}
-                  >
-                    <MdInfo />
-                  </Button>
-                  <Overlay
-                    target={target.current}
-                    show={show}
-                    placement="right"
-                  >
-                    {({
-                      placement,
-                      arrowProps,
-                      show: _show,
-                      popper,
-                      ...props
-                    }) => (
-                      <div
-                        {...props}
-                        style={{
-                          position: "absolute",
-                          backgroundColor: "rgba(255, 100, 100, 0.85)",
-                          margin: "0px 5px",
-                          padding: "2px 20px",
-                          color: "white",
-                          borderRadius: 3,
-                          ...props.style,
-                        }}
-                      >
-                        Name_Permission
-                      </div>
-                    )}
-                  </Overlay>
-                  {/* ToolTip Ends */}
                 </div>
               </Form.Group>
             </Col>
