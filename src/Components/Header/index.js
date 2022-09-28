@@ -3,7 +3,7 @@
 import React from "react";
 import styles from "./header.module.css";
 import { MdSearch } from "react-icons/md";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 
 export default function Dashboard() {
@@ -12,10 +12,10 @@ export default function Dashboard() {
 
         <Container fluid>
             <Row className={styles.rowNavbar}>
-                <Col sm={4} md={5} xl={7} >
+                <Col md={12} lg={4} xl={5} className="p-0" >
                     <img src="/img/logo.png" alt="logox" width='150px' />
                 </Col>
-                <Col sm={4} md={4} xl={3} className={styles.searchNavBarMain}>
+                <Col md={6} lg={4} xl={3} className={styles.searchNavBarMain}>
                     <div className={styles.searchNavBar}>
                         <input type="type" placeholder="Search" />
                         <span ><MdSearch /> </span>
@@ -25,9 +25,19 @@ export default function Dashboard() {
 
                     </div>
                 </Col>
-                <Col sm={4} md={3} xl={2} className={styles.adminSection} >
-                    <label>Admin Name</label>
-                    <img src="/img/admin.png" alt="logox" />
+
+                <Col md={6} lg={4} xl={4} className={styles.adminSection} >
+                    <div className={styles.adminSubSection1}>
+                        <Form.Select defaultValue={""}>
+                            <option value="" disabled>--Select--</option>
+                        </Form.Select>
+                    </div>
+                    <div className={styles.adminSubSection2}>
+                        <label>Admin Name</label>
+                        <img src="/img/admin.png" alt="logox" />
+                    </div>
+
+
                 </Col>
             </Row>
         </Container>

@@ -93,7 +93,7 @@ export default function CareerEnquiry() {
             <Col md={12} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Head Office</Form.Label>
-                <Form.Select>
+                <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {headOfficeList.map(headoffice => {
                     return <option value={headoffice.id}>{headoffice.name}</option>
@@ -104,7 +104,7 @@ export default function CareerEnquiry() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Branch</Form.Label>
-                <Form.Select>
+                <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {branchMasterList.map(branch => {
                     return <option value={branch.id}>{branch.name}</option>
@@ -119,7 +119,7 @@ export default function CareerEnquiry() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Country</Form.Label>
-                <Form.Select>
+                <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {countryList.map(country => {
                     return <option value={country.id}>{country.name}</option>
@@ -129,7 +129,7 @@ export default function CareerEnquiry() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Qualification</Form.Label>
-                <Form.Select>
+                <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {qualificationList.map(qualification => {
                     return <option value={qualification.id}>{qualification.name}</option>
@@ -153,7 +153,8 @@ export default function CareerEnquiry() {
                 <Form className={styles.formCareerEnquiries}>
                   <Form.Group className={styles.formCareerEnquirieSub1}>
                     <Form.Label>Head Office</Form.Label>
-                    <Form.Select>
+                    <Form.Select defaultValue={""}>
+                      <option value="" disabled>--Select--</option>
                       {headOfficeList.map(headoffice => {
                         return <option value={headoffice.id}>{headoffice.name}</option>
                       })}
