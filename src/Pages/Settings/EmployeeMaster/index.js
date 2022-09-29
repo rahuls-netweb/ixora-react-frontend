@@ -6,6 +6,7 @@ import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
 import AddBranchesToUser from './AddBranchesToUser'
+import Help from '../../../Components/Help';
 import {
   employeeMasterCreate,
   employeeMasterGetAll,
@@ -243,6 +244,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Password <span className="reqruiredFields">*</span>
+                  <Help text="min character is 8" />
                 </Form.Label>
                 <Form.Control
                   type="password"
@@ -254,6 +256,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Confirm Password <span className="reqruiredFields">*</span>
+                  <Help text="min character is 8" />
                 </Form.Label>
                 <Form.Control
                   type="password"
