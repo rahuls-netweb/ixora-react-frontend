@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DataTable from "../../Components/DataTable";
+import DataTable from "../../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
-import { BiPencil } from "react-icons/bi";
+import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
-import styles from "./rootsettings.module.css";
+import styles from "../rootsettings.module.css";
+import AddBranchesToUser from './AddBranchesToUser'
 import {
   employeeMasterCreate,
   employeeMasterGetAll,
   employeeMasterUpdate,
   employeeMasterDelete,
-} from "../../store/actions/employeeMasterAction";
+} from "../../../store/actions/employeeMasterAction";
 
 import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
-} from "../../utils/helpers";
-// import * as yup from "yup";
+} from "../../../utils/helpers";
 import { useForm } from "react-hook-form";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 import {
   EmailPattern,
   NamePattern,
   PhonePattern,
-} from "../../Components/validation";
+} from "../../../Components/validation";
+import PopUP from "../../../Components/PopUp";
 
 const initialFormState = {
   name: "",
@@ -44,21 +44,21 @@ const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
-// const validationSchema = yup.object({
-//   name: yup.string().required("Required"),
-//   email: yup.string().email("Invalid Email").required("Required"),
-//   password: yup.string().required("Required"),
-//   password_confirmation: yup.string().required("Required"),
-// });
 export default function HeadOffice() {
   const dispatch = useDispatch();
-  // const resolver = useYupValidationResolver(validationSchema);
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  // const [isAdmin, setIsAdmin] = useState(0);
 
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const handleShow = (user) => {
+    setSelectedRole(user);
+    setShow(true);
+  };
 
   const {
     handleSubmit,
@@ -67,7 +67,6 @@ export default function HeadOffice() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
     mode: "onChange",
     defaultValues: initialFormState,
   });
@@ -98,6 +97,14 @@ export default function HeadOffice() {
     {
       cell: (singleRowData, index) => (
         <div>
+          {!singleRowData.is_admin ? (
+            <BiPlus
+              title={`Add Branch to ${singleRowData.name}`}
+              className={styles.actionIcon}
+              onClick={() => handleShow(singleRowData)}
+            />
+
+          ) : null}
           <BiPencil
             className={styles.actionIcon}
             onClick={() => {
@@ -152,7 +159,6 @@ export default function HeadOffice() {
   }, []);
 
   function onFormSubmit(data) {
-    // setIsAdmin(data.is_admin);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
       dispatch(
@@ -164,7 +170,6 @@ export default function HeadOffice() {
             reset();
             dispatch(
               employeeMasterGetAll()
-              // null, () => tttttttt
             );
           },
           () => setIsSubmitting(false)
@@ -199,7 +204,8 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  // name="name"
+                  autoComplete="off"
+
                   placeholder="User Name"
                   {...register("name", {
                     required: true,
@@ -229,7 +235,7 @@ export default function HeadOffice() {
                   placeholder="Phone"
                   {...register(
                     "phone"
-                    // , {pattern: PhonePattern(),maxLength: 15,minLength: 10,required: true}
+                    , { pattern: PhonePattern(), maxLength: 15, minLength: 10, required: true }
                   )}
                 />
               </Form.Group>
@@ -333,6 +339,12 @@ export default function HeadOffice() {
         <div style={{ paddingLeft: 15 }}>
           <DataTable columns={columns} rows={employeeMasterList} />
         </div>
+      )}
+
+      {show && (
+        <PopUP show={show} hide={handleClose} size="xl">
+          <AddBranchesToUser user={selectedRole} />
+        </PopUP>
       )}
     </>
   );

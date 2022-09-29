@@ -69,7 +69,7 @@
 .adminSection label {
   color: #808191;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1vw;
   padding-right: 16px;
   font-family: var(--Mulish);
   white-space: nowrap;

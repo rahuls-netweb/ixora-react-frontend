@@ -25,7 +25,7 @@ import { NamePattern } from "../../Components/validation";
 
 const initialFormState = {
   name: "",
-  code: "",
+  code: "91",
   flag_image: null,
   status: "1",
 };
@@ -77,10 +77,7 @@ export default function Country() {
       name: "Country Code",
       selector: (row) => row.code,
     },
-    // {
-    //   name: "Country Flag",
-    //   selector: (row) => row.flag_image,
-    // },
+
     {
       cell: (singleRowData, index) => (
         <div>
@@ -204,7 +201,7 @@ export default function Country() {
                 </Form.Label>
 
                 <PhoneInput
-                  country={"in"}
+                  country={"ar"}
                   placeholder="Enter phone number"
                   onChange={(value) => setValue("code", value)}
                   inputProps={{
