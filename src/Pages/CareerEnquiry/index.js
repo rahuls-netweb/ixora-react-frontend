@@ -12,6 +12,8 @@ import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
 import { countryGetAll } from "../../store/actions/countryAction";
 import { qualificationGetAll } from "../../store/actions/qualificationAction";
+import { careerGetAll } from "../../store/actions/careerAction";
+import Skeleton from "../../Components/Skeleton";
 
 const columns = [
   {
@@ -47,36 +49,39 @@ const columns = [
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const data = [
-    {
-      ID: 1,
-      CCID: "IX2256",
-      StudentName: "Manjot Kaur",
-      SID: 96858,
-      DOJ: "Mon Aug 01 2022",
-      Branch: "Amritsar",
-      Admission: "Ankit madaan",
-      View: (
-        <MdRemoveRedEye
-          className={styles.iconView}
-          onClick={() => {
-            navigate("/career-enquiry/1");
-          }}
-        />
-      ),
-    },
-  ];
+  // const [loading, setLoading] = useState(false);
+
+  // const data = [
+  //   {
+  //     ID: 1,
+  //     CCID: "IX2256",
+  //     StudentName: "Manjot Kaur",
+  //     SID: 96858,
+  //     DOJ: "Mon Aug 01 2022",
+  //     Branch: "Amritsar",
+  //     Admission: "Ankit madaan",
+  //     View: (
+  //       <MdRemoveRedEye
+  //         className={styles.iconView}
+  //         onClick={() => {
+  //           navigate("/career-enquiry/1");
+  //         }}
+  //       />
+  //     ),
+  //   },
+  // ];
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { branchMasterList, headOfficeList, countryList, qualificationList } = useSelector((state) => ({
+  const { branchMasterList, headOfficeList, countryList, qualificationList, careerList } = useSelector((state) => ({
     branchMasterList: state.branchMaster.branchMasterList,
     headOfficeList: state.headOffice.headOfficeList,
     countryList: state.country.countryList,
     qualificationList: state.qualification.qualificationList,
+    careerList: state.career.careerList,
   }));
 
   useEffect(() => {
@@ -84,6 +89,7 @@ export default function CareerEnquiry() {
     dispatch(branchMasterGetAll());
     dispatch(countryGetAll());
     dispatch(qualificationGetAll());
+    dispatch(careerGetAll());
   }, []);
   return (
     <Layout>
@@ -170,11 +176,17 @@ export default function CareerEnquiry() {
                   </Form.Group>
                 </Form>
               </div>
-              <div className="dataTableRow">
-                <DataTable
-                  columns={columns}
-                  rows={[...data, ...data, ...data, ...data, ...data, ...data]}
-                />
+              {/* {loading ? (
+                <div className="dataTableRow" >
+                  <Skeleton />
+                </div>
+              ) : (
+                <div className="dataTableRow" >
+                  <DataTable columns={columns} rows={careerList} />
+                </div>
+              )} */}
+              <div className="dataTableRow" >
+                <DataTable columns={columns} rows={careerList} />
               </div>
             </div>
           </Col>

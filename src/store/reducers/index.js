@@ -9,6 +9,7 @@ import branchMasterReducer from "./branchMasterReducer";
 import employeeMasterReducer from "./employeeMasterReducer";
 import permissionsReducer from "./permissionsReducer";
 import rolesReducer from "./rolesReducer";
+import careerReducer from "./careerReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   employeeMaster: employeeMasterReducer,
   permissions: permissionsReducer,
   roles: rolesReducer,
+  career: careerReducer,
 });
 
 export default rootReducer;

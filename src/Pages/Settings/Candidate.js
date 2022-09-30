@@ -84,6 +84,7 @@ export default function Candidate() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
+              console.log('Delete selectedTab', singleRowData.id);
               reset();
               setLoading(true);
               setMode(PAGE_MODES.add);
@@ -102,7 +103,6 @@ export default function Candidate() {
           />
         </div>
       ),
-
       button: true,
     },
   ];

@@ -122,13 +122,11 @@ export default function AddBranchesToUser({ user }) {
                                                 return (
                                                     <li>
                                                         <input type="checkbox" checked={currentBranch ? selectedBranches[currentBranch]?.includes(role.id) : false} onChange={(event) => {
-                                                            console.log(currentBranch, 'currentBranch')
-                                                            console.log(event.target.checked);
+
                                                             const targetRoles = [...selectedBranches[currentBranch]];
-                                                            console.log(targetRoles, 'targetRoles')
-                                                            // return;
+
                                                             const index = targetRoles.findIndex(roleId => roleId === role.id);
-                                                            console.log(index, 'index goes here!')
+
                                                             if (index === -1) {
                                                                 // add
                                                                 targetRoles.push(role.id);

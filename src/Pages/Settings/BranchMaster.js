@@ -280,9 +280,6 @@ export default function BranchMaster() {
                   <option value="" disabled>
                     --Select--
                   </option>
-                  <option value="admin1">Admin1</option>
-                  <option value="admin2">Admin2</option>
-                  <option value="admin3">Admin3</option>
                   {headOfficeList.map((headoffice) => {
                     return (
                       <option value={headoffice.id}>{headoffice.name}</option>

@@ -203,8 +203,6 @@ export default function HeadOffice() {
                   <option value="" disabled>
                     --Select--
                   </option>
-                  <option value="country1">Country1</option>
-                  <option value="country2">Country2</option>
                   {countryList.map((country) => {
                     return <option value={country.id}>{country.name}</option>;
                   })}
