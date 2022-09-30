@@ -4,6 +4,7 @@ import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import Skeleton from "../../Components/Skeleton";
 import styles from "./rootsettings.module.css";
 import {
   branchMasterCreate,
@@ -381,10 +382,10 @@ export default function BranchMaster() {
       </Form>
       {loading ? (
         <div className="text-center">
-          <Spinner animation="border" className={styles.signInLoader} />
+          <Skeleton />
         </div>
       ) : (
-        <div style={{ paddingLeft: 15 }}>
+        <div className="dataTableRow">
           <DataTable columns={columns} rows={branchMasterList} />
         </div>
       )}

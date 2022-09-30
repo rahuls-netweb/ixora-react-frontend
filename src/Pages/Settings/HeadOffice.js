@@ -4,6 +4,7 @@ import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import Skeleton from '../../Components/Skeleton'
 import styles from "./rootsettings.module.css";
 import {
   headOfficeCreate,
@@ -263,12 +264,13 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
+
       {loading ? (
-        <div className="text-center">
-          <Spinner animation="border" className={styles.signInLoader} />
+        <div className="dataTableRow" >
+          <Skeleton />
         </div>
       ) : (
-        <div className="dataTableRow" style={{ paddingLeft: 15 }}>
+        <div className="dataTableRow" >
           <DataTable columns={columns} rows={headOfficeList} />
         </div>
       )}

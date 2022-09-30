@@ -46,6 +46,9 @@ code {
   display: flex;
 }
 
+.dataTableRow {
+  padding-left: 15px;
+}
 
 .dataTableRow .rdt_TableRow:nth-child(odd) {
   background: #f2f2f2;

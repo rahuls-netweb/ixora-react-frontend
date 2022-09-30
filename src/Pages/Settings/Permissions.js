@@ -27,6 +27,7 @@ import {
 import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Help from "../../Components/Help";
+import Skeleton from "../../Components/Skeleton";
 // import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
@@ -223,10 +224,10 @@ export default function Permissions() {
       </Form>
       {loading ? (
         <div className="text-center">
-          <Spinner animation="border" className={styles.signInLoader} />
+          <Skeleton />
         </div>
       ) : (
-        <div style={{ paddingLeft: 15 }}>
+        <div className="dataTableRow">
           <DataTable columns={columns} rows={permissionsList} />
         </div>
       )}

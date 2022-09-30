@@ -26,6 +26,7 @@ import Flags from "country-flag-icons/react/3x2";
 import ReactSelect, { components } from "react-select";
 
 import countries from "./countries.json";
+import Skeleton from "../../../Components/Skeleton";
 
 
 const initialFormState = {
@@ -279,10 +280,10 @@ export default function Country() {
             </Form>
             {loading ? (
                 <div className="text-center">
-                    <Spinner animation="border" className={styles.signInLoader} />
+                    <Skeleton />
                 </div>
             ) : (
-                <div style={{ paddingLeft: 15 }}>
+                <div className="dataTableRow">
                     <DataTable columns={columns} rows={countryList} />
                 </div>
             )}

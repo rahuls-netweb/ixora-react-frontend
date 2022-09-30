@@ -235,7 +235,7 @@ export default function CardView() {
                         <h4>List of Past Admissions</h4>
                       </div>
                     </div>
-                    <div style={{ paddingLeft: 15 }}>
+                    <div className="dataTableRow">
                       <DataTable
                         columns={columns}
                         rows={[
@@ -257,7 +257,7 @@ export default function CardView() {
                         <h4>Test Details</h4>
                       </div>
                     </div>
-                    <div style={{ paddingLeft: 15 }}>
+                    <div className="dataTableRow">
                       <DataTable
                         columns={columns2}
                         rows={[
@@ -279,7 +279,7 @@ export default function CardView() {
                         <h4>Mockup</h4>
                       </div>
                     </div>
-                    <div style={{ paddingLeft: 15 }}>
+                    <div className="dataTableRow">
                       <DataTable
                         columns={columns3}
                         rows={[

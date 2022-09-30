@@ -1,0 +1,36 @@
+.tableSkeleton {
+    width: 100%;
+}
+
+.tableSkeletonRow {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.25) !important;
+    border-radius: 7px;
+    display: flex;
+    padding: 15px;
+    margin-bottom: 3px;
+    gap: 15%;
+}
+
+.tableSkeletonRow:nth-child(even) {
+    background: #f2f2f2;
+}
+
+.skeleton .line {
+    width: 40% !important;
+    border-radius: 2px;
+    background: linear-gradient(to right, rgba(130, 130, 130, 0.2) 8%, rgba(130, 130, 130, 0.3) 18%, rgba(130, 130, 130, 0.2) 33%);
+    background-size: 800px 100px;
+    height: 17px !important;
+    animation: wave-lines 2s infinite ease-out;
+}
+
+@keyframes wave-lines {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}

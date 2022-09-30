@@ -25,6 +25,7 @@ import {
   PhonePattern,
 } from "../../../Components/validation";
 import PopUP from "../../../Components/PopUp";
+import Skeleton from "../../../Components/Skeleton";
 
 const initialFormState = {
   name: "",
@@ -337,10 +338,10 @@ export default function HeadOffice() {
       </Form>
       {loading ? (
         <div className="text-center">
-          <Spinner animation="border" className={styles.signInLoader} />
+          <Skeleton />
         </div>
       ) : (
-        <div style={{ paddingLeft: 15 }}>
+        <div className="dataTableRow">
           <DataTable columns={columns} rows={employeeMasterList} />
         </div>
       )}

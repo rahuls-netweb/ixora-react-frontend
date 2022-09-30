@@ -170,7 +170,7 @@ export default function CareerEnquiry() {
                   </Form.Group>
                 </Form>
               </div>
-              <div style={{ paddingLeft: 15 }}>
+              <div className="dataTableRow">
                 <DataTable
                   columns={columns}
                   rows={[...data, ...data, ...data, ...data, ...data, ...data]}
