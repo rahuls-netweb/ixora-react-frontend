@@ -298,6 +298,7 @@ export default function BranchMaster() {
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  autoComplete="off"
                   placeholder="Branch Code"
                   {...register("branch_code", { required: true })}
                 />
