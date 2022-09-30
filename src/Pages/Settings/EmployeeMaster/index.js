@@ -206,7 +206,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  autoComplete="name"
+                  autoComplete="off"
                   placeholder="User Name"
                   {...register("name", {
                     required: true,
@@ -221,7 +221,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="email"
-                  autoComplete="name"
+                  autoComplete="off"
                   placeholder="Email"
                   {...register("email", {
                     pattern: EmailPattern(),
@@ -233,7 +233,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
-                  autoComplete="name"
+                  autoComplete="off"
                   type="tel"
                   placeholder="Phone"
                   {...register(
@@ -250,6 +250,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="password"
+                  autoComplete="off"
                   placeholder="Password"
                   {...register("password", { required: true, minLength: 8 })}
                 />
@@ -262,6 +263,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="password"
+                  autoComplete="off"
                   placeholder="Confirm Password"
                   {...register("password_confirmation", {
                     required: true,
