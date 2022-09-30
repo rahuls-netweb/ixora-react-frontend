@@ -1,3 +1,4 @@
+import { Children } from "react";
 import DataTable from "react-data-table-component";
 
 const customStyles = {
@@ -7,6 +8,7 @@ const customStyles = {
       border: "1px solid rgba(0, 0, 0, 0.25) !important",
       marginBottom: 2,
       borderRadius: 5,
+      paddingLeft: "15px",
     },
   },
   rows: {
@@ -15,6 +17,7 @@ const customStyles = {
       border: "1px solid rgba(0, 0, 0, 0.25) !important",
       marginBottom: 2,
       borderRadius: 5,
+      paddingLeft: "15px",
     },
   },
   headCells: {
@@ -39,10 +42,10 @@ const customStyles = {
 export default function TableGrid({ columns, rows, perPage = 8 }) {
   return (
     <DataTable
+      className="rahul"
       columns={columns}
       data={rows}
       customStyles={customStyles}
-      selectableRows
       pagination={!!perPage}
       paginationPerPage={perPage}
       paginationRowsPerPageOptions={[perPage, perPage * 2, perPage * 3]}

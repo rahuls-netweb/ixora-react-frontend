@@ -66,3 +66,34 @@ export const branchMasterDelete =
                     onFailure && onFailure();
                 });
         };
+
+export const addBranchesTouser =
+    (data, onSuccess, onFailure) => async (dispatch) => {
+        const { userId, ...rest } = data;
+        // magic code here
+        const params = new URLSearchParams();
+        // const branchIds = Object.keys(rest);
+        // const permissionIds = Object.values(rest);
+        Object.entries(rest).forEach(([branchId, permissionIds]) => {
+            permissionIds.forEach(pId => {
+                params.append(`branches[${branchId}][]`, pId)
+            });
+        });
+        // console.log({ branchIds, permissionIds }, 'rest!!!');
+        // branchIds.forEach((branchId) => {
+        //     permissionIds.forEach((permissionId) => {
+        //         params.append(`branches[${branchId}][]`, permissionId)
+        //     });
+        // })
+        // // permissionIds.forEach((id, index) => params.append(`permission_ids[${index + 1}]`, id));
+        axios
+            .put(`/users/${userId}`, params)
+            .then(function ({ data }) {
+                onSuccess && onSuccess();
+                toast.success("Roles added to users successfully");
+            })
+            .catch(function (err) {
+                showErrorMessageFromApi(err);
+                onFailure && onFailure();
+            });
+    };

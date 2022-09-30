@@ -205,8 +205,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  autoComplete="off"
-
+                  autoComplete="name"
                   placeholder="User Name"
                   {...register("name", {
                     required: true,
@@ -221,6 +220,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="email"
+                  autoComplete="name"
                   placeholder="Email"
                   {...register("email", {
                     pattern: EmailPattern(),
@@ -232,11 +232,12 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
+                  autoComplete="name"
                   type="tel"
                   placeholder="Phone"
                   {...register(
                     "phone"
-                    , { pattern: PhonePattern(), maxLength: 15, minLength: 10, required: true }
+                    , { minLength: 10, maxLength: 15, required: true }
                   )}
                 />
               </Form.Group>
@@ -244,7 +245,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Password <span className="reqruiredFields">*</span>
-                  <Help text="min character is 8" />
+                  <Help text="min 8 character is required" />
                 </Form.Label>
                 <Form.Control
                   type="password"
@@ -256,7 +257,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Confirm Password <span className="reqruiredFields">*</span>
-                  <Help text="min character is 8" />
+                  <Help text="same Password" />
                 </Form.Label>
                 <Form.Control
                   type="password"

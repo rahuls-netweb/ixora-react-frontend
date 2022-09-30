@@ -41,3 +41,12 @@ code {
 .reqruiredFields {
   color: red;
 }
+
+.countryInputFieldOptions .css-319lph-ValueContainer {
+  display: flex;
+}
+
+
+.dataTableRow .rdt_TableRow:nth-child(odd) {
+  background: #f2f2f2;
+}

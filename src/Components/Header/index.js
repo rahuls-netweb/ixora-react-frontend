@@ -45,7 +45,7 @@ export default function Dashboard() {
                     <div className={styles.adminSubSection2}>
                         <label>Admin Name</label>
                         <img src="/img/admin.png" alt="logox" />
-                        <ul class="dropdown-menu show" data-bs-popper="static">
+                        {/* <ul class="dropdown-menu show" data-bs-popper="static">
                             <li><a class="dropdown-item profile-deatils" href="javascript:void(0)">
                                 <div class="nav-profile-img">
                                     <img src="/img/admin.png" alt="logox" /></div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
                             </a></li>
                             <li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen-to-square"></i>Edit Profile</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a></li>
-                        </ul>
+                        </ul> */}
                     </div>
 
 

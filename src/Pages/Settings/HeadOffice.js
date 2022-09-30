@@ -223,6 +223,7 @@ export default function HeadOffice() {
                   type="number"
                   placeholder="Phone Number"
                   {...register("phone", {
+                    // pattern: PhonePattern(),
                     required: true,
                     maxLength: 15,
                     minLength: 10,
@@ -267,7 +268,7 @@ export default function HeadOffice() {
           <Spinner animation="border" className={styles.signInLoader} />
         </div>
       ) : (
-        <div style={{ paddingLeft: 15 }}>
+        <div className="dataTableRow" style={{ paddingLeft: 15 }}>
           <DataTable columns={columns} rows={headOfficeList} />
         </div>
       )}

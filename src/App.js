@@ -19,7 +19,7 @@ function App() {
   return (
     <Provider store={store}>
       <AppRoutes />
-      <ToastContainer autoClose={2000} position="bottom-center" />
+      <ToastContainer autoClose={2000} position="top-right" />
     </Provider>
   );
 }

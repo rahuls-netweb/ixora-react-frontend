@@ -1,8 +1,9 @@
-.button{
+.button {
     border: none;
-    padding: 6px;
+    padding: 0 6px;
     background: transparent;
 }
-.icon{
+
+.icon {
     color: var(--theme-color);
 }
