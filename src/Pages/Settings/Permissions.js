@@ -150,7 +150,11 @@ export default function Permissions() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     } else if (mode === PAGE_MODES.edit) {
@@ -169,7 +173,11 @@ export default function Permissions() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     }

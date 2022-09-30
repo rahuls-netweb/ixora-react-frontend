@@ -6,6 +6,7 @@ import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import Skeleton from '../../Components/Skeleton'
 import styles from "./rootsettings.module.css";
+import Help, { PhoneText, EmailText } from "../../Components/Help";
 import {
   headOfficeCreate,
   headOfficeGetAll,
@@ -38,12 +39,10 @@ const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
-// const validationSchema = yup.object({
-//   name: yup.string().required("Required"),
-// });
+
 export default function HeadOffice() {
   const dispatch = useDispatch();
-  // const resolver = useYupValidationResolver(validationSchema);
+
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -57,7 +56,6 @@ export default function HeadOffice() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
     mode: "onChange",
     defaultValues: initialFormState,
   });
@@ -161,6 +159,8 @@ export default function HeadOffice() {
           },
           () => {
             setIsSubmitting(false);
+            setLoading(false);
+            reset();
           }
         )
       );
@@ -180,7 +180,11 @@ export default function HeadOffice() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     }
@@ -199,6 +203,7 @@ export default function HeadOffice() {
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  autoComplete="off"
                   placeholder="Head Office Name"
                   {...register("name", {
                     pattern: NamePattern(),
@@ -209,8 +214,10 @@ export default function HeadOffice() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Email</Form.Label>
+                <Help text={EmailText()} />
                 <Form.Control
                   type="email"
+                  autoComplete="off"
                   placeholder="Email"
                   {...register("email", {
                     pattern: EmailPattern(),
@@ -220,14 +227,14 @@ export default function HeadOffice() {
               </Form.Group>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone Number</Form.Label>
+                <Help text={PhoneText()} />
                 <Form.Control
-                  type="number"
+                  type="text"
+                  autoComplete="off"
                   placeholder="Phone Number"
                   {...register("phone", {
-                    // pattern: PhonePattern(),
+                    pattern: PhonePattern(),
                     required: true,
-                    maxLength: 15,
-                    minLength: 10,
                   })}
                 />
               </Form.Group>
@@ -236,8 +243,9 @@ export default function HeadOffice() {
                 <Form.Label>Address</Form.Label>
                 <Form.Control
                   type="text"
+                  autoComplete="off"
                   placeholder="Address"
-                  {...register("address", { required: true })}
+                  {...register("address")}
                 />
               </Form.Group>
             </Col>

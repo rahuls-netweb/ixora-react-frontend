@@ -24,7 +24,7 @@
 
 .divPermissions div:nth-child(odd) {
     padding: 10px;
-    background: #f2f2f2;
+    background: var(--table-bg);
     cursor: pointer;
     min-height: 62px;
 }

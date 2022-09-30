@@ -15,10 +15,9 @@ import {
 
 import {
     getPaginatedRecordNumber,
-    resetReactHookFormValues,
 } from "../../../utils/helpers";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, } from "react-hook-form";
 
 
 
@@ -58,10 +57,11 @@ export default function Country() {
 
 
     const [selectedCountry, setSelectedCountry] = useState('');
+    console.log(selectedCountry, 'selectedCountry')
     const country = "US";
-    const Flag = Flags[country.toUpperCase()];
+    // const Flag = Flags[country.toUpperCase()];
 
-    console.log(selectedCountry, "selectedCountry")
+
 
     const IconOption = (props) => {
         const {
@@ -103,17 +103,6 @@ export default function Country() {
 
     const { countryList } = useSelector((state) => state.country);
 
-    const {
-        handleSubmit,
-        register,
-        setValue,
-        formState: { isDirty, isValid },
-        reset,
-    } = useForm({
-        // resolver,
-        mode: "onChange",
-        defaultValues: initialFormState,
-    });
 
     const columns = [
         {
@@ -138,20 +127,17 @@ export default function Country() {
                         className={styles.actionIcon}
                         onClick={() => {
                             setMode(PAGE_MODES.edit);
-                            resetReactHookFormValues(
-                                {
-                                    id: singleRowData.id,
-                                    name: singleRowData.name,
-                                    code: singleRowData.code,
-                                },
-                                setValue
-                            );
+                            setSelectedCountry({
+                                id: singleRowData.id,
+                                label: singleRowData.name,
+                                value: singleRowData.code,
+                            });
+
                         }}
                     />
                     <MdDelete
                         className={styles.actionIcon}
                         onClick={() => {
-                            reset();
                             setLoading(true);
                             setMode(PAGE_MODES.add);
                             dispatch(
@@ -184,9 +170,15 @@ export default function Country() {
         );
     }, []);
 
-    function onFormSubmit(data) {
-        console.log(data);
-        return;
+    function onFormSubmit(e) {
+        e.preventDefault();
+        console.log(selectedCountry, " selectedCountry");
+        const data = {
+            id: selectedCountry.id,
+            name: selectedCountry.label,
+            code: selectedCountry.value,
+        }
+        console.log(data, "data");
         setLoading(true);
         setIsSubmitting(true);
         if (mode === PAGE_MODES.add) {
@@ -196,7 +188,7 @@ export default function Country() {
                     () => {
                         setIsSubmitting(false);
                         setMode(PAGE_MODES.add);
-                        reset();
+                        setSelectedCountry("");
                         dispatch(
                             countryGetAll(
                                 null,
@@ -205,7 +197,11 @@ export default function Country() {
                             )
                         );
                     },
-                    () => setIsSubmitting(false)
+                    () => {
+                        setIsSubmitting(false);
+                        setLoading(false);
+                        setSelectedCountry("");
+                    }
                 )
             );
         } else if (mode === PAGE_MODES.edit) {
@@ -215,7 +211,7 @@ export default function Country() {
                     () => {
                         setIsSubmitting(false);
                         setMode(PAGE_MODES.add);
-                        reset();
+                        setSelectedCountry("");
                         dispatch(
                             countryGetAll(
                                 null,
@@ -224,7 +220,11 @@ export default function Country() {
                             )
                         );
                     },
-                    () => setIsSubmitting(false)
+                    () => {
+                        setIsSubmitting(false);
+                        setLoading(false);
+                        setSelectedCountry("");
+                    }
                 )
             );
         }
@@ -233,7 +233,7 @@ export default function Country() {
 
     return (
         <>
-            <Form onSubmit={handleSubmit(onFormSubmit)}>
+            <Form onSubmit={onFormSubmit}>
                 <Container fluid>
                     <Row>
                         <Col md={10} className={styles.customColumn}>
@@ -248,7 +248,15 @@ export default function Country() {
                                     options={options}
                                     components={{ Option: IconOption, ValueContainer: ValueContainer }}
                                     onChange={(values) => {
-                                        setSelectedCountry(values);
+                                        setSelectedCountry(prev => {
+                                            if (typeof prev === 'string') {
+                                                return values
+                                            }
+                                            return {
+                                                ...prev,
+                                                ...values
+                                            }
+                                        });
                                     }}
                                 />
                             </Form.Group>
@@ -260,7 +268,6 @@ export default function Country() {
                                 <Button
                                     type="submit"
                                     className={styles.formShowButton}
-                                    disabled={!isDirty || !isValid}
                                 >
                                     {isSubmitting ? (
                                         <Spinner

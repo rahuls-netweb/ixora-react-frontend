@@ -3,7 +3,20 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { MdInfo } from "react-icons/md";
 import styles from "./help.module.css";
 
+export function PhoneText() {
+  return (<div className='toolTipFormat'>
+    <h6>Phone Example</h6>
+    <h6>1234567890</h6>
+    <h6>+911234567890</h6>
+  </div>)
+}
+export function EmailText() {
+  return (<div className='toolTipFormat'>
+    <h6>username@domain.com</h6>
+  </div>)
+}
 const Help = ({ text }) => {
+
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       {text}
@@ -24,3 +37,5 @@ const Help = ({ text }) => {
 };
 
 export default Help;
+
+

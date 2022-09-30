@@ -13,7 +13,7 @@
 }
 
 .tableSkeletonRow:nth-child(even) {
-    background: #f2f2f2;
+    background: var(--table-bg);
 }
 
 .skeleton .line {

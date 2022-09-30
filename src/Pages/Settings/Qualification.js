@@ -137,7 +137,11 @@ export default function Qualification() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     } else if (mode === PAGE_MODES.edit) {
@@ -155,7 +159,11 @@ export default function Qualification() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     }

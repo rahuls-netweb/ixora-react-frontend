@@ -18,10 +18,10 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-// import * as yup from "yup";
+
 import { useForm } from "react-hook-form";
 import { EmailPattern, NamePattern } from "../../Components/validation";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import Help, { PhoneText, EmailText } from "../../Components/Help";
 
 const initialFormState = {
   name: "",
@@ -40,15 +40,6 @@ const PAGE_MODES = {
   add: "add",
 };
 
-// const validationSchema = yup.object({
-//   name: yup.string().required("Required"),
-//   email: yup.string().email("Invalid Email").required("Required"),
-//   headoffice_id: yup.number().required("Required"),
-//   branch_code: yup.string().required("Required"),
-//   opening_time: yup.string().required("Required"),
-//   closing_time: yup.string().required("Required"),
-//   lunch_time: yup.string().required("Required"),
-// });
 
 export default function BranchMaster() {
   // const resolver = useYupValidationResolver(validationSchema);
@@ -64,7 +55,6 @@ export default function BranchMaster() {
     formState: { isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
     mode: "onChange",
     defaultValues: initialFormState,
   });
@@ -98,26 +88,12 @@ export default function BranchMaster() {
       name: "Address",
       selector: (row) => row.address,
     },
-    // {
-    //   name: "Headoffice Id",
-    //   selector: (row) => row.headoffice_id,
-    // },
+
     {
       name: "Branch code",
       selector: (row) => row.branch_code,
     },
-    // {
-    //   name: "Opening Time",
-    //   selector: (row) => row.opening_time,
-    // },
-    // {
-    //   name: "Closing Time",
-    //   selector: (row) => row.closing_time,
-    // },
-    // {
-    //   name: "Lunch Time",
-    //   selector: (row) => row.lunch_time,
-    // },
+
     {
       cell: (singleRowData, index) => (
         <div>
@@ -199,7 +175,11 @@ export default function BranchMaster() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     } else if (mode === PAGE_MODES.edit) {
@@ -218,7 +198,11 @@ export default function BranchMaster() {
               )
             );
           },
-          () => setIsSubmitting(false)
+          () => {
+            setIsSubmitting(false);
+            setLoading(false);
+            reset();
+          }
         )
       );
     }
@@ -238,6 +222,7 @@ export default function BranchMaster() {
                 <Form.Control
                   type="text"
                   name="name"
+                  autoComplete="off"
                   placeholder="Branch Name"
                   {...register("name", {
                     required: true,
@@ -249,9 +234,11 @@ export default function BranchMaster() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Email <span className="reqruiredFields">*</span>
+                  <Help text={EmailText()} />
                 </Form.Label>
                 <Form.Control
                   type="email"
+                  autoComplete="off"
                   placeholder="Email"
                   {...register("email", {
                     required: true,
@@ -262,8 +249,10 @@ export default function BranchMaster() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone</Form.Label>
+                <Help text={PhoneText()} />
                 <Form.Control
                   type="number"
+                  autoComplete="off"
                   placeholder="Phone"
                   {...register("phone", {
                     required: true,
@@ -277,6 +266,7 @@ export default function BranchMaster() {
                 <Form.Label>Address</Form.Label>
                 <Form.Control
                   type="text"
+                  autoComplete="off"
                   placeholder="Address"
                   {...register("address", { required: true })}
                 />

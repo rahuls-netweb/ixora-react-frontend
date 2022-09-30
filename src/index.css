@@ -10,6 +10,7 @@
   --theme-color: #1C4E80;
   --white-color: white;
   --light-grey-color: #adadad;
+  --table-bg: #f2f2f2
 }
 
 body {
@@ -51,5 +52,14 @@ code {
 }
 
 .dataTableRow .rdt_TableRow:nth-child(odd) {
-  background: #f2f2f2;
+  background: var(--table-bg);
+}
+
+.toolTipFormat h6 {
+  font-size: 13px;
+}
+
+input:disabled {
+  background: var(--table-bg) !important;
+  cursor: not-allowed;
 }
