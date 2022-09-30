@@ -206,7 +206,7 @@ export default function Candidate() {
         </Container>
       </Form>
       {loading ? (
-        <div className="text-center">
+        <div className="dataTableRow" >
           <Skeleton />
         </div>
       ) : (
