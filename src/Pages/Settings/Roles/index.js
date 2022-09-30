@@ -229,6 +229,7 @@ export default function Roles() {
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  autoComplete="off"
                   placeholder="Role Name"
                   {...register("name", {
                     pattern: NamePattern(),

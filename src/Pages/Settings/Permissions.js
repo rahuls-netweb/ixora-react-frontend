@@ -193,11 +193,12 @@ export default function Permissions() {
               <Form.Group className={styles.divDivision}>
                 <Form.Label>
                   Permission Name <span className="reqruiredFields">*</span>
-                  <Help text="---Testing---" />
+                  <Help text="Ex:- Module_PermissionType" />
                 </Form.Label>
                 <div style={{ display: "flex" }}>
                   <Form.Control
                     type="text"
+                    autoComplete="off"
                     placeholder="Permission Name"
                     {...register("name", {
                       required: true,
