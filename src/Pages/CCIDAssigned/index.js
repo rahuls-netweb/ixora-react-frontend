@@ -169,8 +169,8 @@ export default function CCIDassigned() {
     <Layout>
       <Container fluid>
         <Row>
-          <Col md={12}>
-            <div className={styles.cardview}>
+          <Col md={12} style={{ paddingRight: 0 }}>
+            <div className={styles.cardview} >
               <Tabs
                 defaultActiveKey="EnquiryForm"
                 id="fill-tab-example"

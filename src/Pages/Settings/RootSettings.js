@@ -58,7 +58,7 @@ const RootSettings = () => {
         <Layout>
             <Container fluid>
                 <Row>
-                    <Col md={12}>
+                    <Col md={12} style={{ paddingRight: 0 }}>
                         <div className={styles.cardview}>
                             <CustomTabs
                                 tabs={HEADOFFICE_TABS}
