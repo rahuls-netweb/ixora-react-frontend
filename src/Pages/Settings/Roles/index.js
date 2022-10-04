@@ -20,11 +20,12 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../../utils/helpers";
-// import * as yup from "yup";
+
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { NamePattern } from "../../../Components/validation";
 import Skeleton from "../../../Components/Skeleton";
-// import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
+import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -36,12 +37,14 @@ const PAGE_MODES = {
   add: "add",
 };
 
-// const validationSchema = yup.object({
-//     name: yup.string().required("Required"),
-// });
+const validationSchema = yup.object({
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+});
 
 export default function Roles() {
-  // const resolver = useYupValidationResolver(validationSchema);
+  const resolver = useYupValidationResolver(validationSchema);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
 
@@ -57,11 +60,11 @@ export default function Roles() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -231,11 +234,9 @@ export default function Roles() {
                   type="text"
                   autoComplete="off"
                   placeholder="Role Name"
-                  {...register("name", {
-                    pattern: NamePattern(),
-                    required: true,
-                  })}
+                  {...register("name")}
                 />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -243,7 +244,7 @@ export default function Roles() {
                 <Form.Control type="text" placeholder="Web" disabled={true} />
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"

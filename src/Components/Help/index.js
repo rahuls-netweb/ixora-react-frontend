@@ -5,9 +5,8 @@ import styles from "./help.module.css";
 
 export function PhoneText() {
   return (<div className='toolTipFormat'>
-    <h6>Phone Example</h6>
-    <h6>1234567890</h6>
-    <h6>+911234567890</h6>
+    <h6>digits valid only from 10-14</h6>
+    <h6>Ex-1234567890</h6>
   </div>)
 }
 export function EmailText() {

@@ -63,3 +63,8 @@ input:disabled {
   background: var(--table-bg) !important;
   cursor: not-allowed;
 }
+
+.errorMessage {
+  color: red;
+  margin: 0 !important;
+}

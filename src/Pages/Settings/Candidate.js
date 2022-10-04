@@ -15,11 +15,11 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-// import * as yup from "yup";
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Skeleton from "../../Components/Skeleton";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -30,12 +30,15 @@ const PAGE_MODES = {
   add: "add",
 };
 
-// const validationSchema = yup.object({
-//   category_name: yup.string().required("Required"),
-// });
+const validationSchema = yup.object({
+
+  category_name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+});
 
 export default function Candidate() {
-  // const resolver = useYupValidationResolver(validationSchema);
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,11 +49,11 @@ export default function Candidate() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -175,14 +178,12 @@ export default function Candidate() {
                 <Form.Control
                   type="text"
                   placeholder="Category Name"
-                  {...register("category_name", {
-                    required: true,
-                    pattern: NamePattern(),
-                  })}
+                  {...register("category_name")}
                 />
+                <Form.Label className="errorMessage">  {errors.category_name && errors.category_name.message}</Form.Label>
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"

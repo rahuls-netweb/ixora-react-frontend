@@ -196,7 +196,7 @@ export default function AddPermissionToRoleModel({ role }) {
                             </tbody>
                         </Table>
                     </Col>
-                    <Col md={12} className="d-flex justify-content-end">
+                    <Col md={12} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
                         <Form.Group
                         // className={styles.formCareerEnquirieSub2}
                         >

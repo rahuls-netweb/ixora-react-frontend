@@ -6,7 +6,7 @@ import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
 import AddBranchesToUser from './AddBranchesToUser'
-import Help from '../../../Components/Help';
+import Help, { PhoneText } from '../../../Components/Help';
 import {
   employeeMasterCreate,
   employeeMasterGetAll,
@@ -18,12 +18,11 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../../utils/helpers";
+
 import { useForm } from "react-hook-form";
-import {
-  EmailPattern,
-  NamePattern,
-  PhonePattern,
-} from "../../../Components/validation";
+import * as yup from "yup";
+import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
+
 import PopUP from "../../../Components/PopUp";
 import Skeleton from "../../../Components/Skeleton";
 
@@ -46,11 +45,28 @@ const PAGE_MODES = {
   edit: "edit",
   add: "add",
 };
+
+const validationSchema = yup.object({
+
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+  email: yup.string().required("Enter a valid Email").email("Enter a valid Email"),
+  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
+    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+
+  password: yup.string().required('Password is required').min(8, 'Min 8 character required'),
+  password_confirmation: yup.string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+
+});
+
 export default function HeadOffice() {
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const resolver = useYupValidationResolver(validationSchema);
 
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
 
@@ -66,10 +82,11 @@ export default function HeadOffice() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -208,11 +225,9 @@ export default function HeadOffice() {
                   type="text"
                   autoComplete="off"
                   placeholder="User Name"
-                  {...register("name", {
-                    required: true,
-                    pattern: NamePattern(),
-                  })}
+                  {...register("name")}
                 />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -223,24 +238,22 @@ export default function HeadOffice() {
                   type="email"
                   autoComplete="off"
                   placeholder="Email"
-                  {...register("email", {
-                    pattern: EmailPattern(),
-                    required: true,
-                  })}
+                  {...register("email")}
                 />
+                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone</Form.Label>
+                <Help text={PhoneText()} />
                 <Form.Control
                   autoComplete="off"
                   type="tel"
                   placeholder="Phone"
                   {...register(
-                    "phone"
-                    , { minLength: 10, maxLength: 15, required: true }
-                  )}
+                    "phone")}
                 />
+                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -252,8 +265,9 @@ export default function HeadOffice() {
                   type="password"
                   autoComplete="off"
                   placeholder="Password"
-                  {...register("password", { required: true, minLength: 8 })}
+                  {...register("password")}
                 />
+                <Form.Label className="errorMessage">  {errors.password && errors.password.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -265,11 +279,9 @@ export default function HeadOffice() {
                   type="password"
                   autoComplete="off"
                   placeholder="Confirm Password"
-                  {...register("password_confirmation", {
-                    required: true,
-                    minLength: 8,
-                  })}
+                  {...register("password_confirmation")}
                 />
+                <Form.Label className="errorMessage">  {errors.password_confirmation && errors.password_confirmation.message}</Form.Label>
               </Form.Group>
             </Col>
 
@@ -281,6 +293,7 @@ export default function HeadOffice() {
                   placeholder="Report Time From"
                   {...register("report_time_from")}
                 />
+                <Form.Label className="errorMessage">  </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -316,7 +329,7 @@ export default function HeadOffice() {
               className="d-flex justify-content-end"
               style={{ paddingRight: 0 }}
             >
-              <Form.Group className={styles.formCareerEnquirieSub2}>
+              <Form.Group className={styles.formCareerEnquirieSub2} style={{ paddingRight: 0 }}>
                 <Button
                   type="submit"
                   className={styles.formShowButton}

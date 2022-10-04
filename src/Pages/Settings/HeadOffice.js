@@ -18,14 +18,11 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-// import * as yup from "yup";
+
 import { useForm } from "react-hook-form";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import {
-  EmailPattern,
-  NamePattern,
-  PhonePattern,
-} from "../../Components/validation";
+import * as yup from "yup";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+
 
 const initialFormState = {
   name: "",
@@ -40,8 +37,21 @@ const PAGE_MODES = {
   add: "add",
 };
 
+
+const validationSchema = yup.object({
+
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+  email: yup.string().email("Enter a valid Email"),
+  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
+    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+});
+
 export default function HeadOffice() {
   const dispatch = useDispatch();
+
+  const resolver = useYupValidationResolver(validationSchema);
 
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,10 +63,11 @@ export default function HeadOffice() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -205,11 +216,9 @@ export default function HeadOffice() {
                   type="text"
                   autoComplete="off"
                   placeholder="Head Office Name"
-                  {...register("name", {
-                    pattern: NamePattern(),
-                    required: true,
-                  })}
+                  {...register("name")}
                 />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -219,11 +228,9 @@ export default function HeadOffice() {
                   type="email"
                   autoComplete="off"
                   placeholder="Email"
-                  {...register("email", {
-                    pattern: EmailPattern(),
-                    required: true,
-                  })}
+                  {...register("email")}
                 />
+                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
               </Form.Group>
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Phone Number</Form.Label>
@@ -232,11 +239,10 @@ export default function HeadOffice() {
                   type="text"
                   autoComplete="off"
                   placeholder="Phone Number"
-                  {...register("phone", {
-                    pattern: PhonePattern(),
-                    required: true,
-                  })}
+                  {...register("phone")}
+                  minLength="10"
                 />
+                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -249,7 +255,7 @@ export default function HeadOffice() {
                 />
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"

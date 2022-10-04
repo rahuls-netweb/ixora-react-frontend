@@ -56,10 +56,9 @@ const { Option } = components;
 export default function Country() {
 
 
-    const [selectedCountry, setSelectedCountry] = useState('');
-    console.log(selectedCountry, 'selectedCountry')
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [error, setError] = useState("");
     const country = "US";
-    // const Flag = Flags[country.toUpperCase()];
 
 
 
@@ -100,6 +99,7 @@ export default function Country() {
     const [mode, setMode] = useState(PAGE_MODES.add);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [reqruiredFields, setreqruiredFields] = useState(false);
 
     const { countryList } = useSelector((state) => state.country);
 
@@ -237,7 +237,7 @@ export default function Country() {
                 <Container fluid>
                     <Row>
                         <Col md={10} className={styles.customColumn}>
-                            <Form.Group className={styles.divDivision}>
+                            <Form.Group className={styles.divDivision3}>
                                 <Form.Label>
                                     Country Name <span className="reqruiredFields">*</span>
                                 </Form.Label>
@@ -247,7 +247,11 @@ export default function Country() {
                                     value={selectedCountry}
                                     options={options}
                                     components={{ Option: IconOption, ValueContainer: ValueContainer }}
+                                    onBlur={() => {
+                                        setError('Enter country name')
+                                    }}
                                     onChange={(values) => {
+                                        setError("");
                                         setSelectedCountry(prev => {
                                             if (typeof prev === 'string') {
                                                 return values
@@ -259,15 +263,17 @@ export default function Country() {
                                         });
                                     }}
                                 />
+                                <Form.Label className="errorMessage">  {error}</Form.Label>
                             </Form.Group>
 
 
                         </Col>
-                        <Col md={2} className="d-flex justify-content-end">
+                        <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
                             <Form.Group className={styles.formCareerEnquirieSub2}>
                                 <Button
                                     type="submit"
                                     className={styles.formShowButton}
+                                    disabled={selectedCountry === null}
                                 >
                                     {isSubmitting ? (
                                         <Spinner

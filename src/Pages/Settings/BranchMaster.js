@@ -20,7 +20,9 @@ import {
 } from "../../utils/helpers";
 
 import { useForm } from "react-hook-form";
-import { EmailPattern, NamePattern } from "../../Components/validation";
+import * as yup from "yup";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+
 import Help, { PhoneText, EmailText } from "../../Components/Help";
 
 const initialFormState = {
@@ -41,21 +43,34 @@ const PAGE_MODES = {
 };
 
 
+const validationSchema = yup.object({
+
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+  email: yup.string().email("Enter a valid Email").required("Enter a valid Email"),
+  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
+    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+});
+
 export default function BranchMaster() {
-  // const resolver = useYupValidationResolver(validationSchema);
+  const resolver = useYupValidationResolver(validationSchema);
+
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+
   const {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -224,11 +239,9 @@ export default function BranchMaster() {
                   name="name"
                   autoComplete="off"
                   placeholder="Branch Name"
-                  {...register("name", {
-                    required: true,
-                    pattern: NamePattern(),
-                  })}
+                  {...register("name")}
                 />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -240,11 +253,9 @@ export default function BranchMaster() {
                   type="email"
                   autoComplete="off"
                   placeholder="Email"
-                  {...register("email", {
-                    required: true,
-                    pattern: EmailPattern(),
-                  })}
+                  {...register("email")}
                 />
+                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -254,12 +265,9 @@ export default function BranchMaster() {
                   type="number"
                   autoComplete="off"
                   placeholder="Phone"
-                  {...register("phone", {
-                    required: true,
-                    minLength: 10,
-                    maxLength: 15,
-                  })}
+                  {...register("phone")}
                 />
+                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -338,6 +346,7 @@ export default function BranchMaster() {
                   placeholder="Lunch Time"
                   {...register("lunch_time", { required: true })}
                 />
+                <Form.Label className="errorMessage">  </Form.Label>
               </Form.Group>
             </Col>
 

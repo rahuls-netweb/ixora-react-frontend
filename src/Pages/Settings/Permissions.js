@@ -23,12 +23,12 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-// import * as yup from "yup";
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Help from "../../Components/Help";
 import Skeleton from "../../Components/Skeleton";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -39,12 +39,14 @@ const PAGE_MODES = {
   add: "add",
 };
 
-// const validationSchema = yup.object({
-//   name: yup.string().required("Required"),
-// });
+const validationSchema = yup.object({
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+});
 
 export default function Permissions() {
-  // const resolver = useYupValidationResolver(validationSchema);
+  const resolver = useYupValidationResolver(validationSchema);
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,11 +61,11 @@ export default function Permissions() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -195,20 +197,18 @@ export default function Permissions() {
                   Permission Name <span className="reqruiredFields">*</span>
                   <Help text="Ex:- Module_PermissionType" />
                 </Form.Label>
-                <div style={{ display: "flex" }}>
-                  <Form.Control
-                    type="text"
-                    autoComplete="off"
-                    placeholder="Permission Name"
-                    {...register("name", {
-                      required: true,
-                      pattern: NamePattern(),
-                    })}
-                  />
-                </div>
+
+                <Form.Control
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Permission Name"
+                  {...register("name")}
+                />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"

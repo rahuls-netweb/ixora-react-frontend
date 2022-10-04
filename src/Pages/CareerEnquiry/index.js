@@ -14,42 +14,59 @@ import { countryGetAll } from "../../store/actions/countryAction";
 import { qualificationGetAll } from "../../store/actions/qualificationAction";
 import { careerGetAll } from "../../store/actions/careerAction";
 import Skeleton from "../../Components/Skeleton";
+import {
+  getPaginatedRecordNumber,
+} from "../../utils/helpers";
 
-const columns = [
-  {
-    name: "CCID",
-    selector: (row) => row.CCID,
-  },
-  {
-    name: "Student Name",
-    selector: (row) => row.StudentName,
-  },
-  {
-    name: "SID",
-    selector: (row) => row.SID,
-  },
-  {
-    name: "DOJ",
-    selector: (row) => row.DOJ,
-  },
-  {
-    name: "Branch",
-    selector: (row) => row.Branch,
-  },
-  {
-    name: "Admission",
-    selector: (row) => row.Admission,
-  },
-  {
-    name: "View",
-    selector: (row) => row.View,
-  },
-];
+
+
 
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const columns = [
+    {
+      name: "ID",
+      selector: (_, index) => {
+        return getPaginatedRecordNumber({ page: 1, per_page: 8, index });
+      },
+    },
+    {
+      name: "Student Name",
+      selector: (row) => row.first_name + " " + row.last_name,
+    },
+    {
+      name: "Father Name",
+      selector: (row) => row.father_name,
+    },
+
+    {
+      name: "Email",
+      selector: (row) => row.email,
+    },
+    {
+      name: "SID",
+      selector: (row) => row.sid,
+    },
+
+    {
+      name: "DOB",
+      selector: (row) => row.dob,
+    },
+    {
+      name: "View",
+      cell: (singleRowData, index) => (
+        <MdRemoveRedEye
+          className={styles.iconView}
+          onClick={() => {
+            navigate(`/career-enquiry/${singleRowData.id}`);
+          }}
+        />
+      ),
+    },
+  ];
 
   // const data = [
   //   {
@@ -84,12 +101,18 @@ export default function CareerEnquiry() {
     careerList: state.career.careerList,
   }));
 
+
   useEffect(() => {
+    setLoading(true);
     dispatch(headOfficeGetAll());
     dispatch(branchMasterGetAll());
     dispatch(countryGetAll());
     dispatch(qualificationGetAll());
-    dispatch(careerGetAll());
+    dispatch(careerGetAll(
+      null,
+      () => setLoading(false),
+      () => setLoading(false)
+    ));
   }, []);
   return (
     <Layout>
@@ -176,7 +199,7 @@ export default function CareerEnquiry() {
                   </Form.Group>
                 </Form>
               </div>
-              {/* {loading ? (
+              {loading ? (
                 <div className="dataTableRow" >
                   <Skeleton />
                 </div>
@@ -184,10 +207,8 @@ export default function CareerEnquiry() {
                 <div className="dataTableRow" >
                   <DataTable columns={columns} rows={careerList} />
                 </div>
-              )} */}
-              <div className="dataTableRow" >
-                <DataTable columns={columns} rows={careerList} />
-              </div>
+              )}
+
             </div>
           </Col>
         </Row>

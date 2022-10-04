@@ -10,6 +10,7 @@ import { MdRemoveRedEye } from "react-icons/md";
 import CardViewTable from "../../Components/CardViewTable";
 import PopUP from "../../Components/PopUp";
 import TestDetailView from "../../Components/TestDetailView";
+import { useParams } from "react-router-dom";
 
 const columns = [
   {
@@ -91,6 +92,9 @@ const columns3 = [
 ];
 
 export default function CardView() {
+
+  const { id } = useParams();
+
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);

@@ -4,21 +4,40 @@ import styles from "../rootsettings.module.css";
 import stylesIndex from "./index.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { addBranchesTouser, branchMasterGetAll } from "../../../store/actions/branchMasterAction";
+import { employeeMasterGetAll } from "../../../store/actions/employeeMasterAction";
 import { rolesGetAll } from "../../../store/actions/rolesAction";
 
 export default function AddBranchesToUser({ user }) {
     const [selectedBranches, setSelectedBranches] = useState(null);
     const [currentBranch, setCurrentBranch] = useState("");
     const dispatch = useDispatch();
-
-    const { branchMasterList, rolesList } = useSelector((state) => ({
+    const { branchMasterList, rolesList, employeeMasterList } = useSelector((state) => ({
         branchMasterList: state.branchMaster.branchMasterList,
         rolesList: state.roles.rolesList,
+        employeeMasterList: state.employeeMaster.employeeMasterList
     }));
+
+    const selectedUser = employeeMasterList.find(singleUser => singleUser.id === user.id);
+
+    console.log(selectedUser, "selectedUser selectedUser");
+
     useEffect(() => {
         dispatch(branchMasterGetAll());
         dispatch(rolesGetAll());
     }, []);
+
+    useEffect(() => {
+        if (selectedUser) {
+            const brancheIds = Array.from(new Set(selectedUser.branches.map(branch => branch.id)));
+            const initialBranches = {};
+            brancheIds.forEach(branchId => {
+                const rolesForBranch = selectedUser.user_has_roles.filter(role => role.branch_id === branchId).map(role => role.role_id);
+                initialBranches[branchId] = rolesForBranch;
+            });
+            console.log(initialBranches, 'dddddddddddddddddddddddd')
+            setSelectedBranches(initialBranches)
+        }
+    }, [user]);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -27,6 +46,7 @@ export default function AddBranchesToUser({ user }) {
             ...selectedBranches,
         }, () => {
             console.log("Success!!");
+            dispatch(employeeMasterGetAll())
         }, () => {
             console.log("Error!!");
         }));

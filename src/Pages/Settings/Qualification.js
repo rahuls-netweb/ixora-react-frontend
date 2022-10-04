@@ -16,11 +16,10 @@ import {
   resetReactHookFormValues,
 } from "../../utils/helpers";
 
-// import * as yup from "yup";
+import * as yup from "yup";
 import { useForm } from "react-hook-form";
-import { NamePattern } from "../../Components/validation";
 import Skeleton from "../../Components/Skeleton";
-// import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const initialFormState = {
   name: "",
@@ -31,12 +30,14 @@ const PAGE_MODES = {
   add: "add",
 };
 
-// const validationSchema = yup.object({
-//   name: yup.string().required("Required"),
-// });
+const validationSchema = yup.object({
+  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+    message: 'Enter a valid Name'
+  }),
+});
 
 export default function Qualification() {
-  // const resolver = useYupValidationResolver(validationSchema);
+  const resolver = useYupValidationResolver(validationSchema);
 
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
@@ -47,11 +48,11 @@ export default function Qualification() {
     handleSubmit,
     register,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { errors, isDirty, isValid },
     reset,
   } = useForm({
-    // resolver,
-    mode: "onChange",
+    resolver,
+    mode: "onBlur",
     defaultValues: initialFormState,
   });
 
@@ -183,14 +184,12 @@ export default function Qualification() {
                 <Form.Control
                   type="text"
                   placeholder="Qualification"
-                  {...register("name", {
-                    required: true,
-                    pattern: NamePattern(),
-                  })}
+                  {...register("name")}
                 />
+                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end">
+            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
