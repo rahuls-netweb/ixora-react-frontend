@@ -2,7 +2,7 @@ import { CAREER_GETALL, CAREER_GETSINGLE } from "../actions/careerAction";
 
 const initialState = {
     careerList: [],
-    singlecareer: null,
+    singleCareerList: null,
 };
 
 const careerReducer = (state = initialState, action) => {
@@ -15,7 +15,7 @@ const careerReducer = (state = initialState, action) => {
         case CAREER_GETSINGLE:
             return {
                 ...state,
-                singlecareer: action.payload,
+                singleCareerList: action.payload,
             };
         default:
             return state;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { Container, Row, Col, Tab, Tabs, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
@@ -6,11 +6,13 @@ import styles from "./careerEnquiry.module.css";
 import DataTable from "../../Components/DataTable";
 import { useNavigate } from "react-router-dom";
 import { MdRemoveRedEye } from "react-icons/md";
-
+import { careerGetSingle } from "../../store/actions/careerAction";
 import CardViewTable from "../../Components/CardViewTable";
 import PopUP from "../../Components/PopUp";
 import TestDetailView from "../../Components/TestDetailView";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Skeleton from "../../Components/Skeleton";
 
 const columns = [
   {
@@ -94,6 +96,23 @@ const columns3 = [
 export default function CardView() {
 
   const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+
+  const { singleCareerList } = useSelector((state) => ({
+    singleCareerList: state.career.singleCareerList,
+  }));
+
+  useEffect(() => {
+    setLoading(true);
+    dispatch(careerGetSingle(
+      { id: id },
+      () => setLoading(false),
+      () => setLoading(false)
+    ));
+  }, []);
+  console.log(singleCareerList, "singleCareerList");
 
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
@@ -167,69 +186,80 @@ export default function CardView() {
               >
                 <Tab eventKey="tentative-from" title="Tentative From">
                   <div className={styles.tablecardViewMain}>
-                    <Table className={styles.tablecardView}>
-                      <tr>
-                        <td
-                          className={styles.tablecardViewCustomCol}
-                          rowSpan={3}
-                          colSpan={2}
-                        >
-                          <img src="/img/Image8.png" alt="Image8" />
-                        </td>
-                        <td>Date of Birth</td>
-                        <td>02-05-2022</td>
-                      </tr>
-                      <tr>
-                        <td>Passport Number</td>
-                        <td>paas2563632</td>
-                      </tr>
-                      <tr>
-                        <td>Current Course</td>
-                        <td>MBA</td>
-                      </tr>
-                      <tr>
-                        <td>Name</td>
-                        <td>xzy</td>
-                        <td>Admission By</td>
-                        <td>xyz</td>
-                      </tr>
-                      <tr>
-                        <td>SID</td>
-                        <td>#1255</td>
-                        <td>Current Batch</td>
-                        <td>xyz</td>
-                      </tr>
-                      <tr>
-                        <td>Date of Admission</td>
-                        <td>07-05-2022</td>
-                        <td>Shifted to</td>
-                        <td>xyz</td>
-                      </tr>
-                      <tr>
-                        <td>Date of Joining</td>
-                        <td>02-25-2022</td>
-                        <td>Course Upgrade</td>
-                        <td>no</td>
-                      </tr>
-                      <tr>
-                        <td>Valid Upto</td>
-                        <td>2025</td>
-                        <td>Current Course Discount</td>
-                        <td>NO</td>
-                      </tr>
-                      <tr>
-                        <td>Branch</td>
-                        <td>Delhi</td>
-                        <td>Email ID</td>
-                        <td>ram@gmail.com</td>
-                      </tr>
-                      <tr>
-                        <td>Gender</td>
-                        <td>male</td>
-                        <td>Father Name</td>
-                        <td>xyz</td>
-                      </tr>
-                    </Table>
+
+                    {loading ? (
+                      <div className="dataTableRow" >
+                        <Skeleton />
+                      </div>
+                    ) : (
+                      <div className="dataTableRow" >
+                        <Table className={styles.tablecardView}>
+                          <tr>
+                            <td
+                              className={styles.tablecardViewCustomCol}
+                              rowSpan={3}
+                              colSpan={2}
+                            >
+                              <img src="/img/Image8.png" alt="Image8" />
+                            </td>
+                            <td>Date of Birth</td>
+                            <td>{singleCareerList.dob}</td>
+                          </tr>
+                          <tr>
+                            <td>Passport Number</td>
+                            <td>{singleCareerList.passport_number}</td>
+                          </tr>
+                          <tr>
+                            <td>Current Course</td>
+                            <td>{singleCareerList.course_id}</td>
+                          </tr>
+                          <tr>
+                            <td>Name</td>
+                            <td>{singleCareerList.first_name + " " + singleCareerList.last_name}</td>
+                            <td>Admission By</td>
+                            <td>{singleCareerList.admission_by}</td>
+                          </tr>
+                          <tr>
+                            <td>SID</td>
+                            <td>{singleCareerList.sid}</td>
+                            <td>Current Batch</td>
+                            <td>{singleCareerList.branch_name}</td>
+                          </tr>
+                          <tr>
+                            <td>Date of Admission</td>
+                            <td>{singleCareerList.date_of_admission}</td>
+                            <td>Shifted to</td>
+                            <td>####</td>
+                          </tr>
+                          <tr>
+                            <td>Date of Joining</td>
+                            <td>{singleCareerList.date_of_joining}</td>
+                            <td>Course Upgrade</td>
+                            <td>{singleCareerList.course_upgrade}</td>
+                          </tr>
+                          <tr>
+                            <td>Valid Upto</td>
+                            <td>{singleCareerList.valid_upto}</td>
+                            <td>Current Course Discount</td>
+                            <td>{singleCareerList.course_discount}</td>
+                          </tr>
+                          <tr>
+                            <td>Branch</td>
+                            <td>{singleCareerList.branch_name}</td>
+                            <td>Email ID</td>
+                            <td>{singleCareerList.email}</td>
+                          </tr>
+                          <tr>
+                            <td>Gender</td>
+                            <td>{singleCareerList.gender}</td>
+                            <td>Father Name</td>
+                            <td>{singleCareerList.father_name}</td>
+                          </tr>
+                        </Table>
+                      </div>
+                    )}
+
+
                   </div>
                 </Tab>
                 <Tab eventKey="past-admission" title="Past admission Details">

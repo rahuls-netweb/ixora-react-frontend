@@ -99,6 +99,19 @@
     cursor: pointer !important;
 }
 
+.formShowButton2,
+.formShowButton2:hover,
+.formShowButton2:active,
+.formShowButton2:focus {
+    background: var(--theme-color) !important;
+    color: white !important;
+    border: none !important;
+    width: 135px;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    height: 38px;
+}
+
 .actionIcon {
     font-size: 25px;
     margin-right: 5px;

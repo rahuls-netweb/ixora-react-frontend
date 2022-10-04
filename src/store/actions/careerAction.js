@@ -37,7 +37,7 @@ export const careerGetAll =
     };
 
 export const careerGetSingle =
-    (id, onSuccess, onFailure) => async (dispatch) => {
+    ({ id }, onSuccess, onFailure) => async (dispatch) => {
         axios
             .get(`/enquiries/${id}/show`, {})
             .then(function ({ data }) {
@@ -45,6 +45,7 @@ export const careerGetSingle =
                     type: CAREER_GETSINGLE,
                     payload: data.data,
                 });
+                console.log(data.data, "data");
                 onSuccess && onSuccess();
             })
             .catch(function (err) {

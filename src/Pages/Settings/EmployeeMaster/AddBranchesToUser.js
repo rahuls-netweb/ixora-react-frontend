@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Table, Badge, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
 import stylesIndex from "./index.module.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,8 @@ import { employeeMasterGetAll } from "../../../store/actions/employeeMasterActio
 import { rolesGetAll } from "../../../store/actions/rolesAction";
 
 export default function AddBranchesToUser({ user }) {
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedBranches, setSelectedBranches] = useState(null);
     const [currentBranch, setCurrentBranch] = useState("");
     const dispatch = useDispatch();
@@ -41,14 +43,15 @@ export default function AddBranchesToUser({ user }) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        setIsSubmitting(true);
         dispatch(addBranchesTouser({
             userId: user.id,
             ...selectedBranches,
         }, () => {
-            console.log("Success!!");
+            setIsSubmitting(false);
             dispatch(employeeMasterGetAll())
         }, () => {
-            console.log("Error!!");
+            setIsSubmitting(false);
         }));
     }
 
@@ -95,42 +98,34 @@ export default function AddBranchesToUser({ user }) {
                                                                     // className={selectedBranches?.[branch.id] ? stylesIndex.active : ""}
                                                                     className={currentBranch === branch.id ? stylesIndex.active : ""}
                                                                     onClick={() => {
-                                                                        setCurrentBranch(branch.id);
+                                                                        setCurrentBranch(branch.id)
                                                                         setSelectedBranches((prevBranch) => {
                                                                             let copiedBranches = {
                                                                                 ...(prevBranch || {})
-                                                                            };
+                                                                            }
                                                                             if (!copiedBranches[branch.id]) {
                                                                                 copiedBranches = {
                                                                                     ...copiedBranches,
                                                                                     [branch.id]: [],
-                                                                                };
+                                                                                }
                                                                             }
                                                                             setSelectedBranches(copiedBranches);
-                                                                            // if (copiedBranches[branch.id]) {
-                                                                            //     // remove old branch
-                                                                            //     delete copiedBranches[branch.id];
-                                                                            // } else {
-                                                                            //     // append new branch
-                                                                            //     copiedBranches = {
-                                                                            //         ...copiedBranches,
-                                                                            //         [branch.id]: [],
-                                                                            //     };
-                                                                            // }
+
                                                                             return copiedBranches;
                                                                         })
                                                                     }}
                                                                 >
                                                                     <h5>{branch.name}</h5>
-                                                                    {selectedBranches?.[branch.id]?.map(roleId => (
-                                                                        <span>
-                                                                            {getRoleNameByRoleId(roleId)}
-                                                                        </span>
-                                                                    ))}
+                                                                    <h6>
+                                                                        {selectedBranches?.[branch.id]?.map(roleId => (
+                                                                            <Badge>{getRoleNameByRoleId(roleId)}</Badge>
+                                                                        ))}
+                                                                    </h6>
+
                                                                 </div>
                                                             );
                                                         })}
-                                                        ;
+
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -148,10 +143,10 @@ export default function AddBranchesToUser({ user }) {
                                                             const index = targetRoles.findIndex(roleId => roleId === role.id);
 
                                                             if (index === -1) {
-                                                                // add
+
                                                                 targetRoles.push(role.id);
                                                             } else {
-                                                                // remove
+
                                                                 targetRoles.splice(index, 1);
                                                             }
 
@@ -173,8 +168,21 @@ export default function AddBranchesToUser({ user }) {
                     </Col>
                     <Col md={12} className="d-flex justify-content-end">
                         <Form.Group>
-                            <Button type="submit" className="themeColor">
-                                Add Branches
+                            {/* <Button type="submit" className="themeColor">
+                            
+                            </Button> */}
+                            <Button
+                                type="submit"
+                                className={styles.formShowButton2}
+
+                            >
+                                {isSubmitting ? (
+                                    <Spinner
+                                        animation="border"
+                                        className={styles.signInLoader}
+                                    />
+                                ) : "Add Branches"
+                                }
                             </Button>
                         </Form.Group>
                     </Col>

@@ -87,3 +87,19 @@ export const addBranchesTouser =
                 onFailure && onFailure();
             });
     };
+
+export const branchMasterSwitch =
+    (id, onSuccess, onFailure) => async (dispatch) => {
+
+        axios
+            .post("/branch/switch/update", id)
+            .then(function ({ data }) {
+                onSuccess && onSuccess();
+                toast.success("Branch Master Switched");
+                console.log(data, "Branch Switched");
+            })
+            .catch(function (err) {
+                showErrorMessageFromApi(err);
+                onFailure && onFailure();
+            });
+    };

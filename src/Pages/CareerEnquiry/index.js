@@ -68,25 +68,7 @@ export default function CareerEnquiry() {
     },
   ];
 
-  // const data = [
-  //   {
-  //     ID: 1,
-  //     CCID: "IX2256",
-  //     StudentName: "Manjot Kaur",
-  //     SID: 96858,
-  //     DOJ: "Mon Aug 01 2022",
-  //     Branch: "Amritsar",
-  //     Admission: "Ankit madaan",
-  //     View: (
-  //       <MdRemoveRedEye
-  //         className={styles.iconView}
-  //         onClick={() => {
-  //           navigate("/career-enquiry/1");
-  //         }}
-  //       />
-  //     ),
-  //   },
-  // ];
+
 
   const [show, setShow] = useState(false);
 

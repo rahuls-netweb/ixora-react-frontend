@@ -6,7 +6,7 @@ import { MdSearch } from "react-icons/md";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
+import { branchMasterGetAll, branchMasterSwitch } from "../../store/actions/branchMasterAction";
 
 export default function Dashboard() {
     const dispatch = useDispatch();
@@ -15,6 +15,12 @@ export default function Dashboard() {
     useEffect(() => {
         dispatch(branchMasterGetAll());
     }, []);
+
+    function branchSwitch(e) {
+        const id = e.target.value;
+
+        dispatch(branchMasterSwitch(id));
+    }
 
     return (
 
@@ -36,9 +42,9 @@ export default function Dashboard() {
 
                 <Col md={6} lg={4} xl={4} className={styles.adminSection} >
                     <div className={styles.adminSubSection1}>
-                        <Form.Select>
+                        <Form.Select onChange={branchSwitch}>
                             {branchMasterList.map(branch => {
-                                return <option value={branch.id}>{branch.name}</option>
+                                return <option value={branch.id} >{branch.name}</option>
                             })}
                         </Form.Select>
                     </div>

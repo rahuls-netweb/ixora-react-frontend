@@ -94,10 +94,6 @@
   padding-left: 45px !important;
 }
 
-.tabsContent li {
-  padding: 0px 3px;
-  width: 25%;
-}
 
 .tabsContent li button {
   border: 1px solid var(--theme-color) !important;
