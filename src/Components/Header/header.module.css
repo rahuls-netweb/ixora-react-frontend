@@ -98,3 +98,48 @@
   border: 2px solid white;
   top: -5px;
 }
+
+
+.adminImg,
+.adminImg:hover,
+.adminImg:active,
+.adminImg:focus {
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.adminItems,
+.adminItems:hover,
+.adminItems:active,
+.adminItems:focus {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+
+
+.adminProfiles {
+  display: flex;
+  column-gap: 20px;
+  padding: 7px 15px;
+}
+
+.adminProfiles svg {
+  margin: auto 0;
+  ;
+}
+
+.adminProfiles div img {
+  margin: auto 0;
+  ;
+}
+
+.adminProfiles:hover {
+  background: #cccc !important;
+}
+
+.borderBottom {
+  border-bottom: 1px solid #cccc;
+}

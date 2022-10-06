@@ -2,11 +2,14 @@
 
 import React, { useEffect } from "react";
 import styles from "./header.module.css";
-import { MdSearch } from "react-icons/md";
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { MdSearch, MdOutlineLogout } from "react-icons/md";
+import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
+import { BsPencilSquare } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { branchMasterGetAll, branchMasterSwitch, getCurrentSelectedBranch } from "../../store/actions/branchMasterAction";
+
+import { logoutAction } from "../../store/actions/authAction";
 
 export default function Dashboard() {
     const dispatch = useDispatch();
@@ -15,7 +18,9 @@ export default function Dashboard() {
         auth: state.auth,
         currentSelectedBranch: state.branchMaster.currentSelectedBranch
     }));
-
+    const logOut = () => {
+        dispatch(logoutAction());
+    };
     const userId = auth.user?.user?.id;
 
     console.log(currentSelectedBranch, 'currentSelectedBranch currentSelectedBranch');
@@ -61,25 +66,36 @@ export default function Dashboard() {
                     </div>
                     <div className={styles.adminSubSection2}>
                         <label>Admin Name</label>
-                        <img src="/img/admin.png" alt="logox" />
-                        {/* <ul class="dropdown-menu show" data-bs-popper="static">
-                            <li><a class="dropdown-item profile-deatils" href="javascript:void(0)">
-                                <div class="nav-profile-img">
-                                    <img src="/img/admin.png" alt="logox" /></div>
-                                <div class="profile-detail-text">
-                                    <h5>Admin Name</h5>
-                                    <span>admin@gmail.com</span>
-                                </div>
-                            </a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-pen-to-square"></i>Edit Profile</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</a></li>
-                        </ul> */}
+
+
+                        <Dropdown>
+                            <Dropdown.Toggle className={styles.adminImg}>
+                                <img src="/img/admin.png" id="dropdown-basic-button" alt="logox" />
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu className={styles.adminMenu}>
+                                <Dropdown.Item className={styles.adminItems}>
+                                    <div className={`${styles.adminProfiles} ${styles.borderBottom}`}>
+                                        <div class="nav-profile-img">
+                                            <img src="/img/admin.png" alt="logox" /></div>
+                                        <div class="profile-detail-text">
+                                            <h5>Admin Name</h5>
+                                            <span>admin@gmail.com</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.adminProfiles}><BsPencilSquare /> Edit Profile</div>
+                                    <div className={styles.adminProfiles} onClick={logOut} ><MdOutlineLogout />Logout</div>
+                                </Dropdown.Item>
+
+                            </Dropdown.Menu>
+                        </Dropdown>
+
                     </div>
 
 
                 </Col>
             </Row>
-        </Container>
+        </Container >
 
 
     );
