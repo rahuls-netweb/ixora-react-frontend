@@ -55,6 +55,12 @@ export default function Permissions() {
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
+
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
+
   const { permissionsList } = useSelector((state) => state.permissions);
 
   const {
@@ -212,7 +218,7 @@ export default function Permissions() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -226,6 +232,13 @@ export default function Permissions() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

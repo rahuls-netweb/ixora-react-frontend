@@ -44,6 +44,11 @@ export default function Qualification() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
+
   const {
     handleSubmit,
     register,
@@ -194,7 +199,7 @@ export default function Qualification() {
                 <Button
                   type="submit"
                   disabled={!isDirty || !isValid}
-                  className={styles.formShowButton}
+                  className="formShowButton"
                 >
                   {isSubmitting ? (
                     <Spinner
@@ -207,6 +212,13 @@ export default function Qualification() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

@@ -51,13 +51,6 @@
   align-items: flex-end;
 }
 
-.formShowButton,
-.formShowButton:hover,
-.formShowButton:active,
-.formShowButton:focus {
-  width: 100%;
-  background: var(--theme-color) !important;
-}
 
 .popForm {
   padding: 15px 15px 10px 15px;

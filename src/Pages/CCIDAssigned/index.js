@@ -274,7 +274,7 @@ export default function CCIDassigned() {
                             md={12}
                             className={`${styles.customColumn} justify-content-end`}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>
@@ -316,7 +316,7 @@ export default function CCIDassigned() {
                             md={12}
                             className={`${styles.customColumn} justify-content-end`}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>
@@ -366,7 +366,7 @@ export default function CCIDassigned() {
                             className={`${styles.customColumn} justify-content-end`}
                             style={{ marginTop: "20px" }}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>
@@ -426,7 +426,7 @@ export default function CCIDassigned() {
                             className={`${styles.customColumn} justify-content-end`}
                             style={{ marginTop: "20px" }}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>
@@ -706,7 +706,7 @@ export default function CCIDassigned() {
                             md={12}
                             className={`${styles.customColumn} justify-content-end`}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>
@@ -752,7 +752,7 @@ export default function CCIDassigned() {
                               style={{ marginTop: "43px" }}
                             >
                               <Button
-                                className={styles.formShowButton}
+                                className="formShowButton"
                                 style={{ width: "165px" }}
                               >
                                 Next
@@ -767,7 +767,7 @@ export default function CCIDassigned() {
                             className={`${styles.customColumn} justify-content-end`}
                             style={{ marginTop: "20px" }}
                           >
-                            <Button className={styles.formShowButton}>
+                            <Button className="formShowButton">
                               Next
                             </Button>
                           </Col>

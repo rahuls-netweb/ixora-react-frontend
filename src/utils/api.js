@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
   baseURL: BASE_URL,
   // withCredentials: true,
   headers: {
+    'Accept': 'application/json',
     Authorization: `Bearer ${auth?.token}`,
   },
 });
@@ -31,12 +32,13 @@ axiosInstance.interceptors.response.use(
       const originalRequest = error.config;
       if (error.response.status === 403 && !originalRequest._retry) {
         originalRequest._retry = true;
-
-        return axiosInstance(originalRequest);
-      } else if (error.response.status === 401) {
-
         deleteLocalStorage("auth");
         window.location.reload();
+        // return axiosInstance(originalRequest);
+      } else if (error.response.status === 406) {
+        // console.log(error, 'error')
+        // deleteLocalStorage("auth");
+        // window.location.reload();
       }
       return Promise.reject(error);
     } catch (err) {

@@ -60,7 +60,10 @@ export default function Country() {
     const [error, setError] = useState("");
     const country = "US";
 
-
+    function cancelUser() {
+        setSelectedCountry("");
+        setMode(PAGE_MODES.add);
+    }
 
     const IconOption = (props) => {
         const {
@@ -272,7 +275,7 @@ export default function Country() {
                             <Form.Group className={styles.formCareerEnquirieSub2}>
                                 <Button
                                     type="submit"
-                                    className={styles.formShowButton}
+                                    className="formShowButton"
                                     disabled={selectedCountry === null}
                                 >
                                     {isSubmitting ? (
@@ -286,6 +289,13 @@ export default function Country() {
                                         "Update"
                                     )}
                                 </Button>
+                                {mode === PAGE_MODES.edit ?
+                                    <Button
+                                        className="formShowButton"
+                                        onClick={cancelUser}
+                                    >
+                                        Cancel
+                                    </Button> : null}
                             </Form.Group>
                         </Col>
                     </Row>

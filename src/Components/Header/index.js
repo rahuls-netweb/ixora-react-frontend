@@ -6,19 +6,30 @@ import { MdSearch } from "react-icons/md";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { branchMasterGetAll, branchMasterSwitch } from "../../store/actions/branchMasterAction";
+import { branchMasterGetAll, branchMasterSwitch, getCurrentSelectedBranch } from "../../store/actions/branchMasterAction";
 
 export default function Dashboard() {
     const dispatch = useDispatch();
-    const { branchMasterList } = useSelector((state) => state.branchMaster);
+    const { branchMasterList, auth, currentSelectedBranch } = useSelector((state) => ({
+        branchMasterList: state.branchMaster.branchMasterList,
+        auth: state.auth,
+        currentSelectedBranch: state.branchMaster.currentSelectedBranch
+    }));
+
+    const userId = auth.user?.user?.id;
+
+    console.log(currentSelectedBranch, 'currentSelectedBranch currentSelectedBranch');
 
     useEffect(() => {
         dispatch(branchMasterGetAll());
     }, []);
 
+    useEffect(() => {
+        dispatch(getCurrentSelectedBranch(userId));
+    }, [userId]);
+
     function branchSwitch(e) {
         const id = e.target.value;
-
         dispatch(branchMasterSwitch(id));
     }
 
@@ -42,7 +53,7 @@ export default function Dashboard() {
 
                 <Col md={6} lg={4} xl={4} className={styles.adminSection} >
                     <div className={styles.adminSubSection1}>
-                        <Form.Select onChange={branchSwitch}>
+                        <Form.Select onChange={branchSwitch} value={currentSelectedBranch?.id}>
                             {branchMasterList.map(branch => {
                                 return <option value={branch.id} >{branch.name}</option>
                             })}

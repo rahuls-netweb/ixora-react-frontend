@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../store/actions/authAction";
 //import react pro sidebar components
 import {
@@ -27,12 +27,18 @@ import {
   MdHotelClass,
   MdPhone,
 } from "react-icons/md";
+
 const SideBar = () => {
   const dispatch = useDispatch();
   const [menuCollapse, setMenuCollapse] = useState(false);
   const location = useLocation();
   const CurrentRoute = location.pathname;
   // const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
+  const { user } = useSelector((state) => {
+    return state.auth;
+  });
+  const admin = user.user.is_admin;
+
 
   const sideLinks = [
     {
@@ -183,38 +189,41 @@ const SideBar = () => {
                     </MenuItem>
                   );
                 } else {
-                  return (
-                    <>
-                      <SubMenu
-                        className="submenuContent"
-                        icon={val.icon}
-                        title={<NavLink to={val.route}>{val.Title}</NavLink>}
-                        // icon={val.icon}
-                        defaultOpen={true}
-                      // onClick={() => {
-                      //   setActiveSubmenuParent(val.route);
-                      // }}
-                      >
-                        {val.subRoutes.map((subRoute, index) => {
-                          return (
-                            <MenuItem
-                              key={subRoute.id}
-                              icon={subRoute.icon}
-                              active={
-                                activeRoute.startsWith(subRoute.route)
-                                  ? true
-                                  : false
-                              }
-                            >
-                              <NavLink to={subRoute.route}>
-                                {subRoute.Title}
-                              </NavLink>
-                            </MenuItem>
-                          );
-                        })}
-                      </SubMenu>
-                    </>
-                  );
+                  if (admin) {
+                    return (
+                      <>
+                        <SubMenu
+                          className="submenuContent"
+                          icon={val.icon}
+                          title={<NavLink to={val.route}>{val.Title}</NavLink>}
+                          // icon={val.icon}
+                          defaultOpen={true}
+                        // onClick={() => {
+                        //   setActiveSubmenuParent(val.route);
+                        // }}
+                        >
+                          {val.subRoutes.map((subRoute, index) => {
+                            return (
+                              <MenuItem
+                                key={subRoute.id}
+                                icon={subRoute.icon}
+                                active={
+                                  activeRoute.startsWith(subRoute.route)
+                                    ? true
+                                    : false
+                                }
+                              >
+                                <NavLink to={subRoute.route}>
+                                  {subRoute.Title}
+                                </NavLink>
+                              </MenuItem>
+                            );
+                          })}
+                        </SubMenu>
+                      </>
+                    );
+                  }
+
                 }
               })}
             </Menu>

@@ -56,6 +56,11 @@ export default function Roles() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
+
   const {
     handleSubmit,
     register,
@@ -102,7 +107,7 @@ export default function Roles() {
       name: "Permissions",
       selector: (row) => (
         <div onClick={() => handleShow1(row)}>
-          <span className={styles.formShowButton1}>View All </span>
+          <span className="formShowViewButton">View All </span>
         </div>
       ),
     },
@@ -248,7 +253,7 @@ export default function Roles() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -262,6 +267,13 @@ export default function Roles() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

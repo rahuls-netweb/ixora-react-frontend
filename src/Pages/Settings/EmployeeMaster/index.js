@@ -46,28 +46,29 @@ const PAGE_MODES = {
   add: "add",
 };
 
-const validationSchema = yup.object({
 
-  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
-  email: yup.string().required("Enter a valid Email").email("Enter a valid Email"),
-  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
-    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
-
-  password: yup.string().required('Password is required').min(8, 'Min 8 character required'),
-  password_confirmation: yup.string()
-    .oneOf([yup.ref('password'), null], 'Passwords must match'),
-
-});
 
 export default function HeadOffice() {
+
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const resolver = useYupValidationResolver(validationSchema);
 
+  const validationSchema = yup.object({
+    name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
+      message: 'Enter a valid Name'
+    }),
+    email: yup.string().required("Enter a valid Email").email("Enter a valid Email"),
+    phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
+      .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+    password: mode === PAGE_MODES.add ? yup.string().required('Password is required').min(8, 'Min 8 character required') : null,
+    password_confirmation: yup.string()
+      .oneOf([yup.ref('password'), null], 'Passwords must match'),
+  });
+
+
+  const resolver = useYupValidationResolver(validationSchema);
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
 
   const [show, setShow] = useState(false);
@@ -134,8 +135,8 @@ export default function HeadOffice() {
                   name: singleRowData.name,
                   email: singleRowData.email,
                   phone: singleRowData.phone,
-                  password: singleRowData.password,
-                  password_confirmation: singleRowData.password_confirmation,
+                  password: "",
+                  password_confirmation: "",
                   report_time_from: singleRowData.report_time_from,
                   report_time_to: singleRowData.report_time_to,
                   lunch_from: singleRowData.lunch_from,
@@ -211,6 +212,10 @@ export default function HeadOffice() {
     setMode(PAGE_MODES.add);
   }
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
   return (
     <>
       <Form onSubmit={handleSubmit(onFormSubmit)}>
@@ -332,7 +337,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.formCareerEnquirieSub2} style={{ paddingRight: 0 }}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -346,6 +351,13 @@ export default function HeadOffice() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

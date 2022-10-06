@@ -61,6 +61,10 @@ export default function BranchMaster() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
 
   const {
     handleSubmit,
@@ -358,7 +362,7 @@ export default function BranchMaster() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -372,6 +376,13 @@ export default function BranchMaster() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

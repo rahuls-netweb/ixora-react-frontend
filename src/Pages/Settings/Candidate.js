@@ -45,6 +45,11 @@ export default function Candidate() {
   const [loading, setLoading] = useState(false);
   const { categoryList } = useSelector((state) => state.category);
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
+
   const {
     handleSubmit,
     register,
@@ -187,7 +192,7 @@ export default function Candidate() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -201,6 +206,13 @@ export default function Candidate() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

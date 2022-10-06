@@ -48,6 +48,11 @@ export default function HeadOffice() {
   const { collegeList } = useSelector((state) => state.college);
   const { countryList } = useSelector((state) => state.country);
 
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
+
   const {
     handleSubmit,
     register,
@@ -212,7 +217,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -226,6 +231,13 @@ export default function HeadOffice() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

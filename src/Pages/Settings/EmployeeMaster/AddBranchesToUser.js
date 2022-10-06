@@ -173,7 +173,7 @@ export default function AddBranchesToUser({ user }) {
                             </Button> */}
                             <Button
                                 type="submit"
-                                className={styles.formShowButton2}
+                                className="formShowUserButton"
 
                             >
                                 {isSubmitting ? (

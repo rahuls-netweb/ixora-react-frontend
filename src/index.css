@@ -68,3 +68,36 @@ input:disabled {
   color: red;
   margin: 0 !important;
 }
+
+.formShowButton,
+.formShowButton:hover,
+.formShowButton:active,
+.formShowButton:focus {
+  width: 100%;
+  background: var(--theme-color) !important;
+}
+
+.formShowViewButton,
+.formShowViewButton:hover,
+.formShowViewButton:active,
+.formShowViewButton:focus {
+  color: var(--theme-color) !important;
+  background: transparent !important;
+  border: none !important;
+  padding-left: 0 !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.formShowUserButton,
+.formShowUserButton:hover,
+.formShowUserButton:active,
+.formShowUserButton:focus {
+  background: var(--theme-color) !important;
+  color: white !important;
+  border: none !important;
+  width: 135px;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  height: 38px;
+}

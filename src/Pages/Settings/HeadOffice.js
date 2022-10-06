@@ -43,7 +43,7 @@ const validationSchema = yup.object({
   name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
     message: 'Enter a valid Name'
   }),
-  email: yup.string().email("Enter a valid Email"),
+  email: yup.string().email("Enter a valid Email").required("Enter a valid Email"),
   phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
     .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
 });
@@ -58,6 +58,11 @@ export default function HeadOffice() {
   const [loading, setLoading] = useState(false);
 
   const { headOfficeList } = useSelector((state) => state.headOffice);
+
+  function cancelUser() {
+    reset();
+    setMode(PAGE_MODES.add);
+  }
 
   const {
     handleSubmit,
@@ -222,7 +227,7 @@ export default function HeadOffice() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Email</Form.Label>
+                <Form.Label>Email <span className="reqruiredFields">*</span></Form.Label>
                 <Help text={EmailText()} />
                 <Form.Control
                   type="email"
@@ -233,7 +238,7 @@ export default function HeadOffice() {
                 <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
               </Form.Group>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Phone Number</Form.Label>
+                <Form.Label>Phone Number <span className="reqruiredFields">*</span></Form.Label>
                 <Help text={PhoneText()} />
                 <Form.Control
                   type="text"
@@ -259,7 +264,7 @@ export default function HeadOffice() {
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
-                  className={styles.formShowButton}
+                  className="formShowButton"
                   disabled={!isDirty || !isValid}
                 >
                   {isSubmitting ? (
@@ -273,6 +278,13 @@ export default function HeadOffice() {
                     "Update"
                   )}
                 </Button>
+                {mode === PAGE_MODES.edit ?
+                  <Button
+                    className="formShowButton"
+                    onClick={cancelUser}
+                  >
+                    Cancel
+                  </Button> : null}
               </Form.Group>
             </Col>
           </Row>

@@ -72,45 +72,18 @@
 }
 
 .formCareerEnquirieSub2 {
-    padding: 12px 0;
-    width: 75%;
+    width: 100%;
     display: flex;
     align-items: center;
-    margin-top: 20px !important;
+    justify-content: flex-end;
+    margin-top: 10px !important;
 }
 
-.formShowButton,
-.formShowButton:hover,
-.formShowButton:active,
-.formShowButton:focus {
-    width: 100%;
-    background: var(--theme-color) !important;
+.formCareerEnquirieSub2 button {
+    width: 50% !important;
+    margin-left: 5px;
 }
 
-.formShowButton1,
-.formShowButton1:hover,
-.formShowButton1:active,
-.formShowButton1:focus {
-    color: var(--theme-color) !important;
-    background: transparent !important;
-    border: none !important;
-    padding-left: 0 !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-}
-
-.formShowButton2,
-.formShowButton2:hover,
-.formShowButton2:active,
-.formShowButton2:focus {
-    background: var(--theme-color) !important;
-    color: white !important;
-    border: none !important;
-    width: 135px;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    height: 38px;
-}
 
 .actionIcon {
     font-size: 25px;

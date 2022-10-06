@@ -139,7 +139,7 @@ export default function TelephonicEnquiry() {
                   </Form.Group>
                   <Form.Group className={styles.formCareerEnquirieSub2}>
                     <Button
-                      className={styles.formShowButton}
+                      className="formShowButton"
                       onClick={handleShow}
                     >
                       Assign

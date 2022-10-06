@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const BRANCHMASTER_GETALL = "BRANCHMASTER_GETALL";
-
+export const CURRENT_SELECTED_BRANCH = "CURRENT_SELECTED_BRANCH";
 // Posts action
 export const branchMasterCreate =
     (branchMasterData, onSuccess, onFailure) => async (dispatch) => {
@@ -89,17 +89,34 @@ export const addBranchesTouser =
     };
 
 export const branchMasterSwitch =
-    (id, onSuccess, onFailure) => async (dispatch) => {
+    (id, onSuccess, onFailure) => async (dispatch, getState) => {
+        console.log('Hitting !!!!')
+        const { user } = getState().auth;
 
         axios
-            .post("/branch/switch/update", id)
+            .put(`/user/${user.user.id}/switch/branch`, { branch_id: id })
             .then(function ({ data }) {
+                dispatch(getCurrentSelectedBranch(user.user.id));
                 onSuccess && onSuccess();
-                toast.success("Branch Master Switched");
-                console.log(data, "Branch Switched");
             })
             .catch(function (err) {
                 showErrorMessageFromApi(err);
                 onFailure && onFailure();
             });
     };
+
+export const getCurrentSelectedBranch = (userId, onSuccess, onFailure) => (dispatch) => {
+    axios
+        .get(`/user/${userId}/current/branch`)
+        .then(function ({ data }) {
+            dispatch({
+                type: CURRENT_SELECTED_BRANCH,
+                payload: data.data,
+            });
+            onSuccess && onSuccess();
+        })
+        .catch(function (err) {
+            showErrorMessageFromApi(err);
+            onFailure && onFailure();
+        });
+}
