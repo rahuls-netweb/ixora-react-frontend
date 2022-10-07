@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addBranchesTouser, branchMasterGetAll } from "../../../store/actions/branchMasterAction";
 import { employeeMasterGetAll } from "../../../store/actions/employeeMasterAction";
 import { rolesGetAll } from "../../../store/actions/rolesAction";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddBranchesToUser({ user }) {
 
@@ -118,7 +119,7 @@ export default function AddBranchesToUser({ user }) {
                                                                     <h5>{branch.name}</h5>
                                                                     <h6>
                                                                         {selectedBranches?.[branch.id]?.map(roleId => (
-                                                                            <Badge>{getRoleNameByRoleId(roleId)}</Badge>
+                                                                            <Badge key={uuidv4()}>{getRoleNameByRoleId(roleId)}</Badge>
                                                                         ))}
                                                                     </h6>
 
@@ -135,7 +136,7 @@ export default function AddBranchesToUser({ user }) {
                                         <ul className={stylesIndex.ulModules}>
                                             {currentBranch && rolesList.map((role) => {
                                                 return (
-                                                    <li>
+                                                    <li key={role.id}>
                                                         <input type="checkbox" checked={currentBranch ? selectedBranches[currentBranch]?.includes(role.id) : false} onChange={(event) => {
 
                                                             const targetRoles = [...selectedBranches[currentBranch]];

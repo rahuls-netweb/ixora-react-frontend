@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-const useYupValidationResolver = (validationSchema) =>
+const useYupValidationResolver = (validationSchema, ...extra_deps) =>
   useCallback(
     async (data) => {
       try {
@@ -28,7 +28,7 @@ const useYupValidationResolver = (validationSchema) =>
         };
       }
     },
-    [validationSchema]
+    [validationSchema, extra_deps]
   );
 
 export { useYupValidationResolver };

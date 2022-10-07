@@ -1,8 +1,9 @@
 .colSetting {
   padding-right: 0 !important;
 }
+
 .commonContainer {
-  border: 1px solid #c5c7cd;
+  border: 1px solid var(--border-color);
   border-radius: 15px;
   display: flex;
   justify-content: space-between;
@@ -10,6 +11,7 @@
   align-items: center;
   margin-bottom: 12px;
 }
+
 .commonContainer h5 {
   font-family: var(--Poppins);
   font-size: 20px;
@@ -22,9 +24,10 @@
   font-family: var(--Poppins);
   font-size: 16px;
   letter-spacing: 0.3px;
-  color:#808080;
+  color: #808080;
   font-weight: 600;
 }
+
 .iconDiv {
   background: rgb(223, 224, 235);
   width: 50px;

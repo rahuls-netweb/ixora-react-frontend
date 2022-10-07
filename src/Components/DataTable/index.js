@@ -42,7 +42,6 @@ const customStyles = {
 export default function TableGrid({ columns, rows, perPage = 8 }) {
   return (
     <DataTable
-      className="rahul"
       columns={columns}
       data={rows}
       customStyles={customStyles}

@@ -6,6 +6,7 @@ import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import Skeleton from "../../Components/Skeleton";
 import styles from "./rootsettings.module.css";
+import { v4 as uuidv4 } from "uuid";
 import {
   branchMasterCreate,
   branchMasterGetAll,
@@ -294,7 +295,7 @@ export default function BranchMaster() {
                   </option>
                   {headOfficeList.map((headoffice) => {
                     return (
-                      <option value={headoffice.id}>{headoffice.name}</option>
+                      <option key={uuidv4()} value={headoffice.id}>{headoffice.name}</option>
                     );
                   })}
                 </Form.Select>

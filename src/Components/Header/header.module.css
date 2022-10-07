@@ -1,6 +1,6 @@
 .rowNavbar {
   background: #ffffff;
-  border: 1px solid #c5c7cd;
+  border: 1px solid var(--border-color);
   border-radius: 15px;
   padding: 5px 15px;
   margin-bottom: 12px;
@@ -81,7 +81,7 @@
 }
 
 .notificationBell .logo {
-  color: #c5c7cd;
+  color: var(--border-color);
   font-size: 27px;
 }
 
@@ -131,8 +131,8 @@
   ;
 }
 
-.adminProfiles div img {
-  margin: auto 0;
+.adminProfiles div {
+  margin: auto 0 !important;
   ;
 }
 

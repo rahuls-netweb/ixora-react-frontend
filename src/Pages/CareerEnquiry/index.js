@@ -8,11 +8,13 @@ import { MdRemoveRedEye } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
 import { countryGetAll } from "../../store/actions/countryAction";
 import { qualificationGetAll } from "../../store/actions/qualificationAction";
 import { careerGetAll } from "../../store/actions/careerAction";
+import AssignUserToStudent from "./AssignUserToStudent";
 import Skeleton from "../../Components/Skeleton";
 import {
   getPaginatedRecordNumber,
@@ -20,11 +22,12 @@ import {
 
 
 
-
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [selectedStudent, setSlectedStudent] = useState(null);
+
 
   const columns = [
     {
@@ -58,24 +61,32 @@ export default function CareerEnquiry() {
     {
       name: "View",
       cell: (singleRowData, index) => (
-        <MdRemoveRedEye
-          className={styles.iconView}
-          onClick={() => {
-            navigate(`/career-enquiry/${singleRowData.id}`);
-          }}
-        />
+        <>
+          <MdRemoveRedEye
+            className={styles.iconView}
+            onClick={() => {
+              navigate(`/career-enquiry/${singleRowData.id}`);
+            }}
+          />
+          <a className={styles.assignButton} onClick={() => handleShow(singleRowData)}>
+            Assign
+          </a>
+        </>
       ),
     },
   ];
 
-
-
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
-  const { branchMasterList, headOfficeList, countryList, qualificationList, careerList } = useSelector((state) => ({
+  const handleShow = (student) => {
+
+    setSlectedStudent(student);
+    setShow(true);
+  };
+
+  const { branchMasterList, headOfficeList, countryList, qualificationList, careerList, } = useSelector((state) => ({
     branchMasterList: state.branchMaster.branchMasterList,
     headOfficeList: state.headOffice.headOfficeList,
     countryList: state.country.countryList,
@@ -107,7 +118,7 @@ export default function CareerEnquiry() {
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {headOfficeList.map(headoffice => {
-                    return <option value={headoffice.id}>{headoffice.name}</option>
+                    return <option key={headoffice.id} value={headoffice.id}>{headoffice.name}</option>
                   })}
                 </Form.Select>
 
@@ -118,7 +129,7 @@ export default function CareerEnquiry() {
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {branchMasterList.map(branch => {
-                    return <option value={branch.id}>{branch.name}</option>
+                    return <option key={branch.id} value={branch.id}>{branch.name}</option>
                   })}
                 </Form.Select>
               </Form.Group>
@@ -133,7 +144,7 @@ export default function CareerEnquiry() {
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {countryList.map(country => {
-                    return <option value={country.id}>{country.name}</option>
+                    return <option key={country.id} value={country.id}>{country.name}</option>
                   })}
                 </Form.Select>
               </Form.Group>
@@ -143,7 +154,7 @@ export default function CareerEnquiry() {
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
                   {qualificationList.map(qualification => {
-                    return <option value={qualification.id}>{qualification.name}</option>
+                    return <option key={qualification.id} value={qualification.id}>{qualification.name}</option>
                   })}
                 </Form.Select>
               </Form.Group>
@@ -161,25 +172,6 @@ export default function CareerEnquiry() {
                   <h4>List of career enquiries</h4>
                 </div>
 
-                <Form className={styles.formCareerEnquiries}>
-                  <Form.Group className={styles.formCareerEnquirieSub1}>
-                    <Form.Label>Head Office</Form.Label>
-                    <Form.Select defaultValue={""}>
-                      <option value="" disabled>--Select--</option>
-                      {headOfficeList.map(headoffice => {
-                        return <option value={headoffice.id}>{headoffice.name}</option>
-                      })}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className={styles.formCareerEnquirieSub2}>
-                    <Button
-                      className="formShowButton"
-                      onClick={handleShow}
-                    >
-                      Assign
-                    </Button>
-                  </Form.Group>
-                </Form>
               </div>
               {loading ? (
                 <div className="dataTableRow" >
@@ -196,11 +188,8 @@ export default function CareerEnquiry() {
         </Row>
       </Container>
 
-      <PopUP show={show} hide={handleClose} size="md">
-        <Form className={styles.popForm}>
-          <Form.Control type="text" placeholder="Select" />
-          {/* <AddEmployeeMasterToEnquiry /> */}
-        </Form>
+      <PopUP show={show} hide={handleClose} size="lg">
+        <AssignUserToStudent student={selectedStudent} />
       </PopUP>
     </Layout>
   );

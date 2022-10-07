@@ -96,16 +96,16 @@ const SideBar = () => {
           Title: "Branch Master",
         },
         {
-          id: 7.4,
-          icon: <MdSettings />,
-          route: "/settings/roles",
-          Title: "Roles",
-        },
-        {
           id: 7.3,
           icon: <MdSettings />,
           route: "/settings/permissions",
           Title: "Permissions",
+        },
+        {
+          id: 7.4,
+          icon: <MdSettings />,
+          route: "/settings/roles",
+          Title: "Roles",
         },
         {
           id: 7.5,
@@ -162,7 +162,7 @@ const SideBar = () => {
   };
   return (
     <>
-      <div className="header">
+      <div className="sidebarHeader">
         {/* collapsed props to change menu size using menucollapse state */}
         <ProSidebar collapsed={menuCollapse}>
           <SidebarHeader>

@@ -79,6 +79,7 @@ export default function Dashboard() {
               onClick={() => {
                 handleClick(val.header5);
               }}
+              key={uuidv4()}
             >
               <div className={styles.commonContainer}>
                 <div key={val.id}>

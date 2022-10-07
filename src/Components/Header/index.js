@@ -22,8 +22,8 @@ export default function Dashboard() {
         dispatch(logoutAction());
     };
     const userId = auth.user?.user?.id;
-
-    console.log(currentSelectedBranch, 'currentSelectedBranch currentSelectedBranch');
+    const UserName = auth.user?.user?.name;
+    const UserEmail = auth.user?.user?.email;
 
     useEffect(() => {
         dispatch(branchMasterGetAll());
@@ -60,12 +60,12 @@ export default function Dashboard() {
                     <div className={styles.adminSubSection1}>
                         <Form.Select onChange={branchSwitch} value={currentSelectedBranch?.id}>
                             {branchMasterList.map(branch => {
-                                return <option value={branch.id} >{branch.name}</option>
+                                return <option key={branch.id} value={branch.id} >{branch.name}</option>
                             })}
                         </Form.Select>
                     </div>
                     <div className={styles.adminSubSection2}>
-                        <label>Admin Name</label>
+                        <label>{UserName}</label>
 
 
                         <Dropdown>
@@ -76,11 +76,11 @@ export default function Dashboard() {
                             <Dropdown.Menu className={styles.adminMenu}>
                                 <Dropdown.Item className={styles.adminItems}>
                                     <div className={`${styles.adminProfiles} ${styles.borderBottom}`}>
-                                        <div class="nav-profile-img">
+                                        <div className="nav-profile-img">
                                             <img src="/img/admin.png" alt="logox" /></div>
-                                        <div class="profile-detail-text">
-                                            <h5>Admin Name</h5>
-                                            <span>admin@gmail.com</span>
+                                        <div className="profile-detail-text">
+                                            <h5>{UserName}</h5>
+                                            <span>{UserEmail}</span>
                                         </div>
                                     </div>
                                     <div className={styles.adminProfiles}><BsPencilSquare /> Edit Profile</div>

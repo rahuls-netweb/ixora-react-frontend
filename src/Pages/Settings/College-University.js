@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "./rootsettings.module.css";
+import { v4 as uuidv4 } from "uuid";
 import {
   collegeCreate,
   collegeGetAll,
@@ -208,7 +209,7 @@ export default function HeadOffice() {
                     --Select--
                   </option>
                   {countryList.map((country) => {
-                    return <option value={country.id}>{country.name}</option>;
+                    return <option key={uuidv4()} value={country.id}>{country.name}</option>;
                   })}
                 </Form.Select>
               </Form.Group>

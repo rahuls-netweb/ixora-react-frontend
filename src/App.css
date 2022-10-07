@@ -6,14 +6,16 @@ h5,
 h6 {
   margin: 0 !important;
 }
+
 .containerNavbar {
   box-sizing: border-box;
-  padding: 20px 25px !important;
+  padding: 20px 25px 10px 25px !important;
   margin: 0;
   overflow: hidden;
 }
-.tabs-Content li button.active{
-    background: #1C4E80 !important;
-    color: white !important;
-    font-family: var(--Inter);
+
+.tabs-Content li button.active {
+  background: #1C4E80 !important;
+  color: white !important;
+  font-family: var(--Inter);
 }

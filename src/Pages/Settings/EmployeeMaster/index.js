@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { yupResolver } from '@hookform/resolvers/yup';
 import DataTable from "../../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
@@ -55,6 +56,13 @@ export default function HeadOffice() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  let passwordValidationChain = yup.string();
+
+  if (mode === PAGE_MODES.add) {
+    passwordValidationChain.required('Password is required').min(8, 'Min 8 character required')
+  }
+
+
   const validationSchema = yup.object({
     name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
       message: 'Enter a valid Name'
@@ -62,13 +70,13 @@ export default function HeadOffice() {
     email: yup.string().required("Enter a valid Email").email("Enter a valid Email"),
     phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
       .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
-    password: mode === PAGE_MODES.add ? yup.string().required('Password is required').min(8, 'Min 8 character required') : null,
-    password_confirmation: yup.string()
-      .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    // password: mode === PAGE_MODES.add ? yup.string().required('Password is required').min(8, 'Min 8 character required') : null,
+    password: passwordValidationChain,
+    password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
   });
 
 
-  const resolver = useYupValidationResolver(validationSchema);
+  const resolver = yupResolver(validationSchema);
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
 
   const [show, setShow] = useState(false);
