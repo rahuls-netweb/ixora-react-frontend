@@ -175,13 +175,13 @@ export default function Country() {
 
     function onFormSubmit(e) {
         e.preventDefault();
-        console.log(selectedCountry, " selectedCountry");
+
         const data = {
             id: selectedCountry.id,
             name: selectedCountry.label,
             code: selectedCountry.value,
         }
-        console.log(data, "data");
+
         setLoading(true);
         setIsSubmitting(true);
         if (mode === PAGE_MODES.add) {

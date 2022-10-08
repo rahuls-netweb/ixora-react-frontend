@@ -176,7 +176,7 @@ export default function BranchMaster() {
   }, []);
 
   function onFormSubmit(data) {
-    console.log(data);
+
     setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {

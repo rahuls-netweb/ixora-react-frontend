@@ -45,7 +45,7 @@ export const careerGetSingle =
                     type: CAREER_GETSINGLE,
                     payload: data.data,
                 });
-                console.log(data.data, "data");
+
                 onSuccess && onSuccess();
             })
             .catch(function (err) {

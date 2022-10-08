@@ -49,7 +49,7 @@ const PAGE_MODES = {
 
 
 
-export default function HeadOffice() {
+export default function EmployeeMaster() {
 
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
@@ -107,7 +107,7 @@ export default function HeadOffice() {
       },
     },
     {
-      name: "Head Office Name",
+      name: "Employee Name",
       selector: (row) => row.name,
     },
     {

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 import { employeeMasterGetAll } from "../../store/actions/employeeMasterAction";
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
@@ -31,25 +31,32 @@ export default function AssignUserToStudent({ student }) {
     }, []);
     const options = branchMasterList.map((branch) => {
         return {
-            value: branch.id,
+            value: branch.id.toString(),
             label: branch.name,
         };
     });
-    const options1 = employeeMasterList.map((user) => {
+    const options1 = employeeMasterList.map((employee) => {
         return {
-            value: user.id,
-            label: user.name,
+            value: employee.id.toString(),
+            label: employee.name,
         };
     });
     const {
         handleSubmit,
         register,
+        control,
         formState: { errors, isDirty, isValid },
         reset
     } = useForm({
         resolver,
-        mode: "onBlur"
+        mode: "onChange",
+        defaultValues: {
+            branch: "",
+            employee: ""
+        }
     });
+
+    console.log(errors, ' errors ')
 
     function onFormSubmit(data) {
         console.log(data, "data data 11 111 111");
@@ -60,14 +67,24 @@ export default function AssignUserToStudent({ student }) {
             <Container fluid>
                 <Row className='justify-content-end'>
                     <Col md={12} className={styles.customColumn1}>
-                        <Form.Group cla ssName={styles.divDivision}>
+                        <Form.Group className={styles.divDivision}>
                             <Form.Label className='text-nowrap'> Student Name : {student.first_name} </Form.Label>
                         </Form.Group>
                     </Col>
                     <Col md={6} className={styles.customBranchCol}>
                         <Form.Group >
                             <Form.Label>Branch</Form.Label>
-                            <Select isClearable options={options}   {...register("branch")} />
+                            <Controller
+                                name={"branch"}
+                                control={control}
+                                render={({ field }) => {
+                                    const { value, onChange, onBlur } = field;
+                                    console.log(field, '____field')
+                                    return (
+                                        <Select isClearable options={options} value={value} onChange={onChange} onBlur={onBlur} />
+                                    );
+                                }}
+                            />
                             <Form.Label className="errorMessage">
                                 {errors.branch && errors.branch.message}
                             </Form.Label>
@@ -76,7 +93,18 @@ export default function AssignUserToStudent({ student }) {
                     <Col md={6}>
                         <Form.Group >
                             <Form.Label>Employees</Form.Label>
-                            <Select isClearable options={options1}   {...register("employee")} />
+                            <Controller
+                                name={"employee"}
+                                control={control}
+                                render={({ field: { value, onChange, onBlur } }) => {
+                                    return (
+                                        <Select isClearable options={options1} value={value} onChange={(value => {
+                                            console.log(value, 'vvvv');
+                                            onChange(value);
+                                        })} onBlur={onBlur} />
+                                    );
+                                }}
+                            />
                             <Form.Label className="errorMessage">
                                 {errors.employee && errors.employee.message}
                             </Form.Label>

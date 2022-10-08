@@ -7,7 +7,7 @@ export const CURRENT_SELECTED_BRANCH = "CURRENT_SELECTED_BRANCH";
 // Posts action
 export const branchMasterCreate =
     (branchMasterData, onSuccess, onFailure) => async (dispatch) => {
-        console.log(branchMasterData);
+
         axios
             .post("/branches", branchMasterData)
             .then(function ({ data }) {
@@ -90,7 +90,7 @@ export const addBranchesTouser =
 
 export const branchMasterSwitch =
     (id, onSuccess, onFailure) => async (dispatch, getState) => {
-        console.log('Hitting !!!!')
+
         const { user } = getState().auth;
 
         axios

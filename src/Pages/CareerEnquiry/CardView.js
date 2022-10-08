@@ -112,7 +112,7 @@ export default function CardView() {
       () => setLoading(false)
     ));
   }, []);
-  console.log(singleCareerList, "singleCareerList");
+
 
   const navigate = useNavigate();
   const [show, setShow] = useState(false);

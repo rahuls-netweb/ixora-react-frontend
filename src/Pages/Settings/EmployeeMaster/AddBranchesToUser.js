@@ -22,7 +22,7 @@ export default function AddBranchesToUser({ user }) {
 
     const selectedUser = employeeMasterList.find(singleUser => singleUser.id === user.id);
 
-    console.log(selectedUser, "selectedUser selectedUser");
+
 
     useEffect(() => {
         dispatch(branchMasterGetAll());
@@ -37,7 +37,7 @@ export default function AddBranchesToUser({ user }) {
                 const rolesForBranch = selectedUser.user_has_roles.filter(role => role.branch_id === branchId).map(role => role.role_id);
                 initialBranches[branchId] = rolesForBranch;
             });
-            console.log(initialBranches, 'dddddddddddddddddddddddd')
+
             setSelectedBranches(initialBranches)
         }
     }, [user]);
