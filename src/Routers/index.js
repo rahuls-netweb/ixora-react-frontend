@@ -8,6 +8,7 @@ import CreateNewPassword from "../Pages/Auth/CreateNewPassword";
 import ResetPassword from "../Pages/Auth/ResetPassword";
 
 import Dashboard from "../Pages/Dashboard";
+import Profile from "../Pages/Profile.js"
 import CareerEnquiry from "../Pages/CareerEnquiry/index";
 import CardView from "../Pages/CareerEnquiry/CardView";
 import TTIDEnquiry from "../Pages/TTIDEnquiry";
@@ -31,6 +32,7 @@ export default function AppRoutes() {
 
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/CCID-assigned" element={<CCIDassigned />} />
           <Route path="/career-enquiry">
             <Route path="/career-enquiry" element={<CareerEnquiry />} />

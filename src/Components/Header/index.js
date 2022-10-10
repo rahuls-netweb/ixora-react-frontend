@@ -10,8 +10,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { branchMasterGetAll, branchMasterSwitch, getCurrentSelectedBranch } from "../../store/actions/branchMasterAction";
 
 import { logoutAction } from "../../store/actions/authAction";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+    const navigate = useNavigate();
+    function EditProfile() {
+        navigate("/profile");
+    }
     const dispatch = useDispatch();
     const { branchMasterList, auth, currentSelectedBranch } = useSelector((state) => ({
         branchMasterList: state.branchMaster.branchMasterList,
@@ -83,7 +88,7 @@ export default function Dashboard() {
                                             <span>{UserEmail}</span>
                                         </div>
                                     </div>
-                                    <div className={styles.adminProfiles}><BsPencilSquare /> Edit Profile</div>
+                                    <div className={styles.adminProfiles} onClick={EditProfile}><BsPencilSquare /> Edit Profile</div>
                                     <div className={styles.adminProfiles} onClick={logOut} ><MdOutlineLogout />Logout</div>
                                 </Dropdown.Item>
 

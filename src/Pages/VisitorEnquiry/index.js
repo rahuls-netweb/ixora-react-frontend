@@ -124,7 +124,7 @@ export default function VisitorEnquiry() {
       <Container fluid>
         <Row>
           <Col md={12} style={{ paddingRight: 0 }}>
-            <div className={styles.listCareerEnquiries}>
+            <div className="borderUnderLine">
               <div className={styles.careerEnquiries}>
                 <div className={styles.careerEnquirieSub}>
                   <h4>List of visitor enquiries</h4>

@@ -102,3 +102,9 @@ input:disabled {
   cursor: pointer !important;
   height: 38px;
 }
+
+.borderUnderLine {
+  border: 1px solid rgb(197, 199, 205);
+  border-radius: 15px;
+  padding: 10px 25px;
+}
