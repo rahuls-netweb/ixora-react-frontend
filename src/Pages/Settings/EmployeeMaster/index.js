@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from "@hookform/resolvers/yup";
 import DataTable from "../../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
-import AddBranchesToUser from './AddBranchesToUser'
-import Help, { PhoneText } from '../../../Components/Help';
+import AddBranchesToUser from "./AddBranchesToUser";
+import Help, { PhoneText } from "../../../Components/Help";
 import {
   employeeMasterCreate,
   employeeMasterGetAll,
@@ -22,10 +22,47 @@ import {
 
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
 
 import PopUP from "../../../Components/PopUp";
 import Skeleton from "../../../Components/Skeleton";
+
+const PAGE_MODES = {
+  edit: "edit",
+  add: "add",
+};
+
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
+  email: yup
+    .string()
+    .required("Enter a valid Email")
+    .email("Enter a valid Email"),
+  phone: yup
+    .string()
+    .matches(
+      /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/,
+      { message: "Enter a valid Phone Number" }
+    )
+    .min(10, "Phone range 10-14 digits")
+    .max(14, "Phone range 10-14 digits"),
+  password: yup.string().when("page_mode", {
+    is: PAGE_MODES.add,
+    then: yup
+      .string()
+      .required("Password is required")
+      .min(8, "Min 8 character required"),
+  }),
+  // .required("Password is required")
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
+  page_mode: yup.string(),
+});
 
 const initialFormState = {
   name: "",
@@ -40,42 +77,13 @@ const initialFormState = {
   lunch_to: "",
   status: 1,
   is_admin: 0,
+  page_mode: PAGE_MODES.add,
 };
-
-const PAGE_MODES = {
-  edit: "edit",
-  add: "add",
-};
-
-
 
 export default function EmployeeMaster() {
-
   const dispatch = useDispatch();
-  const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  let passwordValidationChain = yup.string();
-
-  if (mode === PAGE_MODES.add) {
-    passwordValidationChain.required('Password is required').min(8, 'Min 8 character required')
-  }
-
-
-  const validationSchema = yup.object({
-    name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-      message: 'Enter a valid Name'
-    }),
-    email: yup.string().required("Enter a valid Email").email("Enter a valid Email"),
-    phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
-      .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
-    // password: mode === PAGE_MODES.add ? yup.string().required('Password is required').min(8, 'Min 8 character required') : null,
-    password: passwordValidationChain,
-    password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-  });
-
-
   const resolver = yupResolver(validationSchema);
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
 
@@ -93,11 +101,16 @@ export default function EmployeeMaster() {
     setValue,
     formState: { errors, isDirty, isValid },
     reset,
+    watch,
   } = useForm({
     resolver,
     mode: "onBlur",
     defaultValues: initialFormState,
   });
+
+  const mode = watch("page_mode");
+
+  const setMode = (newMode) => setValue("page_mode", newMode);
 
   const columns = [
     {
@@ -131,7 +144,6 @@ export default function EmployeeMaster() {
               className={styles.actionIcon}
               onClick={() => handleShow(singleRowData)}
             />
-
           ) : null}
           <BiPencil
             className={styles.actionIcon}
@@ -196,9 +208,7 @@ export default function EmployeeMaster() {
             setIsSubmitting(false);
             setMode(PAGE_MODES.add);
             reset();
-            dispatch(
-              employeeMasterGetAll()
-            );
+            dispatch(employeeMasterGetAll());
           },
           () => setIsSubmitting(false)
         )
@@ -240,7 +250,10 @@ export default function EmployeeMaster() {
                   placeholder="User Name"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.name && errors.name.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -253,7 +266,10 @@ export default function EmployeeMaster() {
                   placeholder="Email"
                   {...register("email")}
                 />
-                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.email && errors.email.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -263,10 +279,12 @@ export default function EmployeeMaster() {
                   autoComplete="off"
                   type="tel"
                   placeholder="Phone"
-                  {...register(
-                    "phone")}
+                  {...register("phone")}
                 />
-                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.phone && errors.phone.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -280,7 +298,10 @@ export default function EmployeeMaster() {
                   placeholder="Password"
                   {...register("password")}
                 />
-                <Form.Label className="errorMessage">  {errors.password && errors.password.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.password && errors.password.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -294,7 +315,11 @@ export default function EmployeeMaster() {
                   placeholder="Confirm Password"
                   {...register("password_confirmation")}
                 />
-                <Form.Label className="errorMessage">  {errors.password_confirmation && errors.password_confirmation.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.password_confirmation &&
+                    errors.password_confirmation.message}
+                </Form.Label>
               </Form.Group>
             </Col>
 
@@ -306,7 +331,7 @@ export default function EmployeeMaster() {
                   placeholder="Report Time From"
                   {...register("report_time_from")}
                 />
-                <Form.Label className="errorMessage">  </Form.Label>
+                <Form.Label className="errorMessage"> </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -342,7 +367,10 @@ export default function EmployeeMaster() {
               className="d-flex justify-content-end"
               style={{ paddingRight: 0 }}
             >
-              <Form.Group className={styles.formCareerEnquirieSub2} style={{ paddingRight: 0 }}>
+              <Form.Group
+                className={styles.formCareerEnquirieSub2}
+                style={{ paddingRight: 0 }}
+              >
                 <Button
                   type="submit"
                   className="formShowButton"
@@ -359,20 +387,18 @@ export default function EmployeeMaster() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (
