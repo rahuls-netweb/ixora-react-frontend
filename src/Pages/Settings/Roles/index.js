@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import { NamePattern } from "../../../Components/validation";
 import Skeleton from "../../../Components/Skeleton";
 import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
+import DeletePopUp from "../../../Components/PopUp/DeletePopUP";
 
 const initialFormState = {
   name: "",
@@ -38,9 +39,12 @@ const PAGE_MODES = {
 };
 
 const validationSchema = yup.object({
-  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
+  name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
 });
 
 export default function Roles() {
@@ -55,6 +59,8 @@ export default function Roles() {
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   function cancelUser() {
     reset();
@@ -137,20 +143,8 @@ export default function Roles() {
             title="Delete Role"
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                rolesDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    rolesGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -170,7 +164,23 @@ export default function Roles() {
       )
     );
   }, []);
-
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      rolesDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          rolesGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   async function onFormSubmit(data) {
     setLoading(true);
     setIsSubmitting(true);
@@ -241,7 +251,10 @@ export default function Roles() {
                   placeholder="Role Name"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.name && errors.name.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -249,7 +262,11 @@ export default function Roles() {
                 <Form.Control type="text" placeholder="Web" disabled={true} />
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
@@ -267,20 +284,25 @@ export default function Roles() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (

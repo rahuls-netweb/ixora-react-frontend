@@ -31,6 +31,8 @@ import {
 const SideBar = () => {
   const dispatch = useDispatch();
   const [menuCollapse, setMenuCollapse] = useState(false);
+  const [openClass, setOpenClass] = useState(false);
+  // const [openSettings, setOpenSettings] = useState(false);
   const location = useLocation();
   const CurrentRoute = location.pathname;
   // const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
@@ -38,7 +40,6 @@ const SideBar = () => {
     return state.auth;
   });
   const admin = user.user.is_admin;
-
 
   const sideLinks = [
     {
@@ -138,7 +139,7 @@ const SideBar = () => {
           Title: "Category of the candidate",
         },
         {
-          id: 7.10,
+          id: 7.1,
           icon: <MdSettings />,
           route: "/settings/user-rights",
           Title: "User rights",
@@ -169,9 +170,9 @@ const SideBar = () => {
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}
               {menuCollapse ? (
-                <MdOutlineKeyboardArrowLeft />
-              ) : (
                 <MdOutlineKeyboardArrowRight />
+              ) : (
+                <MdOutlineKeyboardArrowLeft />
               )}
             </div>
           </SidebarHeader>
@@ -197,10 +198,10 @@ const SideBar = () => {
                           icon={val.icon}
                           title={<NavLink to={val.route}>{val.Title}</NavLink>}
                           // icon={val.icon}
-                          defaultOpen={true}
-                        // onClick={() => {
-                        //   setActiveSubmenuParent(val.route);
-                        // }}
+                          // defaultOpen={openSettings}
+                          // onClick={(e) => {
+                          //   setOpenSettings(!openSettings);
+                          // }}
                         >
                           {val.subRoutes.map((subRoute, index) => {
                             return (
@@ -223,7 +224,6 @@ const SideBar = () => {
                       </>
                     );
                   }
-
                 }
               })}
             </Menu>

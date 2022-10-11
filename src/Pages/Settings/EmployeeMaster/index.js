@@ -25,6 +25,7 @@ import * as yup from "yup";
 
 import PopUP from "../../../Components/PopUp";
 import Skeleton from "../../../Components/Skeleton";
+import DeletePopUp from "../../../Components/PopUp/DeletePopUP";
 
 const PAGE_MODES = {
   edit: "edit",
@@ -90,6 +91,8 @@ export default function EmployeeMaster() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const [selectedRole, setSelectedRole] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
   const handleShow = (user) => {
     setSelectedRole(user);
     setShow(true);
@@ -171,13 +174,8 @@ export default function EmployeeMaster() {
             <MdDelete
               className={styles.actionIcon}
               onClick={() => {
-                reset();
-                setMode(PAGE_MODES.add);
-                dispatch(
-                  employeeMasterDelete({ id: singleRowData.id }, () =>
-                    dispatch(employeeMasterGetAll())
-                  )
-                );
+                setModalShow(true);
+                setSingleRowData(singleRowData);
               }}
             />
           ) : null}
@@ -197,6 +195,17 @@ export default function EmployeeMaster() {
       )
     );
   }, []);
+
+  const deleteData = () => {
+    reset();
+    setMode(PAGE_MODES.add);
+    dispatch(
+      employeeMasterDelete({ id: singleRowData.id }, () =>
+        dispatch(employeeMasterGetAll())
+      )
+    );
+    setModalShow(false);
+  };
 
   function onFormSubmit(data) {
     setIsSubmitting(true);
@@ -406,7 +415,13 @@ export default function EmployeeMaster() {
           <DataTable columns={columns} rows={employeeMasterList} />
         </div>
       )}
-
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {show && (
         <PopUP show={show} hide={handleClose} size="xl">
           <AddBranchesToUser user={selectedRole} />
