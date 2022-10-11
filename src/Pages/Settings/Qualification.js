@@ -20,6 +20,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import DeletePopUp from "../../Components/PopUp/DeletePopUP";
 
 const initialFormState = {
   name: "",
@@ -31,9 +32,12 @@ const PAGE_MODES = {
 };
 
 const validationSchema = yup.object({
-  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
+  name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
 });
 
 export default function Qualification() {
@@ -43,6 +47,8 @@ export default function Qualification() {
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   function cancelUser() {
     reset();
@@ -90,20 +96,8 @@ export default function Qualification() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                qualificationDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    qualificationGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -124,7 +118,23 @@ export default function Qualification() {
       )
     );
   }, []);
-
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      qualificationDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          qualificationGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   function onFormSubmit(data) {
     setLoading(true);
     setIsSubmitting(true);
@@ -191,10 +201,17 @@ export default function Qualification() {
                   placeholder="Qualification"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.name && errors.name.message}
+                </Form.Label>
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
@@ -212,20 +229,25 @@ export default function Qualification() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (

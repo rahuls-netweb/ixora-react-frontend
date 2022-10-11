@@ -4,7 +4,7 @@ import DataTable from "../../Components/DataTable";
 import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
-import Skeleton from '../../Components/Skeleton'
+import Skeleton from "../../Components/Skeleton";
 import styles from "./rootsettings.module.css";
 import Help, { PhoneText, EmailText } from "../../Components/Help";
 import {
@@ -22,7 +22,7 @@ import {
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-
+import DeletePopUp from "../../Components/PopUp/DeletePopUP";
 
 const initialFormState = {
   name: "",
@@ -37,15 +37,22 @@ const PAGE_MODES = {
   add: "add",
 };
 
-
 const validationSchema = yup.object({
-
-  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
-  email: yup.string().email("Enter a valid Email").required("Enter a valid Email"),
-  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
-    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+  name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
+  email: yup
+    .string()
+    .email("Enter a valid Email")
+    .required("Enter a valid Email"),
+  phone: yup
+    .string()
+    .matches(/^[0-9]*$/, { message: "Enter a valid Phone Number" })
+    .min(10, "Phone range 10-14 digits")
+    .max(14, "Phone range 10-14 digits"),
 });
 
 export default function HeadOffice() {
@@ -56,6 +63,8 @@ export default function HeadOffice() {
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   const { headOfficeList } = useSelector((state) => state.headOffice);
 
@@ -121,20 +130,8 @@ export default function HeadOffice() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                headOfficeDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    headOfficeGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -153,7 +150,23 @@ export default function HeadOffice() {
       )
     );
   }, []);
-
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      headOfficeDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          headOfficeGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   function onFormSubmit(data) {
     setLoading(true);
     setIsSubmitting(true);
@@ -223,11 +236,16 @@ export default function HeadOffice() {
                   placeholder="Head Office Name"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.name && errors.name.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Email <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Email <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Help text={EmailText()} />
                 <Form.Control
                   type="email"
@@ -235,10 +253,15 @@ export default function HeadOffice() {
                   placeholder="Email"
                   {...register("email")}
                 />
-                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.email && errors.email.message}
+                </Form.Label>
               </Form.Group>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Phone Number <span className="reqruiredFields">*</span></Form.Label>
+                <Form.Label>
+                  Phone Number <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Help text={PhoneText()} />
                 <Form.Control
                   type="text"
@@ -247,7 +270,10 @@ export default function HeadOffice() {
                   {...register("phone")}
                   minLength="10"
                 />
-                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.phone && errors.phone.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -260,7 +286,11 @@ export default function HeadOffice() {
                 />
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
@@ -278,25 +308,29 @@ export default function HeadOffice() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
-
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <DataTable columns={columns} rows={headOfficeList} />
         </div>
       )}

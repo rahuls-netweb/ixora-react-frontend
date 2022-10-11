@@ -19,12 +19,12 @@ import {
   getPaginatedRecordNumber,
   resetReactHookFormValues,
 } from "../../utils/helpers";
-
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 import Help, { PhoneText, EmailText } from "../../Components/Help";
+import DeletePopUp from "../../Components/PopUp/DeletePopUP";
 
 const initialFormState = {
   name: "",
@@ -43,15 +43,22 @@ const PAGE_MODES = {
   add: "add",
 };
 
-
 const validationSchema = yup.object({
-
-  name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
-  email: yup.string().email("Enter a valid Email").required("Enter a valid Email"),
-  phone: yup.string().matches(/^[0-9]*$/, { message: 'Enter a valid Phone Number' })
-    .min(10, 'Phone range 10-14 digits').max(14, 'Phone range 10-14 digits'),
+  name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
+  email: yup
+    .string()
+    .email("Enter a valid Email")
+    .required("Enter a valid Email"),
+  phone: yup
+    .string()
+    .matches(/^[0-9]*$/, { message: "Enter a valid Phone Number" })
+    .min(10, "Phone range 10-14 digits")
+    .max(14, "Phone range 10-14 digits"),
 });
 
 export default function BranchMaster() {
@@ -61,6 +68,8 @@ export default function BranchMaster() {
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   function cancelUser() {
     reset();
@@ -141,20 +150,8 @@ export default function BranchMaster() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                branchMasterDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    branchMasterGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -174,9 +171,24 @@ export default function BranchMaster() {
       )
     );
   }, []);
-
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      branchMasterDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          branchMasterGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   function onFormSubmit(data) {
-
     setLoading(true);
     setIsSubmitting(true);
     if (mode === PAGE_MODES.add) {
@@ -246,7 +258,10 @@ export default function BranchMaster() {
                   placeholder="Branch Name"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">  {errors.name && errors.name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.name && errors.name.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -260,7 +275,10 @@ export default function BranchMaster() {
                   placeholder="Email"
                   {...register("email")}
                 />
-                <Form.Label className="errorMessage">  {errors.email && errors.email.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.email && errors.email.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -272,7 +290,10 @@ export default function BranchMaster() {
                   placeholder="Phone"
                   {...register("phone")}
                 />
-                <Form.Label className="errorMessage">  {errors.phone && errors.phone.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.phone && errors.phone.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -295,7 +316,9 @@ export default function BranchMaster() {
                   </option>
                   {headOfficeList.map((headoffice) => {
                     return (
-                      <option key={uuidv4()} value={headoffice.id}>{headoffice.name}</option>
+                      <option key={uuidv4()} value={headoffice.id}>
+                        {headoffice.name}
+                      </option>
                     );
                   })}
                 </Form.Select>
@@ -351,7 +374,7 @@ export default function BranchMaster() {
                   placeholder="Lunch Time"
                   {...register("lunch_time", { required: true })}
                 />
-                <Form.Label className="errorMessage">  </Form.Label>
+                <Form.Label className="errorMessage"> </Form.Label>
               </Form.Group>
             </Col>
 
@@ -377,20 +400,25 @@ export default function BranchMaster() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (

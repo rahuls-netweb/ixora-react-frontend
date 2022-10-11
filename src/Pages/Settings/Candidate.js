@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import DeletePopUp from "../../Components/PopUp/DeletePopUP";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -31,10 +32,12 @@ const PAGE_MODES = {
 };
 
 const validationSchema = yup.object({
-
-  category_name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
+  category_name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
 });
 
 export default function Candidate() {
@@ -44,6 +47,8 @@ export default function Candidate() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const { categoryList } = useSelector((state) => state.category);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   function cancelUser() {
     reset();
@@ -58,7 +63,7 @@ export default function Candidate() {
     reset,
   } = useForm({
     resolver,
-    mode: "onBlur",
+    mode: "onChange",
     defaultValues: initialFormState,
   });
 
@@ -92,20 +97,8 @@ export default function Candidate() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                categoryDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    categoryGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -125,6 +118,23 @@ export default function Candidate() {
     );
   }, []);
 
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      categoryDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          categoryGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   async function onFormSubmit(data) {
     setLoading(true);
     setIsSubmitting(true);
@@ -184,10 +194,17 @@ export default function Candidate() {
                   placeholder="Category Name"
                   {...register("category_name")}
                 />
-                <Form.Label className="errorMessage">  {errors.category_name && errors.category_name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.category_name && errors.category_name.message}
+                </Form.Label>
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
@@ -205,20 +222,25 @@ export default function Candidate() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (

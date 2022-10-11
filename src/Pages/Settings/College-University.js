@@ -21,6 +21,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import DeletePopUp from "../../Components/PopUp/DeletePopUP";
 
 const initialFormState = {
   collage_name: "",
@@ -33,10 +34,12 @@ const PAGE_MODES = {
 };
 
 const validationSchema = yup.object({
-  collage_name: yup.string().required("Enter a valid Name").matches(/^[a-z]/gi, {
-    message: 'Enter a valid Name'
-  }),
-
+  collage_name: yup
+    .string()
+    .required("Enter a valid Name")
+    .matches(/^[a-z]/gi, {
+      message: "Enter a valid Name",
+    }),
 });
 
 export default function HeadOffice() {
@@ -45,6 +48,8 @@ export default function HeadOffice() {
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const [singleRowData, setSingleRowData] = useState();
 
   const { collegeList } = useSelector((state) => state.college);
   const { countryList } = useSelector((state) => state.country);
@@ -101,20 +106,8 @@ export default function HeadOffice() {
           <MdDelete
             className={styles.actionIcon}
             onClick={() => {
-              reset();
-              setLoading(true);
-              setMode(PAGE_MODES.add);
-              dispatch(
-                collegeDelete({ id: singleRowData.id }, () =>
-                  dispatch(
-                    collegeGetAll(
-                      null,
-                      () => setLoading(false),
-                      () => setLoading(false)
-                    )
-                  )
-                )
-              );
+              setModalShow(true);
+              setSingleRowData(singleRowData);
             }}
           />
         </div>
@@ -134,7 +127,23 @@ export default function HeadOffice() {
       )
     );
   }, []);
-
+  const deleteData = () => {
+    reset();
+    setLoading(true);
+    setMode(PAGE_MODES.add);
+    dispatch(
+      collegeDelete({ id: singleRowData.id }, () =>
+        dispatch(
+          collegeGetAll(
+            null,
+            () => setLoading(false),
+            () => setLoading(false)
+          )
+        )
+      )
+    );
+    setModalShow(false);
+  };
   function onFormSubmit(data) {
     setLoading(true);
     setIsSubmitting(true);
@@ -195,7 +204,10 @@ export default function HeadOffice() {
                   placeholder="College Name"
                   {...register("collage_name")}
                 />
-                <Form.Label className="errorMessage">  {errors.collage_name && errors.collage_name.message}</Form.Label>
+                <Form.Label className="errorMessage">
+                  {" "}
+                  {errors.collage_name && errors.collage_name.message}
+                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -209,12 +221,20 @@ export default function HeadOffice() {
                     --Select--
                   </option>
                   {countryList.map((country) => {
-                    return <option key={uuidv4()} value={country.id}>{country.name}</option>;
+                    return (
+                      <option key={uuidv4()} value={country.id}>
+                        {country.name}
+                      </option>
+                    );
                   })}
                 </Form.Select>
               </Form.Group>
             </Col>
-            <Col md={2} className="d-flex justify-content-end" style={{ paddingRight: 0 }}>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
               <Form.Group className={styles.formCareerEnquirieSub2}>
                 <Button
                   type="submit"
@@ -232,20 +252,25 @@ export default function HeadOffice() {
                     "Update"
                   )}
                 </Button>
-                {mode === PAGE_MODES.edit ?
-                  <Button
-                    className="formShowButton"
-                    onClick={cancelUser}
-                  >
+                {mode === PAGE_MODES.edit ? (
+                  <Button className="formShowButton" onClick={cancelUser}>
                     Cancel
-                  </Button> : null}
+                  </Button>
+                ) : null}
               </Form.Group>
             </Col>
           </Row>
         </Container>
       </Form>
+      <DeletePopUp
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        onConfirmed={() => {
+          deleteData();
+        }}
+      />
       {loading ? (
-        <div className="dataTableRow" >
+        <div className="dataTableRow">
           <Skeleton />
         </div>
       ) : (
