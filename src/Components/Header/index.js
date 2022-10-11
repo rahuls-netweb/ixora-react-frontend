@@ -17,6 +17,10 @@ export default function Dashboard() {
     function EditProfile() {
         navigate("/profile");
     }
+    function chooseYourBranch() {
+        navigate("/chooseyourbranch");
+    }
+
     const dispatch = useDispatch();
     const { branchMasterList, auth, currentSelectedBranch } = useSelector((state) => ({
         branchMasterList: state.branchMaster.branchMasterList,
@@ -30,12 +34,14 @@ export default function Dashboard() {
     const UserName = auth.user?.user?.name;
     const UserEmail = auth.user?.user?.email;
 
-    useEffect(() => {
-        dispatch(branchMasterGetAll());
-    }, []);
 
     useEffect(() => {
-        dispatch(getCurrentSelectedBranch(userId));
+        dispatch(branchMasterGetAll());
+        dispatch(getCurrentSelectedBranch(userId, null, (error) => {
+            if (error?.response?.status === 401 && error?.response?.data?.message?.toLowerCase() === 'branch not selected') {
+                chooseYourBranch();
+            }
+        }));
     }, [userId]);
 
     function branchSwitch(e) {
@@ -63,14 +69,15 @@ export default function Dashboard() {
 
                 <Col md={6} lg={4} xl={4} className={styles.adminSection} >
                     <div className={styles.adminSubSection1}>
-                        <Form.Select onChange={branchSwitch} value={currentSelectedBranch?.id}>
+                        <Form.Select onChange={branchSwitch} value={currentSelectedBranch?.id || ""}>
+                            <option value="">---Select Branch---</option>
                             {branchMasterList.map(branch => {
-                                return <option key={branch.id} value={branch.id} >{branch.name}</option>
+                                return <option key={branch.id} onClick={() => branchSwitch(branch.id)} value={branch.id} >{branch.name}</option>
                             })}
                         </Form.Select>
                     </div>
                     <div className={styles.adminSubSection2}>
-                        <label>{UserName}</label>
+                        <label onClick={chooseYourBranch}>{UserName}</label>
 
 
                         <Dropdown>

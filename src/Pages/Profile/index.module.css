@@ -54,3 +54,64 @@
 .uploadBtn:hover {
     box-shadow: 3px 1px 25px #ccc;
 }
+
+.customColumn {
+    display: grid;
+    grid-template-columns: 49% 49%;
+    gap: 12px 30px;
+}
+
+.saveChanges {
+    grid-column: 2/3;
+    display: flex;
+    justify-content: end;
+}
+
+.saveChanges button {
+    width: 30% !important;
+    background: var(--theme-color) !important;
+
+}
+
+.NavTabHeight {
+    height: 85vh !important;
+}
+
+.tabsContent {
+
+    width: 100%;
+
+}
+
+.tabsContent li {
+    margin: 0 10px 0 0;
+}
+
+.tabsContent li button {
+    font-family: var(--Poppins);
+    color: #333333;
+    padding: 10px 0 !important;
+    font-size: 1vw;
+    border: none !important;
+}
+
+
+
+
+/* ////// chooseBranch */
+
+.adminSubSection1 div {
+    border: 1px solid black;
+    width: 150px;
+    padding: 10px 15px;
+}
+
+.adminSubSection1 {
+    display: flex;
+    gap: 12px;
+}
+
+.active {
+    background: var(--theme-color) !important;
+    color: white !important;
+}

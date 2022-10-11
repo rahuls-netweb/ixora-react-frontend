@@ -1,4 +1,4 @@
-import axios from "../../utils/api";
+import axios, { axiosWithActiveBranch } from "../../utils/api";
 import { toast } from "react-toastify";
 import { showErrorMessageFromApi } from "../../utils/common-error";
 
@@ -21,8 +21,8 @@ export const CAREER_GETSINGLE = "CAREER_GETSINGLE";
 
 export const careerGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
-        axios
-            .get("/enquiries/career", {})
+        axiosWithActiveBranch
+            .get("/enquiries/ccid", {})
             .then(function ({ data }) {
                 dispatch({
                     type: CAREER_GETALL,

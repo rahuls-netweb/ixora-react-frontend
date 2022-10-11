@@ -16,6 +16,16 @@ const axiosInstance = axios.create({
   },
 });
 
+export const axiosWithActiveBranch = axios.create({
+  baseURL: BASE_URL,
+  // withCredentials: true,
+  headers: {
+    'Accept': 'application/json',
+    Authorization: `Bearer ${auth?.token}`,
+    'active_branch_id': getLocalStorage('active_branch_id'),
+  },
+});
+
 axiosInstance.interceptors.request.use(function (config) {
   const auth = getLocalStorage("auth");
   config.headers.Authorization =

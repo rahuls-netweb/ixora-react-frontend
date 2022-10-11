@@ -1,5 +1,6 @@
 import axios from "../../utils/api";
 import { toast } from "react-toastify";
+import { setLocalStorage } from '../../utils/localStorage'
 import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const BRANCHMASTER_GETALL = "BRANCHMASTER_GETALL";
@@ -97,6 +98,10 @@ export const branchMasterSwitch =
             .put(`/user/${user.user.id}/switch/branch`, { branch_id: id })
             .then(function ({ data }) {
                 dispatch(getCurrentSelectedBranch(user.user.id));
+                // store the branch id in localstorage
+                setLocalStorage('active_branch_id', id);
+                // console.log(data, 'data hjereer')
+                // branch id is not coming from api 
                 onSuccess && onSuccess();
             })
             .catch(function (err) {
@@ -117,6 +122,6 @@ export const getCurrentSelectedBranch = (userId, onSuccess, onFailure) => (dispa
         })
         .catch(function (err) {
             showErrorMessageFromApi(err);
-            onFailure && onFailure();
+            onFailure && onFailure(err);
         });
 }
