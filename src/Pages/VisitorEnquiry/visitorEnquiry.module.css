@@ -75,22 +75,7 @@
   padding: 10px 30px;
 }
 
-.tabsContent {
-  border-bottom: none !important;
-  width: 100%;
-  margin-bottom: 25px !important;
-  padding-left: 45px !important;
-}
 
-
-.tabsContent li button {
-  border: 1px solid var(--theme-color) !important;
-  border-top-right-radius: 0px !important;
-  border-top-left-radius: 10px !important;
-  border-bottom-right-radius: 10px !important;
-  font-family: var(--Poppins);
-  color: #333333;
-}
 
 .backToCareer {
   display: flex;

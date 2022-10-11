@@ -158,7 +158,7 @@ export default function CardView() {
               <Tabs
                 defaultActiveKey="tentative-from"
                 id="fill-tab-example"
-                className={"tabs-Content " + styles.tabsContent}
+                className="tabs-Content tabsContent"
                 fill
               >
                 <Tab eventKey="tentative-from" title="Tentative From">

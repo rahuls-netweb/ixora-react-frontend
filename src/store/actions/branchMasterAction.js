@@ -1,9 +1,10 @@
-import axios from "../../utils/api";
+import axios, { axiosWithActiveBranch } from "../../utils/api";
 import { toast } from "react-toastify";
 import { setLocalStorage } from '../../utils/localStorage'
 import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const BRANCHMASTER_GETALL = "BRANCHMASTER_GETALL";
+export const GET_BRANCHES_BY_USER = "GET_BRANCHES_BY_USER";
 export const CURRENT_SELECTED_BRANCH = "CURRENT_SELECTED_BRANCH";
 // Posts action
 export const branchMasterCreate =
@@ -97,11 +98,9 @@ export const branchMasterSwitch =
         axios
             .put(`/user/${user.user.id}/switch/branch`, { branch_id: id })
             .then(function ({ data }) {
+                setLocalStorage('active_branch_id', data?.branch?.id || id);
+                console.log(data, 'data data here!')
                 dispatch(getCurrentSelectedBranch(user.user.id));
-                // store the branch id in localstorage
-                setLocalStorage('active_branch_id', id);
-                // console.log(data, 'data hjereer')
-                // branch id is not coming from api 
                 onSuccess && onSuccess();
             })
             .catch(function (err) {
@@ -111,17 +110,34 @@ export const branchMasterSwitch =
     };
 
 export const getCurrentSelectedBranch = (userId, onSuccess, onFailure) => (dispatch) => {
-    axios
-        .get(`/user/${userId}/current/branch`)
+    axiosWithActiveBranch.get(`/user/${userId}/current/branch`)
         .then(function ({ data }) {
             dispatch({
                 type: CURRENT_SELECTED_BRANCH,
                 payload: data.data,
             });
-            onSuccess && onSuccess();
+            onSuccess && onSuccess(data.data);
         })
         .catch(function (err) {
             showErrorMessageFromApi(err);
-            onFailure && onFailure(err);
+            onFailure && onFailure();
         });
 }
+
+
+export const getBranchesByUserId =
+    ({ userId }, onSuccess, onFailure) => async (dispatch) => {
+        axios
+            .get(`/users/${userId}/branches`, {})
+            .then(function ({ data }) {
+                dispatch({
+                    type: GET_BRANCHES_BY_USER,
+                    payload: data.data,
+                });
+                onSuccess && onSuccess();
+            })
+            .catch(function (err) {
+                toast.error(err.response.data.message);
+                onFailure && onFailure();
+            });
+    };

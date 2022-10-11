@@ -9,6 +9,8 @@ const customStyles = {
       marginBottom: 2,
       borderRadius: 5,
       paddingLeft: "15px",
+      fontWeight: "bold",
+      backgroundColor: "var(--table-bg)",
     },
   },
   rows: {

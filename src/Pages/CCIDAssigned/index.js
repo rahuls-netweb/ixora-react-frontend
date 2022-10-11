@@ -174,7 +174,7 @@ export default function CCIDassigned() {
               <Tabs
                 defaultActiveKey="EnquiryForm"
                 id="fill-tab-example"
-                className={"tabs-Content " + styles.tabsContent}
+                className="tabs-Content tabsContent"
                 fill
               >
                 <Tab eventKey="EnquiryForm" title="Enquiry Form">

@@ -30,11 +30,15 @@ export default function CareerEnquiry() {
 
 
   const columns = [
+    // {
+    //   name: "ID",
+    //   selector: (_, index) => {
+    //     return getPaginatedRecordNumber({ page: 1, per_page: 8, index });
+    //   },
+    // },
     {
-      name: "ID",
-      selector: (_, index) => {
-        return getPaginatedRecordNumber({ page: 1, per_page: 8, index });
-      },
+      name: "CCID",
+      selector: (row) => row.ccid,
     },
     {
       name: "Student Name",
@@ -93,6 +97,7 @@ export default function CareerEnquiry() {
     qualificationList: state.qualification.qualificationList,
     careerList: state.career.careerList,
   }));
+
 
 
   useEffect(() => {

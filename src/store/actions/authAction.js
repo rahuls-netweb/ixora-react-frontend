@@ -34,4 +34,5 @@ export const logoutAction = () => (dispatch) => {
     type: ADMIN_LOGIN,
     payload: null,
   });
+  window.location.reload();
 };

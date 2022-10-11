@@ -12,7 +12,7 @@
     gap: 15%;
 }
 
-.tableSkeletonRow:nth-child(even) {
+.tableSkeletonRow:nth-child(odd) {
     background: var(--table-bg);
 }
 

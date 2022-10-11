@@ -7,37 +7,45 @@ import DataTable from "../../Components/DataTable";
 import { useNavigate } from "react-router-dom";
 import { MdRemoveRedEye } from "react-icons/md";
 import { careerGetSingle } from "../../store/actions/careerAction";
+import { admissionGetAll } from "../../store/actions/admissionAction";
 import CardViewTable from "../../Components/CardViewTable";
 import PopUP from "../../Components/PopUp";
 import TestDetailView from "../../Components/TestDetailView";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../../Components/Skeleton";
-
+import { getUndefinedText } from '../../utils/helpers'
 const columns = [
   {
     name: "Coures Name",
-    selector: (row) => row.CouresName,
+    selector: (row) => row.course.course_name,
   },
   {
-    name: "Admission Details",
-    selector: (row) => row.AdmissionDetails,
+    name: "Admission Date",
+    selector: (row) => row.date_of_admission,
   },
   {
     name: "Admission From",
-    selector: (row) => row.AdmissionFrom,
+    selector: (row) => row.date_of_joining,
   },
   {
-    name: "Course Upto",
-    selector: (row) => row.CourseUpto,
+    name: "Course Valid",
+    selector: (row) => row.valid_upto,
   },
   {
     name: "Branch",
-    selector: (row) => row.Branch,
+    selector: (row) => row.branch.name,
   },
   {
     name: "View",
-    selector: (row) => row.View,
+    cell: (singleRowData, index) => (
+      <>
+        <MdRemoveRedEye
+          className={styles.iconView}
+        />
+
+      </>
+    ),
   },
 ];
 const columns2 = [
@@ -100,13 +108,19 @@ export default function CardView() {
 
   const [loading, setLoading] = useState(true);
 
-  const { singleCareerList } = useSelector((state) => ({
+  const { singleCareerList, admissionList } = useSelector((state) => ({
     singleCareerList: state.career.singleCareerList,
+    admissionList: state.admission.admissionList,
   }));
-
+  console.log(admissionList, 'admissionList admissionList');
   useEffect(() => {
     setLoading(true);
     dispatch(careerGetSingle(
+      { id: id },
+      () => setLoading(false),
+      () => setLoading(false)
+    ));
+    dispatch(admissionGetAll(
       { id: id },
       () => setLoading(false),
       () => setLoading(false)
@@ -181,7 +195,7 @@ export default function CardView() {
               <Tabs
                 defaultActiveKey="tentative-from"
                 id="fill-tab-example"
-                className={"tabs-Content " + styles.tabsContent}
+                className="tabs-Content tabsContent"
                 fill
               >
                 <Tab eventKey="tentative-from" title="Tentative From">
@@ -192,68 +206,68 @@ export default function CardView() {
                         <Skeleton />
                       </div>
                     ) : (
-                      <div className="dataTableRow" >
+                      <div className="dataTableRow1" >
                         <Table className={styles.tablecardView}>
                           <tr>
                             <td
-                              className={styles.tablecardViewCustomCol}
+                              className="text-center"
                               rowSpan={3}
                               colSpan={2}
                             >
                               <img src="/img/Image8.png" alt="Image8" />
                             </td>
-                            <td>Date of Birth</td>
-                            <td>{singleCareerList.dob}</td>
+                            <td className={styles.columnHeader}>Date of Birth</td>
+                            <td>{getUndefinedText(singleCareerList.dob)}</td>
                           </tr>
                           <tr>
-                            <td>Passport Number</td>
-                            <td>{singleCareerList.passport_number}</td>
+                            <td className={styles.columnHeader}>Passport Number</td>
+                            <td>{getUndefinedText(singleCareerList.passport_number)}</td>
                           </tr>
                           <tr>
-                            <td>Current Course</td>
-                            <td>{singleCareerList.course_id}</td>
+                            <td className={styles.columnHeader}>Current Course</td>
+                            <td>{getUndefinedText(singleCareerList.course_id)}</td>
                           </tr>
                           <tr>
-                            <td>Name</td>
+                            <td className={styles.columnHeader}>Name</td>
                             <td>{singleCareerList.first_name + " " + singleCareerList.last_name}</td>
-                            <td>Admission By</td>
-                            <td>{singleCareerList.admission_by}</td>
+                            <td className={styles.columnHeader}>Admission By</td>
+                            <td>{getUndefinedText(singleCareerList.admission_by)}</td>
                           </tr>
                           <tr>
-                            <td>SID</td>
-                            <td>{singleCareerList.sid}</td>
-                            <td>Current Batch</td>
-                            <td>{singleCareerList.branch_name}</td>
+                            <td className={styles.columnHeader}>SID</td>
+                            <td>{getUndefinedText(singleCareerList.sid)}</td>
+                            <td className={styles.columnHeader}>Current Batch</td>
+                            <td>{getUndefinedText(singleCareerList.branch_name)}</td>
                           </tr>
                           <tr>
-                            <td>Date of Admission</td>
-                            <td>{singleCareerList.date_of_admission}</td>
-                            <td>Shifted to</td>
+                            <td className={styles.columnHeader}>Date of Admission</td>
+                            <td>{getUndefinedText(singleCareerList.date_of_admission)}</td>
+                            <td className={styles.columnHeader}>Shifted to</td>
                             <td>####</td>
                           </tr>
                           <tr>
-                            <td>Date of Joining</td>
-                            <td>{singleCareerList.date_of_joining}</td>
-                            <td>Course Upgrade</td>
-                            <td>{singleCareerList.course_upgrade}</td>
+                            <td className={styles.columnHeader}>Date of Joining</td>
+                            <td>{getUndefinedText(singleCareerList.date_of_joining)}</td>
+                            <td className={styles.columnHeader}>Course Upgrade</td>
+                            <td>{getUndefinedText(singleCareerList.course_upgrade)}</td>
                           </tr>
                           <tr>
-                            <td>Valid Upto</td>
-                            <td>{singleCareerList.valid_upto}</td>
-                            <td>Current Course Discount</td>
-                            <td>{singleCareerList.course_discount}</td>
+                            <td className={styles.columnHeader}>Valid Upto</td>
+                            <td>{getUndefinedText(singleCareerList.valid_upto)}</td>
+                            <td className={styles.columnHeader}>Current Course Discount</td>
+                            <td>{getUndefinedText(singleCareerList.course_discount)}</td>
                           </tr>
                           <tr>
-                            <td>Branch</td>
-                            <td>{singleCareerList.branch_name}</td>
-                            <td>Email ID</td>
-                            <td>{singleCareerList.email}</td>
+                            <td className={styles.columnHeader}>Branch</td>
+                            <td>{getUndefinedText(singleCareerList.branch_name)}</td>
+                            <td className={styles.columnHeader}>Email ID</td>
+                            <td>{getUndefinedText(singleCareerList.email)}</td>
                           </tr>
                           <tr>
-                            <td>Gender</td>
-                            <td>{singleCareerList.gender}</td>
-                            <td>Father Name</td>
-                            <td>{singleCareerList.father_name}</td>
+                            <td className={styles.columnHeader}>Gender</td>
+                            <td>{getUndefinedText(singleCareerList.gender)}</td>
+                            <td className={styles.columnHeader}>Father Name</td>
+                            <td>{getUndefinedText(singleCareerList.father_name)}</td>
                           </tr>
                         </Table>
                       </div>
@@ -269,17 +283,10 @@ export default function CardView() {
                         <h4>List of Past Admissions</h4>
                       </div>
                     </div>
-                    <div className="dataTableRow">
+                    <div className="dataTableRow1">
                       <DataTable
                         columns={columns}
-                        rows={[
-                          ...data,
-                          ...data,
-                          ...data,
-                          ...data,
-                          ...data,
-                          ...data,
-                        ]}
+                        rows={admissionList}
                       />
                     </div>
                   </div>

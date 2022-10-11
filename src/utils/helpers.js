@@ -18,3 +18,5 @@ export function resetReactHookFormValues(values = {}, setValue = () => { }) {
     setValue(key, value, resetFormOptions)
   })
 }
+
+export const getUndefinedText = text => text || 'N/A';

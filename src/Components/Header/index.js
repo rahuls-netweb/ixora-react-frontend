@@ -7,7 +7,7 @@ import { Container, Row, Col, Form, Dropdown } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import { BsPencilSquare } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
-import { branchMasterGetAll, branchMasterSwitch, getCurrentSelectedBranch } from "../../store/actions/branchMasterAction";
+import { branchMasterSwitch, getBranchesByUserId, getCurrentSelectedBranch } from "../../store/actions/branchMasterAction";
 
 import { logoutAction } from "../../store/actions/authAction";
 import { useNavigate } from "react-router-dom";
@@ -22,8 +22,8 @@ export default function Dashboard() {
     }
 
     const dispatch = useDispatch();
-    const { branchMasterList, auth, currentSelectedBranch } = useSelector((state) => ({
-        branchMasterList: state.branchMaster.branchMasterList,
+    const { currentBranches, auth, currentSelectedBranch } = useSelector((state) => ({
+        currentBranches: state.branchMaster.currentBranches,
         auth: state.auth,
         currentSelectedBranch: state.branchMaster.currentSelectedBranch
     }));
@@ -36,10 +36,10 @@ export default function Dashboard() {
 
 
     useEffect(() => {
-        dispatch(branchMasterGetAll());
-        dispatch(getCurrentSelectedBranch(userId, null, (error) => {
-            if (error?.response?.status === 401 && error?.response?.data?.message?.toLowerCase() === 'branch not selected') {
-                // chooseYourBranch();
+        dispatch(getBranchesByUserId({ userId }));
+        dispatch(getCurrentSelectedBranch(userId, (selectedBranch) => {
+            if (Array.isArray(selectedBranch) && selectedBranch.length === 0) {
+                chooseYourBranch();
             }
         }));
     }, [userId]);
@@ -71,7 +71,7 @@ export default function Dashboard() {
                     <div className={styles.adminSubSection1}>
                         <Form.Select onChange={branchSwitch} value={currentSelectedBranch?.id || ""}>
                             <option value="">---Select Branch---</option>
-                            {branchMasterList.map(branch => {
+                            {currentBranches.map(branch => {
                                 return <option key={branch.id} onClick={() => branchSwitch(branch.id)} value={branch.id} >{branch.name}</option>
                             })}
                         </Form.Select>
@@ -96,7 +96,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
                                     <div className={styles.adminProfiles} onClick={EditProfile}><BsPencilSquare /> Edit Profile</div>
-                                    <div className={styles.adminProfiles} onClick={logOut} ><MdOutlineLogout />Logout</div>
+                                    <div className={styles.adminProfiles} onClick={logOut} ><MdOutlineLogout style={{ fontSize: 18 }} />Logout</div>
                                 </Dropdown.Item>
 
                             </Dropdown.Menu>

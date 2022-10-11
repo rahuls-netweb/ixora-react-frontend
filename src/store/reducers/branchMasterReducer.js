@@ -1,8 +1,9 @@
-import { BRANCHMASTER_GETALL, CURRENT_SELECTED_BRANCH } from "../actions/branchMasterAction";
+import { BRANCHMASTER_GETALL, CURRENT_SELECTED_BRANCH, GET_BRANCHES_BY_USER } from "../actions/branchMasterAction";
 
 const initialState = {
     branchMasterList: [],
     currentSelectedBranch: null,
+    currentBranches: [],
 };
 
 const branchMasterReducer = (state = initialState, action) => {
@@ -17,6 +18,11 @@ const branchMasterReducer = (state = initialState, action) => {
                 ...state,
                 currentSelectedBranch: action.payload,
             };
+        case GET_BRANCHES_BY_USER:
+            return {
+                ...state,
+                currentBranches: action.payload,
+            }
         default:
             return state;
     }

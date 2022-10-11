@@ -45,8 +45,7 @@ export default function Profile() {
                             <Tabs
                                 defaultActiveKey="details"
                                 id="uncontrolled-tab-example"
-                                className={`anotherTabContent ${styles.tabsContent}`}
-                            >
+                                className="anotherTabContent">
                                 <Tab eventKey="details" title="Basic Details">
                                     <Form>
                                         <Container fluid>

@@ -7,32 +7,30 @@ import styles from './index.module.css'
 import { useSelector, useDispatch } from "react-redux";
 import { branchMasterGetAll, branchMasterSwitch } from "../../store/actions/branchMasterAction";
 
-
-
-
-
-
-
 export default function ChooseBranch() {
     const dispatch = useDispatch();
-    const { branchMasterList, auth } = useSelector((state) => ({
+    const { branchMasterList, auth, currentSelectedBranch } = useSelector((state) => ({
         branchMasterList: state.branchMaster.branchMasterList,
         auth: state.auth,
+        currentSelectedBranch: state.branchMaster.currentSelectedBranch
     }));
     // const branchList = auth.user.user.branches[0];
     // console.log(auth.user.user.branches, "branchList");
 
-    const [currentBranch, setCurrentBranch] = useState("");
-
+    // const [currentBranch, setCurrentBranch] = useState("");
+    useEffect(() => {
+        console.log('Mounted~!!')
+    }, []);
     useEffect(() => {
         dispatch(branchMasterGetAll());
     }, []);
 
     function branchSwitch(id) {
         dispatch(branchMasterSwitch(id, () => {
-            setCurrentBranch(id)
+            // show message
         }));
     }
+    console.log(currentSelectedBranch, 'currentSelectedBranch')
     return (
         <Layout>
 
@@ -44,7 +42,7 @@ export default function ChooseBranch() {
                             <div className={styles.adminSubSection1}>
                                 {branchMasterList.map(branch => {
                                     return <div
-                                        className={currentBranch === branch.id ? styles.active : ""}
+                                        className={currentSelectedBranch.id === branch.id ? styles.active : ""}
                                         onClick={() => branchSwitch(branch.id)}
                                         key={branch.id} > {branch.name}</div>
                                 })}
@@ -58,6 +56,6 @@ export default function ChooseBranch() {
             </Container >
 
 
-        </Layout >
+        </Layout>
     );
 }

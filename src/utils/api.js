@@ -8,13 +8,14 @@ if (auth) {
   auth = JSON.parse(auth);
 }
 
-const requestInterceptor = function (config, ...additionalHeaders) {
+const requestInterceptor = function (config, additionalHeaders) {
   const auth = getLocalStorage("auth");
   if (additionalHeaders) {
     Object.entries(additionalHeaders).forEach(([headerKey, headerValue]) => {
       config.headers[headerKey] = headerValue;
     });
   }
+
   config.headers.Authorization =
     auth && auth.token ? `Bearer ${auth.token}` : "";
   return config;
@@ -67,11 +68,15 @@ axiosInstance.interceptors.response.use(
   responseFailureInterceptor
 );
 
-axiosWithActiveBranch.interceptors.request.use(requestInterceptor);
+axiosWithActiveBranch.interceptors.request.use(
+  (config) => {
+    return requestInterceptor(config, {
+      active_branch_id: getLocalStorage("active_branch_id")
+    });
+  });
 
 axiosWithActiveBranch.interceptors.response.use(
-  (config) =>
-    responseSuccessInterceptor(config, getLocalStorage("current_branch_id")),
+  responseSuccessInterceptor,
   responseFailureInterceptor
 );
 

@@ -7,7 +7,7 @@ const CustomTabs = ({ tabs = [], activeKey = '', onTabSelect, children }) => {
         <Tabs
             defaultActiveKey={activeKey}
             id={`tabs-${activeKey}`}
-            className={"tabs-Content " + styles.tabsContent}
+            className="tabs-Content tabsContent"
             fill
             activeKey={activeKey}
             onSelect={(key) => {

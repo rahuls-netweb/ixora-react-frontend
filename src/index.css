@@ -52,7 +52,11 @@ code {
   padding-left: 15px;
 }
 
-.dataTableRow .rdt_TableRow:nth-child(odd) {
+.dataTableRow1 {
+  padding-left: 45px;
+}
+
+.dataTableRow .rdt_TableRow:nth-child(even) {
   background: var(--table-bg);
 }
 
@@ -110,8 +114,46 @@ input:disabled {
   padding: 10px 25px;
 }
 
-.anotherTabs li button.active {
-  background: #1C4E80 !important;
-  color: white !important;
+
+
+.tabsContent {
+  border-bottom: none !important;
+  width: 100%;
+  margin-bottom: 25px !important;
+  padding-left: 45px !important;
+}
+
+.anotherTabContent {
+  width: 100%;
+  margin-bottom: 25px !important;
+}
+
+.tabsContent li,
+.anotherTabContent li {
+  margin: 0 10px 0 0;
+}
+
+.tabsContent li button {
+  border: 1px solid var(--theme-color) !important;
+  border-top-right-radius: 0px !important;
+  border-top-left-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
+  font-family: var(--Poppins);
+  color: #333333;
+  padding: 10px 0 !important;
+}
+
+.anotherTabContent li button {
+  border: none !important;
+  font-family: var(--Poppins);
+  color: #333333;
+  padding: 10px 0 !important;
+  margin-right: 10px;
+}
+
+.anotherTabContent li button.active {
+  color: var(--theme-color) !important;
+  border: none !important;
+  border-bottom: 3px solid var(--theme-color) !important;
   font-family: var(--Inter);
 }
