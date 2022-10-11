@@ -39,7 +39,7 @@ export default function Dashboard() {
         dispatch(branchMasterGetAll());
         dispatch(getCurrentSelectedBranch(userId, null, (error) => {
             if (error?.response?.status === 401 && error?.response?.data?.message?.toLowerCase() === 'branch not selected') {
-                chooseYourBranch();
+                // chooseYourBranch();
             }
         }));
     }, [userId]);
