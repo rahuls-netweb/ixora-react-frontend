@@ -12,7 +12,7 @@ import rolesReducer from "./rolesReducer";
 import careerReducer from "./careerReducer";
 import admissionReducer from "./admissionReducer";
 import testDeatilReducer from "./testDetailReducer";
-
+import mockupReducer from "./mockupReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -28,6 +28,7 @@ const rootReducer = combineReducers({
   career: careerReducer,
   admission: admissionReducer,
   testDeatil: testDeatilReducer,
+  mockup: mockupReducer,
 });
 
 export default rootReducer;
