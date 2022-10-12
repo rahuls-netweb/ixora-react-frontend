@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { MdRemoveRedEye } from "react-icons/md";
 import { careerGetSingle } from "../../store/actions/careerAction";
 import { admissionGetAll } from "../../store/actions/admissionAction";
+import { testDetailGetAll } from "../../store/actions/testDetailAction";
 import CardViewTable from "../../Components/CardViewTable";
 import PopUP from "../../Components/PopUp";
 import TestDetailView from "../../Components/TestDetailView";
@@ -51,23 +52,30 @@ const columns = [
 const columns2 = [
   {
     name: "Test type",
-    selector: (row) => row.Testtype,
+    selector: (row) => row.type,
   },
   {
     name: "Test Date",
-    selector: (row) => row.TestDate,
+    selector: (row) => row.test_date,
   },
   {
     name: "Test result date",
-    selector: (row) => row.TestResultDate,
+    selector: (row) => "N/A",
   },
   {
     name: "Branch",
-    selector: (row) => row.Branch,
+    selector: (row) => row.branch.name,
   },
   {
     name: "View",
-    selector: (row) => row.View,
+    cell: (singleRowData, index) => (
+      <>
+        <MdRemoveRedEye
+          className={styles.iconView}
+        />
+
+      </>
+    ),
   },
 ];
 const columns3 = [
@@ -108,11 +116,13 @@ export default function CardView() {
 
   const [loading, setLoading] = useState(true);
 
-  const { singleCareerList, admissionList } = useSelector((state) => ({
+  const { singleCareerList, admissionList, testDetailList } = useSelector((state) => ({
     singleCareerList: state.career.singleCareerList,
     admissionList: state.admission.admissionList,
+    testDetailList: state.testDeatil.testDetailList,
+
   }));
-  console.log(admissionList, 'admissionList admissionList');
+  console.log(testDetailList, 'testDetailList testDetailList');
   useEffect(() => {
     setLoading(true);
     dispatch(careerGetSingle(
@@ -121,6 +131,11 @@ export default function CardView() {
       () => setLoading(false)
     ));
     dispatch(admissionGetAll(
+      { id: id },
+      () => setLoading(false),
+      () => setLoading(false)
+    ));
+    dispatch(testDetailGetAll(
       { id: id },
       () => setLoading(false),
       () => setLoading(false)
@@ -301,14 +316,7 @@ export default function CardView() {
                     <div className="dataTableRow">
                       <DataTable
                         columns={columns2}
-                        rows={[
-                          ...data2,
-                          ...data2,
-                          ...data2,
-                          ...data2,
-                          ...data2,
-                          ...data2,
-                        ]}
+                        rows={testDetailList}
                       />
                     </div>
                   </div>
