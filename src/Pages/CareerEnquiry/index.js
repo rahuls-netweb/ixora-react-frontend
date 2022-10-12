@@ -5,7 +5,7 @@ import styles from "./careerEnquiry.module.css";
 import DataTable from "../../Components/DataTable";
 import PopUP from "../../Components/PopUp";
 import { MdRemoveRedEye } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -66,12 +66,11 @@ export default function CareerEnquiry() {
       name: "View",
       cell: (singleRowData, index) => (
         <>
-          <MdRemoveRedEye
-            className={styles.iconView}
-            onClick={() => {
-              navigate(`/career-enquiry/${singleRowData.id}`);
-            }}
-          />
+          <Link to={`/career-enquiry/${singleRowData.id}`} target="_blank">
+            <MdRemoveRedEye
+              className={styles.iconView}
+            />
+          </Link>
           <a className={styles.assignButton} onClick={() => handleShow(singleRowData)}>
             Assign
           </a>

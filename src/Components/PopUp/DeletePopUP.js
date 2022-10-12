@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, Modal, CloseButton } from "react-bootstrap";
+import { Container, Row, Col, Button, Modal, CloseButton } from "react-bootstrap";
 import styles from "./popUp.module.css";
+import { TiDeleteOutline } from 'react-icons/ti'
 
 export default function DeletePopUp(props) {
   return (
@@ -17,19 +18,30 @@ export default function DeletePopUp(props) {
           onClick={props.onHide}
           className={styles.formCloseButton}
         />
-        {props.children}
-        <h2>Are You Sure</h2>
-        <br />
-        <h5>
-          Do you really want to delete this record. This process cannot be
-          undone.
-        </h5>
+        <Container fluid>
+          <Row>
+
+            <Col md={12} className="text-center">
+              <TiDeleteOutline className={styles.formDeleteButton} />
+              <h2 className={styles.formConfirmH2} >Are You Sure?</h2>
+              <h5 className={styles.formConfirmH5}>
+                Do you really want to delete this record. This process cannot be
+                undone.
+              </h5>
+            </Col>
+            <Col md={12}>
+              <Button onClick={props.onHide}>Cancel</Button>
+              <Button onClick={props.onConfirmed}>Confirm</Button>
+            </Col>
+          </Row>
+        </Container>
+
+
+
+
       </Modal.Body>
 
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Cancel</Button>
-        <Button onClick={props.onConfirmed}>Confirm</Button>
-      </Modal.Footer>
+
     </Modal>
   );
 }

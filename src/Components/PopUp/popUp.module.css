@@ -10,3 +10,20 @@
     background-color: white !important;
     background-size: 12px !important;
 }
+
+.formDeleteButton {
+    font-size: 100px;
+    color: #F15E5E;
+}
+
+.formConfirmH2 {
+    color: #636363;
+    font-size: 25px;
+    margin: 20px 0 30px 0 !important;
+}
+
+.formConfirmH5 {
+    color: #636363;
+    font-size: 16px;
+    margin: 20px 0 30px 0 !important;
+}
