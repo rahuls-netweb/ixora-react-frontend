@@ -42,13 +42,16 @@
   width: 43px;
   padding: 0px 0px 0px 3px;
 }
-
-.sidebarHeader .pro-sidebar-inner {
-  background: var(--white-color) !important;
+.sidebarHeader{
+  /* background: var(--white-color) ; */
   box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15);
   border-radius: 15px;
-  padding: 10px;
+
   border: 1px solid var(--border-color);
+}
+.sidebarHeader .pro-sidebar-inner {
+  background: transparent ;
+  padding: 10px;
 }
 
 .sidebarHeader .pro-sidebar-inner .pro-sidebar-layout {

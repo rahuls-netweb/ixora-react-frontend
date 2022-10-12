@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutAction } from "../../store/actions/authAction";
@@ -32,8 +32,9 @@ const SideBar = () => {
   const dispatch = useDispatch();
   const [menuCollapse, setMenuCollapse] = useState(false);
   const [openClass, setOpenClass] = useState(false);
-  // const [openSettings, setOpenSettings] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const CurrentRoute = location.pathname;
   // const [activeSubmenuParent, setActiveSubmenuParent] = useState(true);
   const { user } = useSelector((state) => {
@@ -163,7 +164,13 @@ const SideBar = () => {
   };
   return (
     <>
-      <div className="sidebarHeader">
+      {console.log(menuCollapse, "menu collapse")}
+      <div
+        className="sidebarHeader"
+        style={{
+          backgroundColor: menuCollapse ? "#1C4E80" : "white",
+        }}
+      >
         {/* collapsed props to change menu size using menucollapse state */}
         <ProSidebar collapsed={menuCollapse}>
           <SidebarHeader>
@@ -196,9 +203,19 @@ const SideBar = () => {
                         <SubMenu
                           className="submenuContent"
                           icon={val.icon}
-                          title={<NavLink to={val.route}>{val.Title}</NavLink>}
+                          title={val.Title}
+                          onClick={() => {
+                            setOpenSettings(!openSettings);
+                            if (CurrentRoute === "/settings/headoffice") {
+                              setOpenSettings(true);
+                            }
+                            console.log(CurrentRoute, "current");
+                            if (!openSettings) {
+                              navigate("/settings/headoffice");
+                            }
+                          }}
                           // icon={val.icon}
-                          // defaultOpen={openSettings}
+                          defaultOpen={openSettings}
                           // onClick={(e) => {
                           //   setOpenSettings(!openSettings);
                           // }}
