@@ -10,97 +10,44 @@ import { careerGetSingle } from "../../store/actions/careerAction";
 import { admissionGetAll } from "../../store/actions/admissionAction";
 import { testDetailGetAll } from "../../store/actions/testDetailAction";
 import { mockupGetAll } from "../../store/actions/mockupAction";
-import CardViewTable from "../../Components/CardViewTable";
+import ViewAdmissionTable from "./ViewAdmissionTable";
+import ViewTestDetailTable from "./ViewTestDetailTable";
 import PopUP from "../../Components/PopUp";
 import TestDetailView from "../../Components/TestDetailView";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../../Components/Skeleton";
 import { getUndefinedText } from "../../utils/helpers";
-const columns = [
-  {
-    name: "Coures Name",
-    selector: (row) => row.course.course_name,
-  },
-  {
-    name: "Admission Date",
-    selector: (row) => row.date_of_admission,
-  },
-  {
-    name: "Admission From",
-    selector: (row) => row.date_of_joining,
-  },
-  {
-    name: "Course Valid",
-    selector: (row) => row.valid_upto,
-  },
-  {
-    name: "Branch",
-    selector: (row) => row.branch.name,
-  },
-  {
-    name: "View",
-    cell: (singleRowData, index) => (
-      <>
-        <MdRemoveRedEye className={styles.iconView} />
-      </>
-    ),
-  },
-];
-const columns2 = [
-  {
-    name: "Test type",
-    selector: (row) => row.type,
-  },
-  {
-    name: "Test Date",
-    selector: (row) => row.test_date,
-  },
-  {
-    name: "Test result date",
-    selector: (row) => "N/A",
-  },
-  {
-    name: "Branch",
-    selector: (row) => row.branch.name,
-  },
-  {
-    name: "View",
-    cell: (singleRowData, index) => (
-      <>
-        <MdRemoveRedEye className={styles.iconView} />
-      </>
-    ),
-  },
-];
+
+
 const columns3 = [
   {
     name: "Mock test date",
-    selector: (row) => row.exams[0].test_date,
+    selector: (row) => row.date,
   },
   {
     name: "Enrollment",
-    selector: (row) => row.mother_name,
+    selector: (row) => "N/A",
   },
   {
     name: "Scores in listening",
-    selector: (row) => row.mother_name,
+    selector: (row) => row.listening,
   },
   {
     name: "Scores in Speaking",
-    selector: (row) => row.mother_name,
+    selector: (row) => row.speaking,
   },
   {
     name: "Scores in Writing",
-    selector: (row) => row.mother_name,
+    selector: (row) => row.writing,
   },
   {
     name: "Scores in Reading",
-    selector: (row) => row.mother_name,
+    selector: (row) => row.reading,
   },
   {
     name: "Overall  Scorse",
-    selector: (row) => row.mother_name,
+    selector: (row) => row.overall,
   },
 ];
 
@@ -117,7 +64,8 @@ export default function CardView() {
       testDetailList: state.testDeatil.testDetailList,
       mockupList: state.mockup.mockupList,
     }));
-  console.log(mockupList, "mockupList mockupList");
+  const mockAllList = mockupList.mocks;
+
   useEffect(() => {
     setLoading(true);
     dispatch(
@@ -153,44 +101,82 @@ export default function CardView() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+  const [selectAdmission, setSelectAdmission] = useState(null);
+  const handleShow = (admission) => {
+    setSelectAdmission(admission);
+    setShow(true);
+  };
+
 
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
-  const handleShow1 = () => setShow1(true);
-  const data = [
+
+  const [selectTestDetail, setSelectTestDetail] = useState(null);
+  const handleShow1 = (testDetail) => {
+    setSelectTestDetail(testDetail);
+    setShow1(true);
+  };
+
+  const columns = [
     {
-      ID: 1,
-      CouresName: "PTE",
-      AdmissionDetails: "Mon Aug 01 2022",
-      AdmissionFrom: "Mon Aug 01 2022",
-      CourseUpto: "Mon Aug 01 2022",
-      Branch: "Amritsar",
-      View: <MdRemoveRedEye onClick={handleShow} className={styles.iconView} />,
+      name: "Coures Name",
+      selector: (row) => row.course.course_name,
     },
-  ];
-  const data2 = [
     {
-      ID: 1,
-      Testtype: "PTE",
-      TestDate: "Mon Aug 01 2022",
-      TestResultDate: "Mon Aug 01 2022",
-      Branch: "Amritsar",
-      View: (
-        <MdRemoveRedEye onClick={handleShow1} className={styles.iconView} />
+      name: "Admission Date",
+      selector: (row) => row.date_of_admission,
+    },
+    {
+      name: "Admission From",
+      selector: (row) => row.date_of_joining,
+    },
+    {
+      name: "Course Valid",
+      selector: (row) => row.valid_upto,
+    },
+    {
+      name: "Branch",
+      selector: (row) => row.branch.name,
+    },
+    {
+      name: "View",
+      cell: (singleRowData, index) => (
+        <>
+          <MdRemoveRedEye className={styles.iconView}
+            onClick={() => handleShow(singleRowData)}
+
+          />
+        </>
       ),
     },
   ];
-  const data3 = [
+
+  const columns2 = [
     {
-      ID: 1,
-      MockTestDate: "Mon Aug 01 2022",
-      Enrollment: "#1298287",
-      ScoresListening: "xyz",
-      ScoreSpeaking: "xyz",
-      ScoreWriting: "45%",
-      ScoreReading: "45%",
-      OverallScorse: "45%",
+      name: "Test type",
+      selector: (row) => row.type,
+    },
+    {
+      name: "Test Date",
+      selector: (row) => row.test_date,
+    },
+    {
+      name: "Test result date",
+      selector: (row) => "N/A",
+    },
+    {
+      name: "Branch",
+      selector: (row) => row.branch.name,
+    },
+    {
+      name: "View",
+      cell: (singleRowData, index) => (
+        <>
+          <MdRemoveRedEye className={styles.iconView}
+            onClick={() => handleShow1(singleRowData)} />
+        </>
+      ),
     },
   ];
   return (
@@ -198,7 +184,7 @@ export default function CardView() {
       <Container fluid>
         <Row>
           <Col md={12}>
-            <div className={styles.backToCareer}>
+            {/* <div className={styles.backToCareer}>
               <FaArrowLeft
                 className={styles.backToCareerIcon}
                 onClick={() => {
@@ -212,7 +198,7 @@ export default function CardView() {
               >
                 Back to career enquiry
               </span>
-            </div>
+            </div> */}
             <div className={styles.cardview}>
               <Tabs
                 defaultActiveKey="tentative-from"
@@ -377,7 +363,7 @@ export default function CardView() {
                       </div>
                     </div>
                     <div className="dataTableRow">
-                      <DataTable columns={columns3} rows={[mockupList]} />
+                      <DataTable columns={columns3} rows={mockAllList} />
                     </div>
                   </div>
                 </Tab>
@@ -388,10 +374,11 @@ export default function CardView() {
       </Container>
 
       <PopUP show={show} hide={handleClose} size="lg">
-        <CardViewTable />
+        <ViewAdmissionTable admission={selectAdmission} />
       </PopUP>
+
       <PopUP show={show1} hide={handleClose1} size="lg">
-        <TestDetailView />
+        <ViewTestDetailTable testDetail={selectTestDetail} />
       </PopUP>
     </Layout>
   );

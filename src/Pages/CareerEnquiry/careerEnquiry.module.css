@@ -73,6 +73,7 @@
   border: 1px solid var(--border-color);
   border-radius: 10px;
   padding: 10px 30px;
+  min-height: 85vh;
 }
 
 
@@ -102,11 +103,36 @@ td.columnHeader {
 }
 
 td:not(.columnHeader) {
-
   font-weight: 600;
   color: #adadad;
 }
 
+
+
+
+/*            ViewAdmissionTable         */
+
+.tablecardViewMain {
+  padding-left: 60px;
+}
+
+.tablecardView {
+  margin-top: 60px;
+}
+
+.tablecardViewCustomCol {
+  text-align: center;
+  position: relative;
+}
+
+
+.tablecardView tr td {
+  width: 25%;
+  font-family: var(--Poppins);
+  color: #333333;
+
+  font-size: 14px;
+}
 
 
 
@@ -127,12 +153,6 @@ td:not(.columnHeader) {
 
 
 /* CareerEnquiry CarView  Page */
-.cardview {
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  padding: 10px 30px;
-}
-
 
 
 
@@ -157,15 +177,11 @@ td:not(.columnHeader) {
   letter-spacing: 0.2px;
 }
 
-.customColumn {
+.customColumn2 {
   display: flex;
-  padding-right: 0 !important;
-  gap: 13px;
+  gap: 10px;
 }
 
-.divDivision {
-  width: 23%;
-}
 
 .divDivision1 {
   width: 23%;
@@ -296,4 +312,29 @@ td:not(.columnHeader) {
 .customBranchCol {
   margin-bottom: 20px;
 
+}
+
+.admissionDetails {
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--light-grey-color);
+  padding: 0 0 15px 0 !important;
+}
+
+.admissionDetails h6 {
+  font-size: 24px;
+}
+
+.tableAdmissionDetail td {
+  border: none !important;
+  width: 50%;
+  padding: 12px 15px !important;
+}
+
+.tableAdmissionDetail td:nth-child(odd) {
+  font-weight: 600;
+  color: #333333;
+}
+
+.tableAdmissionDetail td:nth-child(even) {
+  color: #adadad !important;
 }

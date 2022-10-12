@@ -116,8 +116,8 @@ export default function CareerEnquiry() {
       <Form>
         <Container fluid>
           <Row>
-            <Col md={12} className={styles.customColumn}>
-              <Form.Group className={styles.divDivision}>
+            <Col md={12} className={styles.customColumn2}>
+              {/* <Form.Group className={styles.divDivision}>
                 <Form.Label>Head Office</Form.Label>
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
@@ -136,14 +136,18 @@ export default function CareerEnquiry() {
                     return <option key={branch.id} value={branch.id}>{branch.name}</option>
                   })}
                 </Form.Select>
-              </Form.Group>
+              </Form.Group> */}
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Date</Form.Label>
+                <Form.Label>Date From</Form.Label>
                 <Form.Control type="date" />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
+                <Form.Label>Date To</Form.Label>
+                <Form.Control type="date" />
+              </Form.Group>
+              {/* <Form.Group className={styles.divDivision}>
                 <Form.Label>Country</Form.Label>
                 <Form.Select defaultValue={""}>
                   <option value="" disabled>--Select--</option>
@@ -161,7 +165,7 @@ export default function CareerEnquiry() {
                     return <option key={qualification.id} value={qualification.id}>{qualification.name}</option>
                   })}
                 </Form.Select>
-              </Form.Group>
+              </Form.Group> */}
             </Col>
           </Row>
         </Container>

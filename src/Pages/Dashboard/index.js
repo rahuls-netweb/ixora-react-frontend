@@ -1,56 +1,20 @@
 import Layout from "../../Components/Layout";
 import { Container, Row, Col } from "react-bootstrap";
 import styles from "./dashboard.module.css";
-import { MdDashboard } from "react-icons/md";
+// import { MdDashboard } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
-const obj = [
-  {
-    id: uuidv4(),
-    header5: "125",
-    header6: "CCID assigned",
-    icon: <img src="/img/careerEnquirysvg.svg" alt="Career Enquiry" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "126",
-    header6: "TTID assigned",
-    icon: <img src="/img/ttidEnquirysvg.svg" alt="TTID Enquiry" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "127",
-    header6: "Visitor assigned",
-    icon: <img src="/img/visitorEnquirysvg.svg" alt="Visitor Enquiry" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "128",
-    header6: "Telephonic assigned",
-    icon: <img src="/img/telephonicEnquirysvg.svg" alt="Telephonic Enquiry" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "129",
-    header6: "Request for merging",
-    icon: <img src="/img/mergingrequestsvg.svg" alt="Merging Request" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "130",
-    header6: "Approval for Merging",
-    icon: <img src="/img/mergingApprovalsvg.svg" alt="Merging Approval" />,
-  },
-  {
-    id: uuidv4(),
-    header5: "131",
-    header6: "List of merged inquires",
-    icon: <img src="/img/mergedEnquirysvg.svg" alt="Mereged Inquiry" />,
-  },
-];
 
 export default function Dashboard() {
+
+  const { user } = useSelector((state) => {
+    return state.auth;
+  });
+  const adminLogin = user.user.is_admin;
+
+
   const navigate = useNavigate();
   const handleClick = (value) => {
     if (value === "125") {
@@ -67,6 +31,52 @@ export default function Dashboard() {
       navigate("/dashboard");
     }
   };
+
+  const obj = [
+    {
+      id: uuidv4(),
+      header5: "125",
+      header6: adminLogin ? "Career Enquiry" : "CCID Assigned",
+      icon: <img src="/img/careerEnquirysvg.svg" alt="Career Enquiry" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "126",
+      header6: adminLogin ? "TTID Enquiry" : "TTID Assigned",
+      icon: <img src="/img/ttidEnquirysvg.svg" alt="TTID Enquiry" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "127",
+      header6: adminLogin ? "Visitor Enquiry" : "Visitor Assigned",
+      icon: <img src="/img/visitorEnquirysvg.svg" alt="Visitor Enquiry" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "128",
+      header6: adminLogin ? "Telephonic Enquiry" : "Telephonic Assigned",
+      icon: <img src="/img/telephonicEnquirysvg.svg" alt="Telephonic Enquiry" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "129",
+      header6: "Request for merging",
+      icon: <img src="/img/mergingrequestsvg.svg" alt="Merging Request" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "130",
+      header6: "Approval for Merging",
+      icon: <img src="/img/mergingApprovalsvg.svg" alt="Merging Approval" />,
+    },
+    {
+      id: uuidv4(),
+      header5: "131",
+      header6: "List of merged Enquires",
+      icon: <img src="/img/mergedEnquirysvg.svg" alt="Mereged Inquiry" />,
+    },
+  ];
+
   return (
     <Layout>
       <Container fluid>
