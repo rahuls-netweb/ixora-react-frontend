@@ -70,17 +70,20 @@ export const careerGetSingle =
 //             });
 //     };
 
-// export const careerDelete =
-//     ({ id }, onSuccess, onFailure) =>
-//         async (dispatch) => {
-//             axios
-//                 .delete(`/career/${id}`)
-//                 .then(function ({ data }) {
-//                     toast.success("Career Enquiry deleted successfully");
-//                     onSuccess && onSuccess();
-//                 })
-//                 .catch(function (err) {
-//                     toast.error(err.response?.data?.message || err?.message);
-//                     onFailure && onFailure();
-//                 });
-//         };
+
+
+export const assignEnquiryToEmployee =
+    (enquiryData, onSuccess, onFailure) => async (dispatch) => {
+        const { enquiry_id, ...rest } = enquiryData;
+        axios
+            .put(`/enquiries/${enquiry_id}/assign`, rest)
+            .then(function ({ data }) {
+                onSuccess && onSuccess();
+
+                toast.success("Assign Enquiry successfully");
+            })
+            .catch(function (err) {
+                toast.error(err.response?.data?.message || err?.message);
+                onFailure && onFailure();
+            });
+    };

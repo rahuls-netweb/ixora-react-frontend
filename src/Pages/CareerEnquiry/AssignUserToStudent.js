@@ -1,41 +1,42 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 import styles from "./careerEnquiry.module.css";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
-import { employeeMasterGetAll } from "../../store/actions/employeeMasterAction";
-
+import { getEmployeesByBranchId } from "../../store/actions/employeeMasterAction";
+import { assignEnquiryToEmployee } from "../../store/actions/careerAction";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const validationSchema = yup.object({
-    // branch: yup.string().required("Enter a Branch Name"),
-    // employee: yup.string().required("Enter a Employee Name")
+    branch: yup.object().required("Enter a Branch Name"),
+    employee: yup.object().required("Enter a Employee Name")
 });
 
 export default function AssignUserToStudent({ student }) {
-    const [error, setError] = useState("");
+    console.log(student.id, "student Id");
     const resolver = useYupValidationResolver(validationSchema);
     const dispatch = useDispatch();
-    const { branchMasterList, employeeMasterList } = useSelector((state) => ({
+    const { branchMasterList, userListByBranch } = useSelector((state) => ({
         branchMasterList: state.branchMaster.branchMasterList,
-        employeeMasterList: state.employeeMaster.employeeMasterList,
+        userListByBranch: state.employeeMaster.userListByBranch,
     }));
     useEffect(() => {
         dispatch(headOfficeGetAll());
-        dispatch(employeeMasterGetAll());
 
     }, []);
+
+
     const options = branchMasterList.map((branch) => {
         return {
             value: branch.id.toString(),
             label: branch.name,
         };
     });
-    const options1 = employeeMasterList.map((employee) => {
+    const options1 = userListByBranch.map((employee) => {
         return {
             value: employee.id.toString(),
             label: employee.name,
@@ -43,10 +44,12 @@ export default function AssignUserToStudent({ student }) {
     });
     const {
         handleSubmit,
-        register,
         control,
         formState: { errors, isDirty, isValid },
-        reset
+        reset,
+        getValues,
+        setValue,
+        watch,
     } = useForm({
         resolver,
         mode: "onChange",
@@ -55,12 +58,33 @@ export default function AssignUserToStudent({ student }) {
             employee: ""
         }
     });
+    const { branch: { value: branchId } } = getValues();
+    // console.log(getValues(), "Values22314")
+    const selectedBranch = watch("branch");
 
-    console.log(errors, ' errors ')
+    useEffect(() => {
+        if (selectedBranch) {
+            setValue("employee", "")
+            dispatch(getEmployeesByBranchId({ branchId }));
+        }
+    }, [selectedBranch]);
+
 
     function onFormSubmit(data) {
-        console.log(data, "data data 11 111 111");
         reset();
+        dispatch(
+            assignEnquiryToEmployee(
+                {
+                    enquiry_id: student.id,
+                    branch_id: data.branch.value,
+                    user_id: data.employee.value,
+                },
+                () => {
+                    reset();
+                },
+
+            )
+        );
     }
     return (
         <Form className={styles.popForm} onSubmit={handleSubmit(onFormSubmit)} >
@@ -78,18 +102,16 @@ export default function AssignUserToStudent({ student }) {
                                 name={"branch"}
                                 control={control}
                                 render={({ field }) => {
-                                    const { value, onChange } = field;
+                                    const { value, onChange, onBlur } = field;
+
                                     return (
-                                        <Select isClearable options={options} value={value} onChange={(value => {
-                                            setError("");
-                                            onChange(value);
-                                        })} onBlur={() => {
-                                            setError("Please Select Branch");
-                                        }} />
+                                        <Select isClearable options={options} value={value} onChange={onChange} onBlur={onBlur} />
                                     );
                                 }}
                             />
-                            <Form.Label className="errorMessage"> {error}</Form.Label>
+                            <Form.Label className="errorMessage">
+                                {errors.branch && errors.branch.message}
+                            </Form.Label>
                         </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -98,14 +120,14 @@ export default function AssignUserToStudent({ student }) {
                             <Controller
                                 name={"employee"}
                                 control={control}
-                                render={({ field: { value, onChange } }) => {
+                                render={({ field: { value, onChange, onBlur } }) => {
                                     return (
-                                        <Select isClearable options={options1} value={value} onChange={(value => {
-                                            setError("");
-                                            onChange(value);
-                                        })} onBlur={() => {
-                                            setError("Enter country name");
-                                        }} />
+                                        <Select isClearable
+                                            options={options1}
+                                            value={value} onChange={(value => {
+
+                                                onChange(value);
+                                            })} onBlur={onBlur} />
                                     );
                                 }}
                             />
@@ -116,7 +138,7 @@ export default function AssignUserToStudent({ student }) {
                     </Col>
                     <Col md={3}>
                         <Form.Group >
-                            <Button className="formShowButton" type="submit">Assign</Button>
+                            <Button className="formShowButton" disabled={!isDirty || !isValid} type="submit">Assign</Button>
                         </Form.Group>
                     </Col>
                 </Row>

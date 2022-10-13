@@ -5,7 +5,7 @@ import Layout from "../../Components/Layout";
 import { Container, Row, Col, Tabs, Tab, Form, Button } from "react-bootstrap";
 import styles from './index.module.css'
 import { useSelector, useDispatch } from "react-redux";
-import { branchMasterGetAll, branchMasterSwitch } from "../../store/actions/branchMasterAction";
+import { getBranchesByUserId, branchMasterSwitch } from "../../store/actions/branchMasterAction";
 
 export default function ChooseBranch() {
     const dispatch = useDispatch();
@@ -14,15 +14,14 @@ export default function ChooseBranch() {
         auth: state.auth,
         currentSelectedBranch: state.branchMaster.currentSelectedBranch
     }));
-    // const branchList = auth.user.user.branches[0];
-    // console.log(auth.user.user.branches, "branchList");
 
-    // const [currentBranch, setCurrentBranch] = useState("");
+
+    const userId = auth.user.user.id;
     useEffect(() => {
         console.log('Mounted~!!')
     }, []);
     useEffect(() => {
-        dispatch(branchMasterGetAll());
+        dispatch(getBranchesByUserId({ userId }));
     }, []);
 
     function branchSwitch(id) {

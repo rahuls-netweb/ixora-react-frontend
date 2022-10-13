@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { showErrorMessageFromApi } from "../../utils/common-error";
 
 export const EMPLOYEEMASTER_GETALL = "EMPLOYEEMASTER_GETALL";
-
+export const GET_USER_BY_BRANCHES = "GET_USER_BY_BRANCHES";
 // Posts action
 export const employeeMasterCreate =
     (employeeMasterData, onSuccess, onFailure) => async (dispatch) => {
@@ -65,3 +65,20 @@ export const employeeMasterDelete =
                     onFailure && onFailure();
                 });
         };
+
+export const getEmployeesByBranchId =
+    ({ branchId }, onSuccess, onFailure) => async (dispatch) => {
+        axios
+            .get(`/branch/${branchId}/users`, {})
+            .then(function ({ data }) {
+                dispatch({
+                    type: GET_USER_BY_BRANCHES,
+                    payload: data.data,
+                });
+                onSuccess && onSuccess();
+            })
+            .catch(function (err) {
+                toast.error(err.response.data.message);
+                onFailure && onFailure();
+            });
+    };
