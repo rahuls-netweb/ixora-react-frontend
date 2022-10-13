@@ -18,12 +18,14 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../../Components/Skeleton";
 import { getUndefinedText } from "../../utils/helpers";
+import moment from 'moment';
+
 
 
 const columns3 = [
   {
     name: "Mock test date",
-    selector: (row) => row.date,
+    selector: (row) => moment(row.date).format("DD/MM/YYYY"),
   },
   {
     name: "Enrollment",
@@ -125,15 +127,15 @@ export default function CardView() {
     },
     {
       name: "Admission Date",
-      selector: (row) => row.date_of_admission,
+      selector: (row) => moment(row.date_of_admission).format("DD/MM/YYYY"),
     },
     {
       name: "Admission From",
-      selector: (row) => row.date_of_joining,
+      selector: (row) => moment(row.date_of_joining).format("DD/MM/YYYY"),
     },
     {
       name: "Course Valid",
-      selector: (row) => row.valid_upto,
+      selector: (row) => moment(row.valid_upto).format("DD/MM/YYYY"),
     },
     {
       name: "Branch",
@@ -159,7 +161,7 @@ export default function CardView() {
     },
     {
       name: "Test Date",
-      selector: (row) => row.test_date,
+      selector: (row) => moment(row.test_date).format("DD/MM/YYYY"),
     },
     {
       name: "Test result date",
@@ -272,7 +274,7 @@ export default function CardView() {
                             </td>
                             <td>
                               {getUndefinedText(
-                                singleCareerList.date_of_admission
+                                moment(singleCareerList.date_of_admission).format("DD/MM/YYYY")
                               )}
                             </td>
                             <td className={styles.columnHeader}>Shifted to</td>
@@ -284,7 +286,7 @@ export default function CardView() {
                             </td>
                             <td>
                               {getUndefinedText(
-                                singleCareerList.date_of_joining
+                                moment(singleCareerList.date_of_joining).format("DD/MM/YYYY")
                               )}
                             </td>
                             <td className={styles.columnHeader}>
@@ -299,7 +301,8 @@ export default function CardView() {
                           <tr>
                             <td className={styles.columnHeader}>Valid Upto</td>
                             <td>
-                              {getUndefinedText(singleCareerList.valid_upto)}
+                              {getUndefinedText(
+                                moment(singleCareerList.valid_upto).format("DD/MM/YYYY"))}
                             </td>
                             <td className={styles.columnHeader}>
                               Current Course Discount

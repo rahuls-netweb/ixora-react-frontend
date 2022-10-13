@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import styles from "./careerEnquiry.module.css";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
@@ -12,12 +12,12 @@ import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 const validationSchema = yup.object({
-    branch: yup.string().required("Enter a Branch Name"),
-    employee: yup.string().required("Enter a Employee Name")
+    // branch: yup.string().required("Enter a Branch Name"),
+    // employee: yup.string().required("Enter a Employee Name")
 });
 
 export default function AssignUserToStudent({ student }) {
-
+    const [error, setError] = useState("");
     const resolver = useYupValidationResolver(validationSchema);
     const dispatch = useDispatch();
     const { branchMasterList, employeeMasterList } = useSelector((state) => ({
@@ -78,16 +78,18 @@ export default function AssignUserToStudent({ student }) {
                                 name={"branch"}
                                 control={control}
                                 render={({ field }) => {
-                                    const { value, onChange, onBlur } = field;
-                                    console.log(field, '____field')
+                                    const { value, onChange } = field;
                                     return (
-                                        <Select isClearable options={options} value={value} onChange={onChange} onBlur={onBlur} />
+                                        <Select isClearable options={options} value={value} onChange={(value => {
+                                            setError("");
+                                            onChange(value);
+                                        })} onBlur={() => {
+                                            setError("Please Select Branch");
+                                        }} />
                                     );
                                 }}
                             />
-                            <Form.Label className="errorMessage">
-                                {errors.branch && errors.branch.message}
-                            </Form.Label>
+                            <Form.Label className="errorMessage"> {error}</Form.Label>
                         </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -96,12 +98,14 @@ export default function AssignUserToStudent({ student }) {
                             <Controller
                                 name={"employee"}
                                 control={control}
-                                render={({ field: { value, onChange, onBlur } }) => {
+                                render={({ field: { value, onChange } }) => {
                                     return (
                                         <Select isClearable options={options1} value={value} onChange={(value => {
-                                            console.log(value, 'vvvv');
+                                            setError("");
                                             onChange(value);
-                                        })} onBlur={onBlur} />
+                                        })} onBlur={() => {
+                                            setError("Enter country name");
+                                        }} />
                                     );
                                 }}
                             />
@@ -112,7 +116,7 @@ export default function AssignUserToStudent({ student }) {
                     </Col>
                     <Col md={3}>
                         <Form.Group >
-                            <Button className="formShowButton" disabled={!isDirty || !isValid} type="submit">Assign</Button>
+                            <Button className="formShowButton" type="submit">Assign</Button>
                         </Form.Group>
                     </Col>
                 </Row>
