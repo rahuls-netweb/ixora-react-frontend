@@ -203,22 +203,27 @@ const SideBar = () => {
                         <SubMenu
                           className="submenuContent"
                           icon={val.icon}
-                          title={val.Title}
+                          title={
+                            <NavLink
+                              to={
+                                !openSettings
+                                  ? val.route
+                                  : val.subRoutes.map((subRoute) => {
+                                      return subRoute;
+                                    })
+                              }
+                            >
+                              {val.Title}
+                            </NavLink>
+                          }
                           onClick={() => {
                             setOpenSettings(!openSettings);
-                            if (CurrentRoute === "/settings/headoffice") {
-                              setOpenSettings(true);
-                            }
+                            // navigate("/settings/headoffice");
                             console.log(CurrentRoute, "current");
-                            if (!openSettings) {
-                              navigate("/settings/headoffice");
-                            }
+                            console.log(openSettings, "opensettings inside");
                           }}
                           // icon={val.icon}
                           defaultOpen={openSettings}
-                          // onClick={(e) => {
-                          //   setOpenSettings(!openSettings);
-                          // }}
                         >
                           {val.subRoutes.map((subRoute, index) => {
                             return (
