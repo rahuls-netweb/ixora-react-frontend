@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../Components/Layout";
 import { Container, Row, Col, Tab, Tabs, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
 import styles from "./careerEnquiry.module.css";
@@ -18,9 +17,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "../../Components/Skeleton";
 import { getUndefinedText } from "../../utils/helpers";
-import moment from 'moment';
-
-
+import moment from "moment";
 
 const columns3 = [
   {
@@ -110,7 +107,6 @@ export default function CardView() {
     setShow(true);
   };
 
-
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
 
@@ -145,9 +141,9 @@ export default function CardView() {
       name: "View",
       cell: (singleRowData, index) => (
         <>
-          <MdRemoveRedEye className={styles.iconView}
+          <MdRemoveRedEye
+            className={styles.iconView}
             onClick={() => handleShow(singleRowData)}
-
           />
         </>
       ),
@@ -175,14 +171,16 @@ export default function CardView() {
       name: "View",
       cell: (singleRowData, index) => (
         <>
-          <MdRemoveRedEye className={styles.iconView}
-            onClick={() => handleShow1(singleRowData)} />
+          <MdRemoveRedEye
+            className={styles.iconView}
+            onClick={() => handleShow1(singleRowData)}
+          />
         </>
       ),
     },
   ];
   return (
-    <Layout>
+    <React.Fragment>
       <Container fluid>
         <Row>
           <Col md={12}>
@@ -274,7 +272,9 @@ export default function CardView() {
                             </td>
                             <td>
                               {getUndefinedText(
-                                moment(singleCareerList.date_of_admission).format("DD/MM/YYYY")
+                                moment(
+                                  singleCareerList.date_of_admission
+                                ).format("DD/MM/YYYY")
                               )}
                             </td>
                             <td className={styles.columnHeader}>Shifted to</td>
@@ -286,7 +286,9 @@ export default function CardView() {
                             </td>
                             <td>
                               {getUndefinedText(
-                                moment(singleCareerList.date_of_joining).format("DD/MM/YYYY")
+                                moment(singleCareerList.date_of_joining).format(
+                                  "DD/MM/YYYY"
+                                )
                               )}
                             </td>
                             <td className={styles.columnHeader}>
@@ -302,7 +304,10 @@ export default function CardView() {
                             <td className={styles.columnHeader}>Valid Upto</td>
                             <td>
                               {getUndefinedText(
-                                moment(singleCareerList.valid_upto).format("DD/MM/YYYY"))}
+                                moment(singleCareerList.valid_upto).format(
+                                  "DD/MM/YYYY"
+                                )
+                              )}
                             </td>
                             <td className={styles.columnHeader}>
                               Current Course Discount
@@ -383,6 +388,6 @@ export default function CardView() {
       <PopUP show={show1} hide={handleClose1} size="lg">
         <ViewTestDetailTable testDetail={selectTestDetail} />
       </PopUP>
-    </Layout>
+    </React.Fragment>
   );
 }

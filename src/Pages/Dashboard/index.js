@@ -1,4 +1,3 @@
-import Layout from "../../Components/Layout";
 import { Container, Row, Col } from "react-bootstrap";
 import styles from "./dashboard.module.css";
 // import { MdDashboard } from "react-icons/md";
@@ -6,14 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 
-
 export default function Dashboard() {
-
   const { user } = useSelector((state) => {
     return state.auth;
   });
   const adminLogin = user.user.is_admin;
-
 
   const navigate = useNavigate();
   const handleClick = (value) => {
@@ -55,7 +51,9 @@ export default function Dashboard() {
       id: uuidv4(),
       header5: "128",
       header6: adminLogin ? "Telephonic Enquiry" : "Telephonic Assigned",
-      icon: <img src="/img/telephonicEnquirysvg.svg" alt="Telephonic Enquiry" />,
+      icon: (
+        <img src="/img/telephonicEnquirysvg.svg" alt="Telephonic Enquiry" />
+      ),
     },
     {
       id: uuidv4(),
@@ -78,30 +76,28 @@ export default function Dashboard() {
   ];
 
   return (
-    <Layout>
-      <Container fluid>
-        <Row>
-          {obj.map((val) => (
-            <Col
-              lg={6}
-              xl={4}
-              className={styles.colSetting}
-              onClick={() => {
-                handleClick(val.header5);
-              }}
-              key={uuidv4()}
-            >
-              <div className={styles.commonContainer}>
-                <div key={val.id}>
-                  <h5>{val.header5}</h5>
-                  <h6>{val.header6}</h6>
-                </div>
-                <div className={styles.iconDiv}>{val.icon}</div>
+    <Container fluid>
+      <Row>
+        {obj.map((val) => (
+          <Col
+            lg={6}
+            xl={4}
+            className={styles.colSetting}
+            onClick={() => {
+              handleClick(val.header5);
+            }}
+            key={uuidv4()}
+          >
+            <div className={styles.commonContainer}>
+              <div key={val.id}>
+                <h5>{val.header5}</h5>
+                <h6>{val.header6}</h6>
               </div>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </Layout>
+              <div className={styles.iconDiv}>{val.icon}</div>
+            </div>
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Layout from "../../Components/Layout";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import styles from "./careerEnquiry.module.css";
 import DataTable from "../../Components/DataTable";
@@ -8,7 +7,6 @@ import { MdRemoveRedEye } from "react-icons/md";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-
 import { headOfficeGetAll } from "../../store/actions/headOfficeAction";
 import { branchMasterGetAll } from "../../store/actions/branchMasterAction";
 import { countryGetAll } from "../../store/actions/countryAction";
@@ -16,18 +14,13 @@ import { qualificationGetAll } from "../../store/actions/qualificationAction";
 import { careerGetAll } from "../../store/actions/careerAction";
 import AssignUserToStudent from "./AssignUserToStudent";
 import Skeleton from "../../Components/Skeleton";
-import {
-  getPaginatedRecordNumber,
-} from "../../utils/helpers";
-
-
+import { getPaginatedRecordNumber } from "../../utils/helpers";
 
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedStudent, setSlectedStudent] = useState(null);
-
 
   const columns = [
     // {
@@ -67,11 +60,12 @@ export default function CareerEnquiry() {
       cell: (singleRowData, index) => (
         <>
           <Link to={`/career-enquiry/${singleRowData.id}`} target="_blank">
-            <MdRemoveRedEye
-              className={styles.iconView}
-            />
+            <MdRemoveRedEye className={styles.iconView} />
           </Link>
-          <a className={styles.assignButton} onClick={() => handleShow(singleRowData)}>
+          <a
+            className={styles.assignButton}
+            onClick={() => handleShow(singleRowData)}
+          >
             Assign
           </a>
         </>
@@ -84,12 +78,17 @@ export default function CareerEnquiry() {
   const handleClose = () => setShow(false);
 
   const handleShow = (student) => {
-
     setSlectedStudent(student);
     setShow(true);
   };
 
-  const { branchMasterList, headOfficeList, countryList, qualificationList, careerList, } = useSelector((state) => ({
+  const {
+    branchMasterList,
+    headOfficeList,
+    countryList,
+    qualificationList,
+    careerList,
+  } = useSelector((state) => ({
     branchMasterList: state.branchMaster.branchMasterList,
     headOfficeList: state.headOffice.headOfficeList,
     countryList: state.country.countryList,
@@ -97,22 +96,23 @@ export default function CareerEnquiry() {
     careerList: state.career.careerList,
   }));
 
-
-
   useEffect(() => {
     setLoading(true);
     dispatch(headOfficeGetAll());
     dispatch(branchMasterGetAll());
     dispatch(countryGetAll());
     dispatch(qualificationGetAll());
-    dispatch(careerGetAll(
-      null,
-      () => setLoading(false),
-      () => setLoading(false)
-    ));
+    dispatch(
+      careerGetAll(
+        null,
+        () => setLoading(false),
+        () => setLoading(false)
+      )
+    );
   }, []);
+
   return (
-    <Layout>
+    <React.Fragment>
       <Form>
         <Container fluid>
           <Row>
@@ -179,18 +179,16 @@ export default function CareerEnquiry() {
                 <div className={styles.careerEnquirieSub}>
                   <h4>List of career enquiries</h4>
                 </div>
-
               </div>
               {loading ? (
-                <div className="dataTableRow" >
+                <div className="dataTableRow">
                   <Skeleton />
                 </div>
               ) : (
-                <div className="dataTableRow" >
+                <div className="dataTableRow">
                   <DataTable columns={columns} rows={careerList} />
                 </div>
               )}
-
             </div>
           </Col>
         </Row>
@@ -199,6 +197,6 @@ export default function CareerEnquiry() {
       <PopUP show={show} hide={handleClose} size="lg">
         <AssignUserToStudent student={selectedStudent} />
       </PopUP>
-    </Layout>
+    </React.Fragment>
   );
 }

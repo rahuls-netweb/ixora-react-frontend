@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Layout from "../../Components/Layout";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import styles from "./ttidEnquiry.module.css";
 import DataTable from "../../Components/DataTable";
@@ -79,7 +78,7 @@ export default function TTIDEnquiry() {
   }
 
   return (
-    <Layout>
+    <React.Fragment>
       <Form>
         <Container fluid>
           <Row>
@@ -138,10 +137,7 @@ export default function TTIDEnquiry() {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group className={styles.formCareerEnquirieSub2}>
-                    <Button
-                      className="formShowButton"
-                      onClick={handleShow}
-                    >
+                    <Button className="formShowButton" onClick={handleShow}>
                       Assign
                     </Button>
                   </Form.Group>
@@ -164,6 +160,6 @@ export default function TTIDEnquiry() {
           {form}
         </Form>
       </PopUP>
-    </Layout>
+    </React.Fragment>
   );
 }
