@@ -102,6 +102,11 @@ export default function BranchMaster() {
     },
 
     {
+      name: "Branch code",
+      selector: (row) => row.branch_code,
+    },
+
+    {
       name: "Branch Name",
       selector: (row) => row.name,
     },
@@ -116,11 +121,6 @@ export default function BranchMaster() {
     {
       name: "Address",
       selector: (row) => row.address,
-    },
-
-    {
-      name: "Branch code",
-      selector: (row) => row.branch_code,
     },
 
     {

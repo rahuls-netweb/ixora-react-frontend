@@ -89,7 +89,8 @@ export default function EmployeeMaster() {
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
 
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShow(!show);
+  const handleClose1 = (newShow) => setShow(newShow);
   const [selectedRole, setSelectedRole] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
@@ -424,7 +425,7 @@ export default function EmployeeMaster() {
       />
       {show && (
         <PopUP show={show} hide={handleClose} size="xl">
-          <AddBranchesToUser user={selectedRole} />
+          <AddBranchesToUser showPopup={handleClose1} user={selectedRole} />
         </PopUP>
       )}
     </>
