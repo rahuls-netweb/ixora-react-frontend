@@ -5,7 +5,7 @@ import AddPermissionToRoleModel from "./AddPermissionToRoleModel";
 import ViewPermissionToRoleModel from "./ViewPermissionToRoleModel";
 import DataTable from "../../../Components/DataTable";
 
-import { MdDelete, MdRestore } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
@@ -54,7 +54,6 @@ export default function Roles() {
 
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
-  const [action, setAction] = useState("");
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -140,26 +139,16 @@ export default function Roles() {
               );
             }}
           />
-          {!singleRowData.deleted_at ? (
-            <MdDelete
-              title="Delete Data"
-              className={styles.actionIcon}
-              onClick={() => {
-                setModalShow(true);
-                setAction("delete");
-                setSingleRowData(singleRowData);
-              }}
-            />
-          ) : (
-            <MdRestore
-              title="Restore Data"
-              className={styles.actionIcon}
-              onClick={() => {
-                setAction("restore");
-                setModalShow(true);
-                setSingleRowData(singleRowData);
-              }} />
-          )}
+
+          <MdDelete
+            title="Delete Data"
+            className={styles.actionIcon}
+            onClick={() => {
+              setModalShow(true);
+              setSingleRowData(singleRowData);
+            }}
+          />
+
         </div>
       ),
       button: true,
@@ -182,7 +171,7 @@ export default function Roles() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      rolesDelete({ id: singleRowData.id, action }, () =>
+      rolesDelete({ id: singleRowData.id }, () =>
         dispatch(
           rolesGetAll(
             null,
@@ -308,7 +297,6 @@ export default function Roles() {
         </Container>
       </Form>
       <ConfirmPrompt
-        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

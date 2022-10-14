@@ -22,7 +22,7 @@ export const permissionsCreate =
 export const permissionsGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/permissions?action=withtrashed", {})
+            .get("/permissions", {})
             .then(function ({ data }) {
                 dispatch({
                     type: PERMISSIONS_GETALL,
@@ -52,16 +52,12 @@ export const permissionsUpdate =
     };
 
 export const permissionsDelete =
-    ({ id, action }, onSuccess, onFailure) =>
+    ({ id }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/permissions/${id}`, {
-                    data: {
-                        action
-                    }
-                })
+                .delete(`/permissions/${id}`)
                 .then(function ({ data }) {
-                    toast.success("Permission deleted successfully");
+                    toast.success(data.message);
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

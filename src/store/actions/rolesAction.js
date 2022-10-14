@@ -22,7 +22,7 @@ export const rolesCreate =
 export const rolesGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/roles?action=withtrashed", {})
+            .get("/roles", {})
             .then(function ({ data }) {
                 dispatch({
                     type: ROLES_GETALL,
@@ -52,14 +52,10 @@ export const rolesUpdate =
 
 
 export const rolesDelete =
-    ({ id, action }, onSuccess, onFailure) =>
+    ({ id }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/roles/${id}`, {
-                    data: {
-                        action
-                    }
-                })
+                .delete(`/roles/${id}`)
                 .then(function ({ data }) {
                     toast.success(data.message);
                     onSuccess && onSuccess();
