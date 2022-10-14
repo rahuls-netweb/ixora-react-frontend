@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -232,7 +232,7 @@ export default function Candidate() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import Skeleton from "../../Components/Skeleton";
@@ -22,7 +22,7 @@ import {
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -134,16 +134,18 @@ export default function HeadOffice() {
               className={styles.actionIcon}
               onClick={() => {
                 setModalShow(true);
-                // setAction("delete");
-                // setAction("softdeletes");
-                setAction("inactive");
+                setAction("delete");
                 setSingleRowData(singleRowData);
               }}
             />
           ) : (
-            <p onClick={() => {
-              setAction("restore");
-            }}>Restore</p>
+            <MdRestore
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
           )}
         </div>
       ),
@@ -330,7 +332,7 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}

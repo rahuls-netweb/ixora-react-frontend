@@ -25,7 +25,7 @@ import * as yup from "yup";
 
 import PopUP from "../../../Components/PopUp";
 import Skeleton from "../../../Components/Skeleton";
-import DeletePopUp from "../../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../../Components/PopUp/ConfirmPrompt";
 
 const PAGE_MODES = {
   edit: "edit",
@@ -416,7 +416,7 @@ export default function EmployeeMaster() {
           <DataTable columns={columns} rows={employeeMasterList} />
         </div>
       )}
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

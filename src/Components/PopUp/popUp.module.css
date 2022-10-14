@@ -18,8 +18,15 @@
 
 .formConfirmH2 {
     color: #636363;
-    font-size: 25px;
+    font-size: 22px;
     margin: 20px 0 30px 0 !important;
+}
+
+.formConfirmH2 span {
+    text-transform: capitalize;
+    font-weight: 700;
+    font-size: 25px;
+    color: #F15E5E;
 }
 
 .formConfirmH5 {

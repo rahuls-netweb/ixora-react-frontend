@@ -22,7 +22,7 @@ import ReactSelect, { components } from "react-select";
 
 import countries from "./countries.json";
 import Skeleton from "../../../Components/Skeleton";
-import DeletePopUp from "../../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -315,7 +315,7 @@ export default function Country() {
         </div>
       )}
 
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

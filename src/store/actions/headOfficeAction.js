@@ -22,7 +22,7 @@ export const headOfficeCreate =
 export const headOfficeGetAll =
   (_, onSuccess, onFailure) => async (dispatch) => {
     axios
-      .get("/headoffices")
+      .get("/headoffices?action=withtrashed")
       .then(function ({ data }) {
         dispatch({
           type: HEADOFFICE_GETALL,
