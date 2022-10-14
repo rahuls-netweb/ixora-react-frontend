@@ -15,6 +15,7 @@ import { careerGetAll } from "../../store/actions/careerAction";
 import AssignUserToStudent from "./AssignUserToStudent";
 import Skeleton from "../../Components/Skeleton";
 import { getPaginatedRecordNumber } from "../../utils/helpers";
+import moment from "moment";
 
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
@@ -34,6 +35,10 @@ export default function CareerEnquiry() {
       selector: (row) => row.ccid,
     },
     {
+      name: "SID",
+      selector: (row) => row.sid,
+    },
+    {
       name: "Student Name",
       selector: (row) => row.first_name + " " + row.last_name,
     },
@@ -46,14 +51,10 @@ export default function CareerEnquiry() {
       name: "Email",
       selector: (row) => row.email,
     },
-    {
-      name: "SID",
-      selector: (row) => row.sid,
-    },
 
     {
-      name: "DOB",
-      selector: (row) => row.dob,
+      name: "Date Of Joining",
+      selector: (row) => moment(row.date_of_joining).format("DD/MM/YYYY"),
     },
     {
       name: "View",
@@ -82,20 +83,11 @@ export default function CareerEnquiry() {
     setShow(true);
   };
 
-  const {
-    branchMasterList,
-    headOfficeList,
-    countryList,
-    qualificationList,
-    careerList,
-  } = useSelector((state) => ({
-    branchMasterList: state.branchMaster.branchMasterList,
-    headOfficeList: state.headOffice.headOfficeList,
-    countryList: state.country.countryList,
-    qualificationList: state.qualification.qualificationList,
+  const { careerList } = useSelector((state) => ({
     careerList: state.career.careerList,
   }));
 
+  console.log(careerList, "career list111111")
   useEffect(() => {
     setLoading(true);
     dispatch(headOfficeGetAll());

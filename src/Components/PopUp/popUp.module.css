@@ -27,3 +27,16 @@
     font-size: 16px;
     margin: 20px 0 30px 0 !important;
 }
+
+.cancelButton {
+    background: #AAAAAA !important;
+    padding: 8px 20px !important;
+    margin-right: 10px;
+    border: none !important;
+}
+
+.deleteButton {
+    background: #F15E5E !important;
+    padding: 8px 17px !important;
+    border: none !important;
+}

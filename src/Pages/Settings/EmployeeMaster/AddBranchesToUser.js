@@ -8,7 +8,7 @@ import { employeeMasterGetAll } from "../../../store/actions/employeeMasterActio
 import { rolesGetAll } from "../../../store/actions/rolesAction";
 import { v4 as uuidv4 } from "uuid";
 
-export default function AddBranchesToUser({ user }) {
+export default function AddBranchesToUser({ showPopup, user }) {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedBranches, setSelectedBranches] = useState(null);
@@ -21,7 +21,6 @@ export default function AddBranchesToUser({ user }) {
     }));
 
     const selectedUser = employeeMasterList.find(singleUser => singleUser.id === user.id);
-
 
 
     useEffect(() => {
@@ -51,6 +50,7 @@ export default function AddBranchesToUser({ user }) {
         }, () => {
             setIsSubmitting(false);
             dispatch(employeeMasterGetAll())
+            showPopup(false);
         }, () => {
             setIsSubmitting(false);
         }));
@@ -169,13 +169,10 @@ export default function AddBranchesToUser({ user }) {
                     </Col>
                     <Col md={12} className="d-flex justify-content-end">
                         <Form.Group>
-                            {/* <Button type="submit" className="themeColor">
-                            
-                            </Button> */}
+
                             <Button
                                 type="submit"
                                 className="formShowUserButton"
-
                             >
                                 {isSubmitting ? (
                                     <Spinner

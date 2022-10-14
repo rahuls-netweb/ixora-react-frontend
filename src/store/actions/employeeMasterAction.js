@@ -69,7 +69,11 @@ export const employeeMasterDelete =
 export const getEmployeesByBranchId =
     ({ branchId }, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get(`/branch/${branchId}/users`, {})
+            .get(`/branch/${branchId}/users`, {
+                data: {
+                    action: "trashed"
+                }
+            })
             .then(function ({ data }) {
                 dispatch({
                     type: GET_USER_BY_BRANCHES,

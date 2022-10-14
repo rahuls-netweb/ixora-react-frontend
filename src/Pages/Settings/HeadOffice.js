@@ -66,6 +66,8 @@ export default function HeadOffice() {
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
 
+  const [action, setAction] = useState("");
+
   const { headOfficeList } = useSelector((state) => state.headOffice);
 
   function cancelUser() {
@@ -127,13 +129,22 @@ export default function HeadOffice() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                // setAction("delete");
+                // setAction("softdeletes");
+                setAction("inactive");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <p onClick={() => {
+              setAction("restore");
+            }}>Restore</p>
+          )}
         </div>
       ),
       button: true,
@@ -150,12 +161,13 @@ export default function HeadOffice() {
       )
     );
   }, []);
+
   const deleteData = () => {
     reset();
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      headOfficeDelete({ id: singleRowData.id }, () =>
+      headOfficeDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           headOfficeGetAll(
             null,
@@ -319,6 +331,7 @@ export default function HeadOffice() {
         </Container>
       </Form>
       <DeletePopUp
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {
