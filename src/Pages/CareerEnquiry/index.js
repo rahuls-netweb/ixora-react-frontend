@@ -4,6 +4,7 @@ import styles from "./careerEnquiry.module.css";
 import DataTable from "../../Components/DataTable";
 import PopUP from "../../Components/PopUp";
 import { MdRemoveRedEye } from "react-icons/md";
+import { BiExport } from "react-icons/bi";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,6 +23,9 @@ export default function CareerEnquiry() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedStudent, setSlectedStudent] = useState(null);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [filteredData, setFilteredData] = useState(null);
 
   const columns = [
     // {
@@ -57,18 +61,17 @@ export default function CareerEnquiry() {
       selector: (row) => moment(row.date_of_joining).format("DD/MM/YYYY"),
     },
     {
-      name: "View",
+      name: "Action",
       cell: (singleRowData, index) => (
         <>
           <Link to={`/career-enquiry/${singleRowData.id}`} target="_blank">
-            <MdRemoveRedEye className={styles.iconView} />
+            <MdRemoveRedEye title="View" className={styles.iconView} />
           </Link>
-          <a
-            className={styles.assignButton}
+          <BiExport
+            title="Assign "
+            className={styles.iconView}
             onClick={() => handleShow(singleRowData)}
-          >
-            Assign
-          </a>
+          />
         </>
       ),
     },
@@ -84,10 +87,11 @@ export default function CareerEnquiry() {
   };
 
   const { careerList } = useSelector((state) => ({
-    careerList: state.career.careerList,
+    careerList: [...state.career.careerList].sort((a, b) => a.id - b.id),
   }));
+  let newList = [];
 
-  console.log(careerList, "career list111111")
+  // console.log(careerList, "career list111111");
   useEffect(() => {
     setLoading(true);
     dispatch(headOfficeGetAll());
@@ -102,6 +106,23 @@ export default function CareerEnquiry() {
       )
     );
   }, []);
+
+  const dateFilter = () => {
+    careerList.filter((record) => {
+      if (
+        moment(record.date_of_joining).format("YYYY MM DD") >
+          moment(dateFrom).format("YYYY MM DD") &&
+        moment(record.date_of_joining).format("YYYY MM DD") <
+          moment(dateTo).format("YYYY MM DD")
+      ) {
+        newList.push(record);
+      }
+    });
+    setFilteredData(newList);
+    console.log(newList);
+    setDateTo("");
+    setDateFrom("");
+  };
 
   return (
     <React.Fragment>
@@ -132,12 +153,37 @@ export default function CareerEnquiry() {
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Date From</Form.Label>
-                <Form.Control type="date" />
+                <Form.Control
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => {
+                    setDateFrom(e.target.value);
+                    console.log(e.target.value, "datefrom");
+                  }}
+                />
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Date To</Form.Label>
-                <Form.Control type="date" />
+                <Form.Control
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => {
+                    setDateTo(e.target.value);
+                    console.log(e.target.value, "dateto");
+                  }}
+                />
+              </Form.Group>
+              <Form.Group className={styles.divDivisionNew}>
+                <Button
+                  className={styles.searchData}
+                  onClick={() => {
+                    dateFilter();
+                  }}
+                  style={{ marginTop: "2rem" }}
+                >
+                  Search
+                </Button>
               </Form.Group>
               {/* <Form.Group className={styles.divDivision}>
                 <Form.Label>Country</Form.Label>
@@ -178,7 +224,10 @@ export default function CareerEnquiry() {
                 </div>
               ) : (
                 <div className="dataTableRow">
-                  <DataTable columns={columns} rows={careerList} />
+                  <DataTable
+                    columns={columns}
+                    rows={filteredData ? filteredData : careerList}
+                  />
                 </div>
               )}
             </div>

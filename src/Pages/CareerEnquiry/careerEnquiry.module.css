@@ -11,7 +11,6 @@
   margin: 12px 0;
 }
 
-
 .careerEnquiries {
   display: flex;
   justify-content: space-between;
@@ -46,7 +45,6 @@
   align-items: flex-end;
 }
 
-
 .popForm {
   padding: 15px 15px 10px 15px;
 }
@@ -75,7 +73,6 @@
   padding: 10px 30px;
   min-height: 85vh;
 }
-
 
 .backToCareer {
   display: flex;
@@ -107,9 +104,6 @@ td:not(.columnHeader) {
   color: #adadad;
 }
 
-
-
-
 /*            ViewAdmissionTable         */
 
 .tablecardViewMain {
@@ -125,7 +119,6 @@ td:not(.columnHeader) {
   position: relative;
 }
 
-
 .tablecardView tr td {
   width: 25%;
   font-family: var(--Poppins);
@@ -134,28 +127,7 @@ td:not(.columnHeader) {
   font-size: 14px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* CareerEnquiry CarView  Page */
-
-
-
 
 .backToCareer {
   display: flex;
@@ -182,14 +154,12 @@ td:not(.columnHeader) {
   gap: 10px;
 }
 
-
 .divDivision1 {
   width: 23%;
   display: flex;
   align-items: flex-end;
   margin-bottom: 15px;
 }
-
 
 .actionIcon {
   font-size: 25px;
@@ -217,7 +187,6 @@ td:not(.columnHeader) {
 .permissionDivision button {
   width: 25%;
   background: var(--theme-color);
-  ;
 }
 
 .colPermissions {
@@ -311,7 +280,6 @@ td:not(.columnHeader) {
 
 .customBranchCol {
   margin-bottom: 20px;
-
 }
 
 .admissionDetails {
@@ -337,4 +305,15 @@ td:not(.columnHeader) {
 
 .tableAdmissionDetail td:nth-child(even) {
   color: #adadad !important;
+}
+.divDivisionNew {
+  width: 62%;
+  display: flex;
+  justify-content: flex-end;
+  margin: 12px 0;
+}
+
+.searchData {
+  width: 20%;
+  background: var(--theme-color) !important;
 }
