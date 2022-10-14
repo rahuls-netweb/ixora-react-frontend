@@ -65,6 +65,11 @@ export default function HeadOffice() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
+  const [filterInputs, setFilterInputs] = useState({
+    fname: "",
+    femail: "",
+    fnumber: "",
+  });
 
   const [action, setAction] = useState("");
 
@@ -141,9 +146,13 @@ export default function HeadOffice() {
               }}
             />
           ) : (
-            <p onClick={() => {
-              setAction("restore");
-            }}>Restore</p>
+            <p
+              onClick={() => {
+                setAction("restore");
+              }}
+            >
+              Restore
+            </p>
           )}
         </div>
       ),
@@ -231,7 +240,21 @@ export default function HeadOffice() {
     }
     setMode(PAGE_MODES.add);
   }
-
+  function onFormFilterSubmit(e) {
+    e.preventDefault();
+    console.log(headOfficeList);
+    // headOfficeList;
+    headOfficeList.filter((record) => {
+      if (record.name.includes(filterInputs.fname)) {
+        // newList.push(record);
+        console.log("dataa");
+      }
+    });
+    // setFilteredData(newList);
+    // console.log(newList);
+    // setDateTo("");
+    // setDateFrom("");
+  }
   return (
     <>
       <Form onSubmit={handleSubmit(onFormSubmit)}>
@@ -239,25 +262,17 @@ export default function HeadOffice() {
           <Row>
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>
-                  Head Office Name <span className="reqruiredFields">*</span>
-                </Form.Label>
+                <Form.Label>Head Office Name</Form.Label>
                 <Form.Control
                   type="text"
                   autoComplete="off"
                   placeholder="Head Office Name"
                   {...register("name")}
                 />
-                <Form.Label className="errorMessage">
-                  {" "}
-                  {errors.name && errors.name.message}
-                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>
-                  Email <span className="reqruiredFields">*</span>
-                </Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Help text={EmailText()} />
                 <Form.Control
                   type="email"
@@ -265,27 +280,17 @@ export default function HeadOffice() {
                   placeholder="Email"
                   {...register("email")}
                 />
-                <Form.Label className="errorMessage">
-                  {" "}
-                  {errors.email && errors.email.message}
-                </Form.Label>
               </Form.Group>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>
-                  Phone Number <span className="reqruiredFields">*</span>
-                </Form.Label>
-                <Help text={PhoneText()} />
+                <Form.Label>Phone Number</Form.Label>
+
                 <Form.Control
-                  type="text"
+                  type="number"
                   autoComplete="off"
                   placeholder="Phone Number"
-                  {...register("phone")}
                   minLength="10"
+                  {...register("number")}
                 />
-                <Form.Label className="errorMessage">
-                  {" "}
-                  {errors.phone && errors.phone.message}
-                </Form.Label>
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
@@ -325,6 +330,71 @@ export default function HeadOffice() {
                     Cancel
                   </Button>
                 ) : null}
+              </Form.Group>
+            </Col>
+          </Row>
+        </Container>
+      </Form>
+      <Form onSubmit={onFormFilterSubmit}>
+        <Container fluid>
+          <Row>
+            <Col md={10} className={styles.customColumn}>
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Head Office Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Head Office Name"
+                  value={filterInputs.fname}
+                  onChange={(e) => {
+                    setFilterInputs({ ...filterInputs, fname: e.target.value });
+                  }}
+                  // {...register("fname")}
+                />
+              </Form.Group>
+
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Email"
+                  value={filterInputs.femail}
+                  onChange={(e) => {
+                    setFilterInputs({
+                      ...filterInputs,
+                      femail: e.target.value,
+                    });
+                  }}
+                  // {...register("femail")}
+                />
+              </Form.Group>
+              <Form.Group className={styles.divDivision}>
+                <Form.Label>Phone Number</Form.Label>
+                <Form.Control
+                  type="text"
+                  autoComplete="off"
+                  placeholder="Phone Number"
+                  value={filterInputs.fnumber}
+                  onChange={(e) => {
+                    setFilterInputs({
+                      ...filterInputs,
+                      fnumber: e.target.value,
+                    });
+                  }}
+                  // {...register("number")}
+                />
+              </Form.Group>
+            </Col>
+            <Col
+              md={2}
+              className="d-flex justify-content-end"
+              style={{ paddingRight: 0 }}
+            >
+              <Form.Group className={styles.formCareerEnquirieSub2}>
+                <Button type="submit" className="formShowButton">
+                  Filter
+                </Button>
               </Form.Group>
             </Col>
           </Row>

@@ -1,102 +1,102 @@
 /* CareerEnquiry CarView  Page */
 .cardview {
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 10px 30px;
-    min-height: 85vh;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 10px 30px;
+  min-height: 85vh;
 }
 
-
-
 .backToCareer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 8px;
-    cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .backToCareerIcon {
-    font-size: 22px;
-    margin-right: 5px;
-    color: var(--theme-color);
+  font-size: 22px;
+  margin-right: 5px;
+  color: var(--theme-color);
 }
 
 .backToCareer span {
-    font-family: var(--Poppins);
-    font-size: 14px;
-    letter-spacing: 0.2px;
+  font-family: var(--Poppins);
+  font-size: 14px;
+  letter-spacing: 0.2px;
 }
 
 .customColumn {
-    display: flex;
-    padding-right: 0 !important;
-    gap: 13px;
+  display: flex;
+  padding-right: 0 !important;
+  gap: 13px;
 }
 
 .divDivision {
-    width: 23%;
+  width: 23%;
 }
 
 .divDivision3 {
-    width: 30%;
+  width: 30%;
 }
 
 .divDivision input {
-    width: 100% !important;
+  width: 100% !important;
 }
 
 .divDivision1 {
-    width: 23%;
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 15px;
+  width: 23%;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 15px;
 }
 
 .formCareerEnquirieSub2 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 10px !important;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 10px !important;
 }
 
 .formCareerEnquirieSub2 button {
-    width: 50% !important;
-    margin-left: 5px;
+  width: 50% !important;
+  margin-left: 5px;
 }
 
-
 .actionIcon {
-    font-size: 25px;
-    margin-right: 5px;
-    color: var(--theme-color);
-    cursor: pointer;
+  font-size: 25px;
+  margin-right: 5px;
+  color: var(--theme-color);
+  cursor: pointer;
 }
 
 .signInLoader {
-    font-size: 15px;
-    width: 20px !important;
-    height: 20px !important;
+  font-size: 15px;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .permissionDivision {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .permissionDivision input {
-    width: 73%;
+  width: 73%;
 }
 
 .permissionDivision button {
-    width: 25%;
-    background: var(--theme-color);
-    ;
+  width: 25%;
+  background: var(--theme-color);
 }
 
-
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 /* 
 .customUL {
     width: 100%;

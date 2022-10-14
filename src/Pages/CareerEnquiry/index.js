@@ -108,20 +108,22 @@ export default function CareerEnquiry() {
   }, []);
 
   const dateFilter = () => {
-    careerList.filter((record) => {
-      if (
-        moment(record.date_of_joining).format("YYYY MM DD") >
-          moment(dateFrom).format("YYYY MM DD") &&
-        moment(record.date_of_joining).format("YYYY MM DD") <
-          moment(dateTo).format("YYYY MM DD")
-      ) {
-        newList.push(record);
-      }
-    });
-    setFilteredData(newList);
-    console.log(newList);
-    setDateTo("");
-    setDateFrom("");
+    if (dateFrom && dateTo) {
+      careerList.filter((record) => {
+        if (
+          moment(record.date_of_joining).format("YYYY MM DD") >
+            moment(dateFrom).format("YYYY MM DD") &&
+          moment(record.date_of_joining).format("YYYY MM DD") <
+            moment(dateTo).format("YYYY MM DD")
+        ) {
+          newList.push(record);
+        }
+      });
+      setFilteredData(newList);
+      console.log(newList);
+      setDateTo("");
+      setDateFrom("");
+    }
   };
 
   return (

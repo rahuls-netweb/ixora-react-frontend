@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Children } from "react";
 import DataTable from "react-data-table-component";
 
@@ -42,15 +43,23 @@ const customStyles = {
 };
 
 export default function TableGrid({ columns, rows, perPage = 8 }) {
+  let current_rows_perPage = localStorage.getItem("current_rows_perPage");
+  if (!current_rows_perPage) {
+    localStorage.setItem("current_rows_perPage", 8);
+  }
+  const [rows_perPage, setRows_perPage] = useState(current_rows_perPage);
   return (
     <DataTable
       columns={columns}
       data={rows}
       customStyles={customStyles}
       pagination={!!perPage}
-      paginationPerPage={perPage}
+      paginationPerPage={rows_perPage}
       paginationRowsPerPageOptions={[perPage, perPage * 2, perPage * 3]}
-
+      onChangeRowsPerPage={(e) => {
+        // setRows_perPage(e);
+        localStorage.setItem("current_rows_perPage", e);
+      }}
     />
   );
 }
