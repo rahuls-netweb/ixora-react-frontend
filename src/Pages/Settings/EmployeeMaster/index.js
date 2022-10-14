@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { yupResolver } from "@hookform/resolvers/yup";
 import DataTable from "../../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
@@ -87,7 +87,7 @@ export default function EmployeeMaster() {
   const [loading, setLoading] = useState(false);
   const resolver = yupResolver(validationSchema);
   const { employeeMasterList } = useSelector((state) => state.employeeMaster);
-
+  const [action, setAction] = useState("");
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(!show);
   const handleClose1 = (newShow) => setShow(newShow);
@@ -140,6 +140,7 @@ export default function EmployeeMaster() {
       selector: (row) => row.report_time_from,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           {!singleRowData.is_admin ? (
@@ -172,13 +173,26 @@ export default function EmployeeMaster() {
           />
 
           {!singleRowData.is_admin ? (
-            <MdDelete
-              className={styles.actionIcon}
-              onClick={() => {
-                setModalShow(true);
-                setSingleRowData(singleRowData);
-              }}
-            />
+            !singleRowData.deleted_at ? (
+              <MdDelete
+                title="Delete Data"
+                className={styles.actionIcon}
+                onClick={() => {
+                  setModalShow(true);
+                  setAction("delete");
+                  setSingleRowData(singleRowData);
+                }}
+              />
+            ) : (
+              <MdRestore
+                title="Restore Data"
+                className={styles.actionIcon}
+                onClick={() => {
+                  setAction("restore");
+                  setModalShow(true);
+                  setSingleRowData(singleRowData);
+                }} />
+            )
           ) : null}
         </div>
       ),
@@ -201,7 +215,7 @@ export default function EmployeeMaster() {
     reset();
     setMode(PAGE_MODES.add);
     dispatch(
-      employeeMasterDelete({ id: singleRowData.id }, () =>
+      employeeMasterDelete({ id: singleRowData.id, action }, () =>
         dispatch(employeeMasterGetAll())
       )
     );
@@ -417,6 +431,7 @@ export default function EmployeeMaster() {
         </div>
       )}
       <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
@@ -100,6 +100,7 @@ export default function Country() {
   const [reqruiredFields, setreqruiredFields] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
+  const [action, setAction] = useState("");
 
   const { countryList } = useSelector((state) => state.country);
 
@@ -120,6 +121,7 @@ export default function Country() {
     },
 
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -133,13 +135,27 @@ export default function Country() {
               });
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
       button: true,
@@ -161,7 +177,7 @@ export default function Country() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      countryDelete({ id: singleRowData.id }, () =>
+      countryDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           countryGetAll(
             null,
@@ -316,6 +332,7 @@ export default function Country() {
       )}
 
       <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

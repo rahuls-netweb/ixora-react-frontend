@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete, MdInfo } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import {
   Container,
@@ -57,7 +57,7 @@ export default function Permissions() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
-
+  const [action, setAction] = useState("");
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
@@ -92,6 +92,7 @@ export default function Permissions() {
       selector: (row) => row.name,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -107,13 +108,26 @@ export default function Permissions() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
 
@@ -136,7 +150,7 @@ export default function Permissions() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      permissionsDelete({ id: singleRowData.id }, () =>
+      permissionsDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           permissionsGetAll(
             null,
@@ -258,6 +272,7 @@ export default function Permissions() {
         </Container>
       </Form>
       <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

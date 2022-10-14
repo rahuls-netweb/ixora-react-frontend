@@ -21,7 +21,7 @@ export const categoryCreate =
 
 export const categoryGetAll = (_, onSuccess, onFailure) => async (dispatch) => {
   axios
-    .get("/categories", {})
+    .get("/categories?action=withtrashed", {})
     .then(function ({ data }) {
       dispatch({
         type: CATEGORY_GETALL,
@@ -51,10 +51,14 @@ export const categoryUpdate =
   };
 
 export const categoryDelete =
-  ({ id }, onSuccess, onFailure) =>
+  ({ id, action }, onSuccess, onFailure) =>
     async (dispatch) => {
       axios
-        .delete(`/categories/${id}`)
+        .delete(`/categories/${id}`, {
+          data: {
+            action
+          }
+        })
         .then(function ({ data }) {
           toast.success("Category deleted successfully");
           onSuccess && onSuccess();

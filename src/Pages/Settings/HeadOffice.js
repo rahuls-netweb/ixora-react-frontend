@@ -111,9 +111,11 @@ export default function HeadOffice() {
       selector: (row) => row.address,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
+            title="Edit Data"
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
@@ -131,6 +133,7 @@ export default function HeadOffice() {
           />
           {!singleRowData.deleted_at ? (
             <MdDelete
+              title="Delete Data"
               className={styles.actionIcon}
               onClick={() => {
                 setModalShow(true);
@@ -140,6 +143,7 @@ export default function HeadOffice() {
             />
           ) : (
             <MdRestore
+              title="Restore Data"
               className={styles.actionIcon}
               onClick={() => {
                 setAction("restore");
