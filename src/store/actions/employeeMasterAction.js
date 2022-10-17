@@ -22,7 +22,7 @@ export const employeeMasterCreate =
 export const employeeMasterGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/users", {})
+            .get("/users?action=withtrashed", {})
             .then(function ({ data }) {
                 dispatch({
                     type: EMPLOYEEMASTER_GETALL,
@@ -52,10 +52,14 @@ export const employeeMasterUpdate =
     };
 
 export const employeeMasterDelete =
-    ({ id }, onSuccess, onFailure) =>
+    ({ id, action }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/users/${id}`)
+                .delete(`/users/${id}`, {
+                    data: {
+                        action
+                    }
+                })
                 .then(function ({ data }) {
                     toast.success("Employee Master deleted successfully");
                     onSuccess && onSuccess();

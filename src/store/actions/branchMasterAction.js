@@ -25,7 +25,7 @@ export const branchMasterCreate =
 export const branchMasterGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/branches", {})
+            .get("/branches?action=withtrashed", {})
             .then(function ({ data }) {
                 dispatch({
                     type: BRANCHMASTER_GETALL,
@@ -55,12 +55,17 @@ export const branchMasterUpdate =
     };
 
 export const branchMasterDelete =
-    ({ id }, onSuccess, onFailure) =>
+    ({ id, action }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/branches/${id}`)
+                .delete(`/branches/${id}`, {
+                    data: {
+                        action
+                    }
+                })
                 .then(function ({ data }) {
-                    toast.success("Branch Master deleted successfully");
+                    console.log(data);
+                    // toast.success("Branch Master deleted successfully");
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

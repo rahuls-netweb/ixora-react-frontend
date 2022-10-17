@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Modal, CloseButton } from "react-bootstrap
 import styles from "./popUp.module.css";
 import { TiDeleteOutline } from 'react-icons/ti'
 
-export default function DeletePopUp({ mode = 'delete', ...props }) {
+export default function ConfirmPrompt({ mode = 'delete', ...props }) {
   return (
     <Modal
       {...props}
@@ -23,7 +23,7 @@ export default function DeletePopUp({ mode = 'delete', ...props }) {
 
             <Col md={12} className="text-center">
               <TiDeleteOutline className={styles.formDeleteButton} />
-              <h2 className={styles.formConfirmH2} >Are You Sure?</h2>
+              <h2 className={styles.formConfirmH2} >Do you want to <span>{mode}</span> It?</h2>
               <h5 className={styles.formConfirmH5}>
                 Do you really want to {mode} this record. This process cannot be
                 undone.

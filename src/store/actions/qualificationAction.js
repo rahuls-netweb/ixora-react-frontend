@@ -22,7 +22,7 @@ export const qualificationCreate =
 export const qualificationGetAll =
   (_, onSuccess, onFailure) => async (dispatch) => {
     axios
-      .get("/qualifications", {})
+      .get("/qualifications?action=withtrashed", {})
       .then(function ({ data }) {
         dispatch({
           type: QUALIFICATION_GETALL,
@@ -55,10 +55,14 @@ export const qualificationUpdate =
   };
 
 export const qualificationDelete =
-  ({ id }, onSuccess, onFailure) =>
+  ({ id, action }, onSuccess, onFailure) =>
     async (dispatch) => {
       axios
-        .delete(`/qualifications/${id}`)
+        .delete(`/qualifications/${id}`, {
+          data: {
+            action
+          }
+        })
         .then(function ({ data }) {
           toast.success("Qualification deleted successfully");
           onSuccess && onSuccess();

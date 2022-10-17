@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form";
 import { NamePattern } from "../../../Components/validation";
 import Skeleton from "../../../Components/Skeleton";
 import { useYupValidationResolver } from "../../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -54,7 +54,6 @@ export default function Roles() {
 
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
-
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -118,6 +117,7 @@ export default function Roles() {
       ),
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPlus
@@ -139,14 +139,16 @@ export default function Roles() {
               );
             }}
           />
+
           <MdDelete
-            title="Delete Role"
+            title="Delete Data"
             className={styles.actionIcon}
             onClick={() => {
               setModalShow(true);
               setSingleRowData(singleRowData);
             }}
           />
+
         </div>
       ),
       button: true,
@@ -294,7 +296,7 @@ export default function Roles() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

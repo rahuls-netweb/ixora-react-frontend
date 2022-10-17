@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "./rootsettings.module.css";
@@ -21,7 +21,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   collage_name: "",
@@ -50,7 +50,7 @@ export default function HeadOffice() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
-
+  const [action, setAction] = useState("");
   const { collegeList } = useSelector((state) => state.college);
   const { countryList } = useSelector((state) => state.country);
 
@@ -103,13 +103,26 @@ export default function HeadOffice() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
 
@@ -132,7 +145,7 @@ export default function HeadOffice() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      collegeDelete({ id: singleRowData.id }, () =>
+      collegeDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           collegeGetAll(
             null,
@@ -262,7 +275,8 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete, MdInfo } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import {
   Container,
@@ -29,7 +29,7 @@ import { NamePattern } from "../../Components/validation";
 import Help from "../../Components/Help";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -57,7 +57,6 @@ export default function Permissions() {
   const [loading, setLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
-
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
@@ -92,6 +91,7 @@ export default function Permissions() {
       selector: (row) => row.name,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -107,13 +107,16 @@ export default function Permissions() {
               );
             }}
           />
+
           <MdDelete
+            title="Delete Data"
             className={styles.actionIcon}
             onClick={() => {
               setModalShow(true);
               setSingleRowData(singleRowData);
             }}
           />
+
         </div>
       ),
 
@@ -257,7 +260,7 @@ export default function Permissions() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

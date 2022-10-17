@@ -57,7 +57,7 @@ export const rolesDelete =
             axios
                 .delete(`/roles/${id}`)
                 .then(function ({ data }) {
-                    toast.success("Roles deleted successfully");
+                    toast.success(data.message);
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "./rootsettings.module.css";
@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import { NamePattern } from "../../Components/validation";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 const initialFormState = {
   category_name: "",
   status: "1",
@@ -49,7 +49,7 @@ export default function Candidate() {
   const { categoryList } = useSelector((state) => state.category);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
-
+  const [action, setAction] = useState("");
   function cancelUser() {
     reset();
     setMode(PAGE_MODES.add);
@@ -79,6 +79,7 @@ export default function Candidate() {
       selector: (row) => row.category_name,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -94,13 +95,26 @@ export default function Candidate() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
       button: true,
@@ -123,7 +137,7 @@ export default function Candidate() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      categoryDelete({ id: singleRowData.id }, () =>
+      categoryDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           categoryGetAll(
             null,
@@ -232,7 +246,8 @@ export default function Candidate() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {

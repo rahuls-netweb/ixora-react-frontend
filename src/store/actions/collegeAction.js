@@ -24,7 +24,7 @@ export const collegeCreate =
 export const collegeGetAll =
     (_, onSuccess, onFailure) => async (dispatch) => {
         axios
-            .get("/collages", {})
+            .get("/collages?action=withtrashed", {})
             .then(function ({ data }) {
                 dispatch({
                     type: COLLEGE_GETALL,
@@ -55,10 +55,14 @@ export const collegeUpdate =
     };
 
 export const collegeDelete =
-    ({ id }, onSuccess, onFailure) =>
+    ({ id, action }, onSuccess, onFailure) =>
         async (dispatch) => {
             axios
-                .delete(`/collages/${id}`)
+                .delete(`/collages/${id}`, {
+                    data: {
+                        action
+                    }
+                })
                 .then(function ({ data }) {
                     toast.success("College deleted successfully");
                     onSuccess && onSuccess();

@@ -57,7 +57,7 @@ export const permissionsDelete =
             axios
                 .delete(`/permissions/${id}`)
                 .then(function ({ data }) {
-                    toast.success("Permission deleted successfully");
+                    toast.success(data.message);
                     onSuccess && onSuccess();
                 })
                 .catch(function (err) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "./rootsettings.module.css";
@@ -20,7 +20,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import Skeleton from "../../Components/Skeleton";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -42,7 +42,7 @@ const validationSchema = yup.object({
 
 export default function Qualification() {
   const resolver = useYupValidationResolver(validationSchema);
-
+  const [action, setAction] = useState("");
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,6 +81,7 @@ export default function Qualification() {
       selector: (row) => row.name,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -93,13 +94,26 @@ export default function Qualification() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
       ignoreRowClick: true,
@@ -123,7 +137,7 @@ export default function Qualification() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      qualificationDelete({ id: singleRowData.id }, () =>
+      qualificationDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           qualificationGetAll(
             null,
@@ -239,8 +253,9 @@ export default function Qualification() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         show={modalShow}
+        mode={action}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {
           deleteData();

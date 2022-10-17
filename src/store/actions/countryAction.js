@@ -26,7 +26,7 @@ export const countryCreate =
 
 export const countryGetAll = (_, onSuccess, onFailure) => async (dispatch) => {
   axios
-    .get("/countries", {})
+    .get("/countries?action=withtrashed", {})
     .then(function ({ data }) {
       dispatch({
         type: COUNTRY_GETALL,
@@ -55,10 +55,14 @@ export const countryUpdate =
   };
 
 export const countryDelete =
-  ({ id }, onSuccess, onFailure) =>
+  ({ id, action }, onSuccess, onFailure) =>
     async (dispatch) => {
       axios
-        .delete(`/countries/${id}`)
+        .delete(`/countries/${id}`, {
+          data: {
+            action
+          }
+        })
         .then(function ({ data }) {
           toast.success("Country deleted successfully");
           onSuccess && onSuccess();

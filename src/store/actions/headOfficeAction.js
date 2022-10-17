@@ -22,7 +22,7 @@ export const headOfficeCreate =
 export const headOfficeGetAll =
   (_, onSuccess, onFailure) => async (dispatch) => {
     axios
-      .get("/headoffices")
+      .get("/headoffices?action=withtrashed")
       .then(function ({ data }) {
         dispatch({
           type: HEADOFFICE_GETALL,
@@ -61,7 +61,7 @@ export const headOfficeDelete =
           }
         })
         .then(function ({ data }) {
-          toast.success("Head Office deleted successfully");
+          toast.success(data.message);
           onSuccess && onSuccess();
         })
         .catch(function (err) {

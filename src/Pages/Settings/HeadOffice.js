@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import Skeleton from "../../Components/Skeleton";
@@ -22,7 +22,7 @@ import {
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -116,9 +116,11 @@ export default function HeadOffice() {
       selector: (row) => row.address,
     },
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
+            title="Edit Data"
             className={styles.actionIcon}
             onClick={() => {
               setMode(PAGE_MODES.edit);
@@ -136,23 +138,24 @@ export default function HeadOffice() {
           />
           {!singleRowData.deleted_at ? (
             <MdDelete
+              title="Delete Data"
               className={styles.actionIcon}
               onClick={() => {
                 setModalShow(true);
-                // setAction("delete");
-                // setAction("softdeletes");
-                setAction("inactive");
+                setAction("delete");
                 setSingleRowData(singleRowData);
               }}
             />
           ) : (
-            <p
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
               onClick={() => {
                 setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
               }}
-            >
-              Restore
-            </p>
+            />
           )}
         </div>
       ),
@@ -335,72 +338,7 @@ export default function HeadOffice() {
           </Row>
         </Container>
       </Form>
-      <Form onSubmit={onFormFilterSubmit}>
-        <Container fluid>
-          <Row>
-            <Col md={10} className={styles.customColumn}>
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  autoComplete="off"
-                  placeholder="Head Office Name"
-                  value={filterInputs.fname}
-                  onChange={(e) => {
-                    setFilterInputs({ ...filterInputs, fname: e.target.value });
-                  }}
-                  // {...register("fname")}
-                />
-              </Form.Group>
-
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="text"
-                  autoComplete="off"
-                  placeholder="Email"
-                  value={filterInputs.femail}
-                  onChange={(e) => {
-                    setFilterInputs({
-                      ...filterInputs,
-                      femail: e.target.value,
-                    });
-                  }}
-                  // {...register("femail")}
-                />
-              </Form.Group>
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  autoComplete="off"
-                  placeholder="Phone Number"
-                  value={filterInputs.fnumber}
-                  onChange={(e) => {
-                    setFilterInputs({
-                      ...filterInputs,
-                      fnumber: e.target.value,
-                    });
-                  }}
-                  // {...register("number")}
-                />
-              </Form.Group>
-            </Col>
-            <Col
-              md={2}
-              className="d-flex justify-content-end"
-              style={{ paddingRight: 0 }}
-            >
-              <Form.Group className={styles.formCareerEnquirieSub2}>
-                <Button type="submit" className="formShowButton">
-                  Filter
-                </Button>
-              </Form.Group>
-            </Col>
-          </Row>
-        </Container>
-      </Form>
-      <DeletePopUp
+      <ConfirmPrompt
         mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}

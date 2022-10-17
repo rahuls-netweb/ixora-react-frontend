@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../Components/DataTable";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil } from "react-icons/bi";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import Skeleton from "../../Components/Skeleton";
@@ -24,7 +24,7 @@ import * as yup from "yup";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 
 import Help, { PhoneText, EmailText } from "../../Components/Help";
-import DeletePopUp from "../../Components/PopUp/DeletePopUP";
+import ConfirmPrompt from "../../Components/PopUp/ConfirmPrompt";
 
 const initialFormState = {
   name: "",
@@ -63,7 +63,7 @@ const validationSchema = yup.object({
 
 export default function BranchMaster() {
   const resolver = useYupValidationResolver(validationSchema);
-
+  const [action, setAction] = useState("");
   const dispatch = useDispatch();
   const [mode, setMode] = useState(PAGE_MODES.add);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,6 +124,7 @@ export default function BranchMaster() {
     },
 
     {
+      name: "Action",
       cell: (singleRowData, index) => (
         <div>
           <BiPencil
@@ -147,13 +148,26 @@ export default function BranchMaster() {
               );
             }}
           />
-          <MdDelete
-            className={styles.actionIcon}
-            onClick={() => {
-              setModalShow(true);
-              setSingleRowData(singleRowData);
-            }}
-          />
+          {!singleRowData.deleted_at ? (
+            <MdDelete
+              title="Delete Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setModalShow(true);
+                setAction("delete");
+                setSingleRowData(singleRowData);
+              }}
+            />
+          ) : (
+            <MdRestore
+              title="Restore Data"
+              className={styles.actionIcon}
+              onClick={() => {
+                setAction("restore");
+                setModalShow(true);
+                setSingleRowData(singleRowData);
+              }} />
+          )}
         </div>
       ),
       button: true,
@@ -176,7 +190,7 @@ export default function BranchMaster() {
     setLoading(true);
     setMode(PAGE_MODES.add);
     dispatch(
-      branchMasterDelete({ id: singleRowData.id }, () =>
+      branchMasterDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           branchMasterGetAll(
             null,
@@ -410,7 +424,8 @@ export default function BranchMaster() {
           </Row>
         </Container>
       </Form>
-      <DeletePopUp
+      <ConfirmPrompt
+        mode={action}
         show={modalShow}
         onHide={() => setModalShow(false)}
         onConfirmed={() => {
