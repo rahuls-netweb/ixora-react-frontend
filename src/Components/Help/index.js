@@ -5,12 +5,13 @@ import styles from "./help.module.css";
 
 export function PhoneText() {
   return (<div className='toolTipFormat'>
-    <h6>digits valid only from 10-14</h6>
-    <h6>Ex-1234567890</h6>
+    <h6>Phone format should be</h6>
+    <h6>  +1 (408) XXX XXXX.</h6>
   </div>)
 }
 export function EmailText() {
   return (<div className='toolTipFormat'>
+    <h6>Email format should be</h6>
     <h6>username@domain.com</h6>
   </div>)
 }

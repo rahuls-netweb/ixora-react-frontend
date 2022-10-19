@@ -77,7 +77,7 @@ export default function Dashboard() {
                         </Form.Select>
                     </div>
                     <div className={styles.adminSubSection2}>
-                        <label onClick={chooseYourBranch}>{UserName}</label>
+                        <label>{UserName}</label>
 
 
                         <Dropdown>

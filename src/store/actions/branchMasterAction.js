@@ -97,16 +97,14 @@ export const addBranchesTouser =
 
 export const branchMasterSwitch =
     (id, onSuccess, onFailure) => async (dispatch, getState) => {
-
         const { user } = getState().auth;
-
         axios
             .put(`/user/${user.user.id}/switch/branch`, { branch_id: id })
             .then(function ({ data }) {
                 setLocalStorage('active_branch_id', data?.branch?.id || id);
-                console.log(data, 'data data here!')
                 dispatch(getCurrentSelectedBranch(user.user.id));
                 onSuccess && onSuccess();
+                toast.success(data.message);
             })
             .catch(function (err) {
                 showErrorMessageFromApi(err);

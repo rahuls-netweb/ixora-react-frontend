@@ -51,7 +51,7 @@ export default function Roles() {
   const resolver = useYupValidationResolver(validationSchema);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-
+  const handleCloseOnClick = (newShow) => setShow(newShow);
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const dispatch = useDispatch();
@@ -315,7 +315,7 @@ export default function Roles() {
 
       {show && (
         <PopUP show={show} hide={handleClose} size="xl">
-          <AddPermissionToRoleModel role={selectedRole} />
+          <AddPermissionToRoleModel showPopup={handleCloseOnClick} role={selectedRole} />
         </PopUP>
       )}
       {show1 && (

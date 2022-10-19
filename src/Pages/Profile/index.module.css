@@ -94,7 +94,88 @@
     gap: 12px;
 }
 
-.active {
+.cardboardActive {
     background: var(--theme-color) !important;
     color: white !important;
+    border-radius: 10px;
+    transition: all .5s ease-in-out;
+    box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgb(82 63 105 / 5%);
+    border: 2px solid #0e467e54;
+    margin-bottom: 15px;
+}
+
+.cardboard {
+    background-color: #fff;
+    transition: all .5s ease-in-out;
+    border: 2px solid #0e467e54;
+    border-radius: 10px;
+    box-shadow: 0rem 0.3125rem 0.3125rem 0rem rgb(82 63 105 / 5%);
+    margin-bottom: 15px;
+}
+
+.cardboardActive:hover,
+.cardboard:hover {
+    box-shadow: 0 1.188rem 1.188rem rgb(25 36 78 / 29%) !important;
+}
+
+
+.cardboard:hover .booking-status span i {
+    background: var(--theme-color);
+    color: #ffffff;
+}
+
+.cardboardBody {
+    padding: 22px;
+}
+
+.cardboardActive .iconMd {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: var(--theme-color);
+    border-radius: 10px;
+}
+
+.cardboard .iconMd {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--theme-color);
+    color: white;
+    border-radius: 10px;
+}
+
+.iconBranch {
+    font-size: 28px;
+    ;
+}
+
+.cardboard .textStyles,
+.cardboardActive .textStyles {
+
+    font-weight: bold;
+    font-size: 16px;
+    font-family: var(--Mulish);
+
+}
+
+.cardboard .textStyles {
+    color: #808191;
+}
+
+.cardboardActive .textStyles {
+    color: white;
+}
+
+.mainHeader {
+    font-family: var(--Poppins);
+    font-size: 22px;
+    line-height: 50px;
+    color: #808191;
+    font-weight: bold;
 }
