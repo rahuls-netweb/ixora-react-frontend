@@ -157,3 +157,9 @@ input:disabled {
   border-bottom: 3px solid var(--theme-color) !important;
   font-family: var(--Inter);
 }
+
+.typeNum::-webkit-outer-spin-button,
+.typeNum::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

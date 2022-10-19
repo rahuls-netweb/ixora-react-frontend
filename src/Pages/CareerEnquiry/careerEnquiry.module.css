@@ -23,6 +23,19 @@
   align-items: flex-end;
 }
 
+.dFlex {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dFlex button {
+  background: var(--theme-color) !important;
+}
+
+.multipleEntries:checked {
+  accent-color: var(--theme-color);
+}
+
 .careerEnquirieSub h4 {
   font-family: var(--Poppins);
   font-size: 20px;
@@ -306,6 +319,7 @@ td:not(.columnHeader) {
 .tableAdmissionDetail td:nth-child(even) {
   color: #adadad !important;
 }
+
 .divDivisionNew {
   width: 62%;
   display: flex;

@@ -17,23 +17,84 @@ import AssignUserToStudent from "./AssignUserToStudent";
 import Skeleton from "../../Components/Skeleton";
 import { getPaginatedRecordNumber } from "../../utils/helpers";
 import moment from "moment";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+
+
+const validationSchema = yup.object({
+  dateFrom: yup.string().required(),
+  dateTo: yup.string().required(),
+});
+
 
 export default function CareerEnquiry() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedStudent, setSlectedStudent] = useState(null);
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
   const [filteredData, setFilteredData] = useState(null);
+  const resolver = useYupValidationResolver(validationSchema);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isDirty, isValid },
+    reset
+  } = useForm({
+    resolver,
+    mode: "onBlur"
+  });
+
+  function onFormSubmit(data) {
+
+    careerList.filter((record) => {
+      if (
+        moment(record.date_of_joining).format("YYYY MM DD") >=
+        moment(data.dateFrom).format("YYYY MM DD") &&
+        moment(record.date_of_joining).format("YYYY MM DD") <=
+        moment(data.dateTo).format("YYYY MM DD")
+      ) {
+        newList.push(record);
+      }
+    });
+    setFilteredData(newList);
+
+    reset();
+  }
 
   const columns = [
-    // {
-    //   name: "ID",
-    //   selector: (_, index) => {
-    //     return getPaginatedRecordNumber({ page: 1, per_page: 8, index });
-    //   },
-    // },
+
+    {
+      name: "",
+      cell: (singleRowData, index) => (
+        <>
+          <input
+            type="checkbox"
+            className={styles.multipleEntries}
+            isChecked={Boolean(
+              selectedEvents.find((event) => event === singleRowData.id)
+            )}
+
+            onChange={(e) => {
+              const { checked } = e.target;
+
+              if (checked) {
+                setSelectedEvents((prev) => prev.concat(singleRowData.id));
+              } else {
+                setSelectedEvents((prev) =>
+                  prev.filter(
+                    (prevSelected) => prevSelected !== singleRowData.id
+                  )
+                );
+              }
+
+            }}
+          />
+        </>
+      ),
+    },
     {
       name: "CCID",
       selector: (row) => row.ccid,
@@ -91,7 +152,7 @@ export default function CareerEnquiry() {
   }));
   let newList = [];
 
-  // console.log(careerList, "career list111111");
+
   useEffect(() => {
     setLoading(true);
     dispatch(headOfficeGetAll());
@@ -107,59 +168,21 @@ export default function CareerEnquiry() {
     );
   }, []);
 
-  const dateFilter = () => {
-    careerList.filter((record) => {
-      if (
-        moment(record.date_of_joining).format("YYYY MM DD") >
-          moment(dateFrom).format("YYYY MM DD") &&
-        moment(record.date_of_joining).format("YYYY MM DD") <
-          moment(dateTo).format("YYYY MM DD")
-      ) {
-        newList.push(record);
-      }
-    });
-    setFilteredData(newList);
-    console.log(newList);
-    setDateTo("");
-    setDateFrom("");
-  };
+
 
   return (
     <React.Fragment>
-      <Form>
+      <Form onSubmit={handleSubmit(onFormSubmit)}>
         <Container fluid>
           <Row>
             <Col md={12} className={styles.customColumn2}>
-              {/* <Form.Group className={styles.divDivision}>
-                <Form.Label>Head Office</Form.Label>
-                <Form.Select defaultValue={""}>
-                  <option value="" disabled>--Select--</option>
-                  {headOfficeList.map(headoffice => {
-                    return <option key={headoffice.id} value={headoffice.id}>{headoffice.name}</option>
-                  })}
-                </Form.Select>
 
-              </Form.Group>
-
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Branch</Form.Label>
-                <Form.Select defaultValue={""}>
-                  <option value="" disabled>--Select--</option>
-                  {branchMasterList.map(branch => {
-                    return <option key={branch.id} value={branch.id}>{branch.name}</option>
-                  })}
-                </Form.Select>
-              </Form.Group> */}
 
               <Form.Group className={styles.divDivision}>
                 <Form.Label>Date From</Form.Label>
                 <Form.Control
                   type="date"
-                  value={dateFrom}
-                  onChange={(e) => {
-                    setDateFrom(e.target.value);
-                    console.log(e.target.value, "datefrom");
-                  }}
+                  {...register("dateFrom")}
                 />
               </Form.Group>
 
@@ -167,43 +190,21 @@ export default function CareerEnquiry() {
                 <Form.Label>Date To</Form.Label>
                 <Form.Control
                   type="date"
-                  value={dateTo}
-                  onChange={(e) => {
-                    setDateTo(e.target.value);
-                    console.log(e.target.value, "dateto");
-                  }}
+                  {...register("dateTo")}
+
                 />
               </Form.Group>
               <Form.Group className={styles.divDivisionNew}>
                 <Button
                   className={styles.searchData}
-                  onClick={() => {
-                    dateFilter();
-                  }}
+                  type="submit"
+                  disabled={!isDirty || !isValid}
                   style={{ marginTop: "2rem" }}
                 >
                   Search
                 </Button>
               </Form.Group>
-              {/* <Form.Group className={styles.divDivision}>
-                <Form.Label>Country</Form.Label>
-                <Form.Select defaultValue={""}>
-                  <option value="" disabled>--Select--</option>
-                  {countryList.map(country => {
-                    return <option key={country.id} value={country.id}>{country.name}</option>
-                  })}
-                </Form.Select>
-              </Form.Group>
 
-              <Form.Group className={styles.divDivision}>
-                <Form.Label>Qualification</Form.Label>
-                <Form.Select defaultValue={""}>
-                  <option value="" disabled>--Select--</option>
-                  {qualificationList.map(qualification => {
-                    return <option key={qualification.id} value={qualification.id}>{qualification.name}</option>
-                  })}
-                </Form.Select>
-              </Form.Group> */}
             </Col>
           </Row>
         </Container>
@@ -214,8 +215,10 @@ export default function CareerEnquiry() {
           <Col md={12} style={{ paddingRight: 0 }}>
             <div className="borderUnderLine">
               <div className={styles.careerEnquiries}>
-                <div className={styles.careerEnquirieSub}>
+                <div className={`${styles.careerEnquirieSub} ${styles.dFlex}`}>
                   <h4>List of career enquiries</h4>
+                  {selectedEvents.length > 1 && <Button
+                  >Multiple Assign</Button>}
                 </div>
               </div>
               {loading ? (
