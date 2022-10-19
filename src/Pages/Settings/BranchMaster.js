@@ -166,7 +166,8 @@ export default function BranchMaster() {
                 setAction("restore");
                 setModalShow(true);
                 setSingleRowData(singleRowData);
-              }} />
+              }}
+            />
           )}
         </div>
       ),
@@ -176,7 +177,7 @@ export default function BranchMaster() {
 
   useEffect(() => {
     setLoading(true);
-    dispatch(headOfficeGetAll());
+    dispatch(headOfficeGetAll({ action: "withtrashed" }));
     dispatch(
       branchMasterGetAll(
         null,

@@ -20,9 +20,10 @@ export const headOfficeCreate =
   };
 
 export const headOfficeGetAll =
-  (_, onSuccess, onFailure) => async (dispatch) => {
+  ({ action }, _, onSuccess, onFailure) =>
+  async (dispatch) => {
     axios
-      .get("/headoffices?action=withtrashed")
+      .get(`/headoffices?action=${action}`)
       .then(function ({ data }) {
         dispatch({
           type: HEADOFFICE_GETALL,
@@ -53,19 +54,19 @@ export const headOfficeUpdate =
 
 export const headOfficeDelete =
   ({ id, action }, onSuccess, onFailure) =>
-    async (dispatch) => {
-      axios
-        .delete(`/headoffices/${id}`, {
-          data: {
-            action
-          }
-        })
-        .then(function ({ data }) {
-          toast.success(data.message);
-          onSuccess && onSuccess();
-        })
-        .catch(function (err) {
-          toast.error(err.response?.data?.message || err?.message);
-          onFailure && onFailure();
-        });
-    };
+  async (dispatch) => {
+    axios
+      .delete(`/headoffices/${id}`, {
+        data: {
+          action,
+        },
+      })
+      .then(function ({ data }) {
+        toast.success(data.message);
+        onSuccess && onSuccess();
+      })
+      .catch(function (err) {
+        toast.error(err.response?.data?.message || err?.message);
+        onFailure && onFailure();
+      });
+  };

@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import DataTable from "../../../Components/DataTable";
 import { MdDelete, MdRestore } from "react-icons/md";
 import { BiPencil, BiPlus } from "react-icons/bi";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import styles from "../rootsettings.module.css";
 import AddBranchesToUser from "./AddBranchesToUser";
@@ -94,6 +95,7 @@ export default function EmployeeMaster() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [singleRowData, setSingleRowData] = useState();
+  const [credField, setCredField] = useState(false);
   const handleShow = (user) => {
     setSelectedRole(user);
     setShow(true);
@@ -191,7 +193,8 @@ export default function EmployeeMaster() {
                   setAction("restore");
                   setModalShow(true);
                   setSingleRowData(singleRowData);
-                }} />
+                }}
+              />
             )
           ) : null}
         </div>
@@ -311,34 +314,52 @@ export default function EmployeeMaster() {
                 </Form.Label>
               </Form.Group>
 
-              <Form.Group className={styles.divDivision}>
+              <Form.Group
+                className={styles.divDivision}
+                style={{ position: "relative" }}
+              >
                 <Form.Label>
                   Password <span className="reqruiredFields">*</span>
                   <Help text="min 8 character is required" />
                 </Form.Label>
                 <Form.Control
-                  type="password"
+                  type={credField ? "text" : "password"}
                   autoComplete="off"
                   placeholder="Password"
                   {...register("password")}
                 />
+                <span
+                  className={styles.floatingEye}
+                  onClick={() => setCredField(!credField)}
+                >
+                  {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
+                </span>
                 <Form.Label className="errorMessage">
                   {" "}
                   {errors.password && errors.password.message}
                 </Form.Label>
               </Form.Group>
 
-              <Form.Group className={styles.divDivision}>
+              <Form.Group
+                className={styles.divDivision}
+                style={{ position: "relative" }}
+              >
                 <Form.Label>
                   Confirm Password <span className="reqruiredFields">*</span>
                   <Help text="same Password" />
                 </Form.Label>
                 <Form.Control
-                  type="password"
+                  type={credField ? "text" : "password"}
                   autoComplete="off"
                   placeholder="Confirm Password"
                   {...register("password_confirmation")}
                 />
+                <span
+                  className={styles.floatingEye}
+                  onClick={() => setCredField(!credField)}
+                >
+                  {!credField ? <AiFillEyeInvisible /> : <AiFillEye />}
+                </span>
                 <Form.Label className="errorMessage">
                   {" "}
                   {errors.password_confirmation &&
@@ -349,7 +370,9 @@ export default function EmployeeMaster() {
 
             <Col md={10} className={styles.customColumn}>
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Report Time From</Form.Label>
+                <Form.Label>
+                  Report Time From <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Report Time From"
@@ -359,7 +382,9 @@ export default function EmployeeMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Report Time To</Form.Label>
+                <Form.Label>
+                  Report Time To <span className="reqruiredFields">*</span>
+                </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Report Time To"
@@ -368,7 +393,7 @@ export default function EmployeeMaster() {
               </Form.Group>
 
               <Form.Group className={styles.divDivision}>
-                <Form.Label>Lunch From</Form.Label>
+                <Form.Label>Lunch From </Form.Label>
                 <Form.Control
                   type="time"
                   placeholder="Lunch From"

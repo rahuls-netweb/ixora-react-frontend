@@ -131,3 +131,12 @@ input::-webkit-inner-spin-button {
 .themeColor {
     background: var(--theme-color) !important;
 } */
+
+.floatingEye {
+  position: absolute;
+  top: 32px;
+  right: 13px;
+  font-size: 22px;
+  color: #979797;
+  cursor: pointer;
+}
