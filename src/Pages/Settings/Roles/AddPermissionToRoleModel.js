@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { permissionsGetAll } from "../../../store/actions/permissionsAction";
 import { rolesGetAll } from "../../../store/actions/rolesAction";
 
-export default function AddPermissionToRoleModel({ role }) {
+export default function AddPermissionToRoleModel({ role, showPopup }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedModule, setSelectedModule] = useState("");
   const [selectedPermissions, setSelectedPermissions] = useState({});
@@ -97,6 +97,7 @@ export default function AddPermissionToRoleModel({ role }) {
           setIsSubmitting(false);
           dispatch(permissionsGetAll());
           dispatch(rolesGetAll());
+          showPopup(false);
         },
         () => {
           // onFailure
@@ -109,6 +110,7 @@ export default function AddPermissionToRoleModel({ role }) {
   const onSelectModule = (moduleName) => {
     setSelectedModule(moduleName);
     // setSelectedPermissions({});
+    console.log(permissions, "permissions");
   };
 
   return (

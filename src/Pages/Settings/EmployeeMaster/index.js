@@ -142,6 +142,12 @@ export default function EmployeeMaster() {
       selector: (row) => row.report_time_from,
     },
     {
+      name: "Is Admin",
+      cell: (singleRowData, index) => (
+        <Form.Check type="switch" checked={singleRowData.is_admin} />
+      ),
+    },
+    {
       name: "Action",
       cell: (singleRowData, index) => (
         <div>

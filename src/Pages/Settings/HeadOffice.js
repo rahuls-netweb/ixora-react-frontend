@@ -163,6 +163,7 @@ export default function HeadOffice() {
   ];
   useEffect(() => {
     setLoading(true);
+
     dispatch(
       headOfficeGetAll(
         { action: "withtrashed" },
@@ -173,6 +174,7 @@ export default function HeadOffice() {
     );
   }, []);
   const deleteData = () => {
+    console.log(action, "action is here");
     reset();
     setLoading(true);
     setMode(PAGE_MODES.add);
@@ -180,6 +182,7 @@ export default function HeadOffice() {
       headOfficeDelete({ id: singleRowData.id, action }, () =>
         dispatch(
           headOfficeGetAll(
+            { action: "withtrashed" },
             null,
             () => setLoading(false),
             () => setLoading(false)
