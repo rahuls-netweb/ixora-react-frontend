@@ -91,10 +91,10 @@ export default function CareerEnquiry() {
   }));
   let newList = [];
 
-
+  // console.log(careerList, "career list111111");
   useEffect(() => {
     setLoading(true);
-    dispatch(headOfficeGetAll());
+    dispatch(headOfficeGetAll({ action: "withtrash" }));
     dispatch(branchMasterGetAll());
     dispatch(countryGetAll());
     dispatch(qualificationGetAll());
@@ -112,9 +112,9 @@ export default function CareerEnquiry() {
       careerList.filter((record) => {
         if (
           moment(record.date_of_joining).format("YYYY MM DD") >
-          moment(dateFrom).format("YYYY MM DD") &&
+            moment(dateFrom).format("YYYY MM DD") &&
           moment(record.date_of_joining).format("YYYY MM DD") <
-          moment(dateTo).format("YYYY MM DD")
+            moment(dateTo).format("YYYY MM DD")
         ) {
           newList.push(record);
         }
